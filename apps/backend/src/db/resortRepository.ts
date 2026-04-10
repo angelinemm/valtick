@@ -1,0 +1,23 @@
+import type { Resort, Lift } from "@prisma/client";
+import { prisma } from "./prisma";
+
+export type { Resort, Lift };
+
+export async function findResortByGuestId(
+  guestId: string
+): Promise<(Resort & { lifts: Lift[] }) | null> {
+  return prisma.resort.findUnique({
+    where: { guestId },
+    include: { lifts: true },
+  });
+}
+
+export async function updateResort(
+  id: string,
+  data: { moneyCents: number; lastTickAt: Date }
+): Promise<Resort> {
+  return prisma.resort.update({
+    where: { id },
+    data,
+  });
+}
