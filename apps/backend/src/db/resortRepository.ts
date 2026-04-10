@@ -21,3 +21,9 @@ export async function updateResort(
     data,
   });
 }
+
+export async function findIdleResorts(idleThreshold: Date): Promise<Resort[]> {
+  return prisma.resort.findMany({
+    where: { lastTickAt: { lt: idleThreshold } },
+  });
+}
