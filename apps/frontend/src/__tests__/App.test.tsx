@@ -51,7 +51,7 @@ describe("App routing", () => {
     vi.spyOn(client, "fetchResort").mockResolvedValue(mockResortResponse);
     renderWithRouter("/resort/abc123");
     await waitFor(() =>
-      expect(screen.getByText("Resort: Snowpeak")).toBeInTheDocument()
+      expect(screen.getByText("Snowpeak")).toBeInTheDocument()
     );
   });
 

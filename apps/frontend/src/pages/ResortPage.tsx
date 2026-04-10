@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useResort } from "../hooks/useResort";
 import { GameNotFoundPage } from "./GameNotFoundPage";
+import { ResortTopBar } from "../components/ResortTopBar";
 
 export function ResortPage() {
   const { guestId } = useParams<{ guestId: string }>();
@@ -10,5 +11,10 @@ export function ResortPage() {
   if (error?.message === "NOT_FOUND") return <GameNotFoundPage />;
   if (error || !data) return <div>Something went wrong.</div>;
 
-  return <div>Resort: {data.resort.name}</div>;
+  return (
+    <div>
+      <ResortTopBar resort={data.resort} summary={data.summary} />
+      {/* lift list coming next */}
+    </div>
+  );
 }
