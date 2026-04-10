@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "name": "val-tick",
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "test": "vitest run --passWithNoTests",
+    "dev:backend": "npm run dev --workspace=apps/backend",
+    "dev:frontend": "npm run dev --workspace=apps/frontend"
+  },
+  "devDependencies": {
+    "vitest": "^1.6.0"
+  }
+}
