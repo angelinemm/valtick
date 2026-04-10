@@ -4,12 +4,15 @@ import { GameNotFoundPage } from "./GameNotFoundPage";
 import { ResortTopBar } from "../components/ResortTopBar";
 import { LiftList } from "../components/LiftList";
 import { JunkyardSection } from "../components/JunkyardSection";
+import { useTick } from "../hooks/useTick";
 
 export function ResortPage() {
   const { guestId } = useParams<{ guestId: string }>();
   const { data, isLoading, error } = useResort(guestId!);
   const buyLift = useBuyLiftMutation(guestId!);
   const repairLift = useRepairLiftMutation(guestId!);
+
+  useTick(guestId!);
 
   if (isLoading) return <div>Loading...</div>;
   if (error?.message === "NOT_FOUND") return <GameNotFoundPage />;
