@@ -5,5 +5,37 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../apps/backend/node_modules/.prisma/client"
+}
+
+enum LiftStatus {
+  working
+  broken
+  junked
+}
+
+model Resort {
+  id         String   @id @default(uuid())
+  name       String
+  guestId    String   @unique
+  moneyCents Int
+  lastTickAt DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  lifts Lift[]
+}
+
+model Lift {
+  id                      String     @id @default(uuid())
+  resortId                String
+  liftModelKey            String
+  currentBreakProbability Float
+  status                  LiftStatus
+  createdAt               DateTime   @default(now())
+  updatedAt               DateTime   @updatedAt
+
+  resort Resort @relation(fields: [resortId], references: [id], onDelete: Cascade)
+
+  @@index([resortId])
+  @@index([status])
 }
