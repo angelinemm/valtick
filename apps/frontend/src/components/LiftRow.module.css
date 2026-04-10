@@ -1,0 +1,17 @@
+.brokenLabel {
+  color: #cc0000;
+  font-weight: bold;
+}
+
+.repairButton {
+  background-color: #cc0000;
+  color: white;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+}
+
+.repairButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

@@ -3,6 +3,7 @@ import { useResort, useBuyLiftMutation, useRepairLiftMutation } from "../hooks/u
 import { GameNotFoundPage } from "./GameNotFoundPage";
 import { ResortTopBar } from "../components/ResortTopBar";
 import { LiftList } from "../components/LiftList";
+import { JunkyardSection } from "../components/JunkyardSection";
 
 export function ResortPage() {
   const { guestId } = useParams<{ guestId: string }>();
@@ -15,6 +16,7 @@ export function ResortPage() {
   if (error || !data) return <div>Something went wrong.</div>;
 
   const activeLifts = data.lifts.filter((l) => l.status !== "junked");
+  const junkedLifts = data.lifts.filter((l) => l.status === "junked");
 
   return (
     <div>
@@ -26,6 +28,7 @@ export function ResortPage() {
         onBuy={(key) => buyLift.mutate({ guestId: guestId!, liftModelKey: key })}
         onRepair={(id) => repairLift.mutate({ guestId: guestId!, liftId: id })}
       />
+      <JunkyardSection liftModels={data.liftModels} junkedLifts={junkedLifts} />
     </div>
   );
 }
