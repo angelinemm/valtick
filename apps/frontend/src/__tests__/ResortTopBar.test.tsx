@@ -1,5 +1,6 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { ResortTopBar } from "../components/ResortTopBar";
 import type { ResortDTO, SummaryDTO } from "@val-tick/shared";
 
@@ -23,8 +24,8 @@ const summary: SummaryDTO = {
   junkedLiftsCount: 0,
 };
 
-function renderBar() {
-  render(<ResortTopBar resort={resort} summary={summary} />);
+function renderBar(onReset = vi.fn()) {
+  render(<ResortTopBar resort={resort} summary={summary} onReset={onReset} />);
 }
 
 describe("ResortTopBar", () => {
@@ -65,8 +66,29 @@ describe("ResortTopBar", () => {
 
   it("renders brokenLiftsCount of 0 when there are no broken lifts", () => {
     render(
-      <ResortTopBar resort={resort} summary={{ ...summary, brokenLiftsCount: 0 }} />
+      <ResortTopBar resort={resort} summary={{ ...summary, brokenLiftsCount: 0 }} onReset={vi.fn()} />
     );
     expect(screen.getByText("0")).toBeInTheDocument();
+  });
+
+  it("renders a Reset button", () => {
+    renderBar();
+    expect(screen.getByRole("button", { name: "Reset" })).toBeInTheDocument();
+  });
+
+  it("calls onReset after user confirms", async () => {
+    const onReset = vi.fn();
+    vi.spyOn(window, "confirm").mockReturnValue(true);
+    renderBar(onReset);
+    await userEvent.click(screen.getByRole("button", { name: "Reset" }));
+    expect(onReset).toHaveBeenCalledOnce();
+  });
+
+  it("does NOT call onReset if user cancels confirm", async () => {
+    const onReset = vi.fn();
+    vi.spyOn(window, "confirm").mockReturnValue(false);
+    renderBar(onReset);
+    await userEvent.click(screen.getByRole("button", { name: "Reset" }));
+    expect(onReset).not.toHaveBeenCalled();
   });
 });

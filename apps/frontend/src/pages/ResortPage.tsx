@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useResort, useBuyLiftMutation, useRepairLiftMutation } from "../hooks/useResort";
+import { useResort, useBuyLiftMutation, useRepairLiftMutation, useResetResortMutation } from "../hooks/useResort";
 import { GameNotFoundPage } from "./GameNotFoundPage";
 import { ResortTopBar } from "../components/ResortTopBar";
 import { LiftList } from "../components/LiftList";
@@ -11,6 +11,7 @@ export function ResortPage() {
   const { data, isLoading, error } = useResort(guestId!);
   const buyLift = useBuyLiftMutation(guestId!);
   const repairLift = useRepairLiftMutation(guestId!);
+  const resetResort = useResetResortMutation(guestId!);
 
   useTick(guestId!);
 
@@ -23,7 +24,11 @@ export function ResortPage() {
 
   return (
     <div>
-      <ResortTopBar resort={data.resort} summary={data.summary} />
+      <ResortTopBar
+        resort={data.resort}
+        summary={data.summary}
+        onReset={() => resetResort.mutate({ guestId: guestId! })}
+      />
       <LiftList
         liftModels={data.liftModels}
         lifts={activeLifts}

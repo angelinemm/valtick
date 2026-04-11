@@ -20,6 +20,10 @@ export async function updateLift(
   return prisma.lift.update({ where: { id }, data });
 }
 
+export async function deleteAllLiftsForResort(resortId: string): Promise<void> {
+  await prisma.lift.deleteMany({ where: { resortId } });
+}
+
 export async function bulkUpdateLifts(
   updates: Array<{
     id: string;

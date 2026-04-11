@@ -27,3 +27,9 @@ export interface RepairLiftRequest {
   guestId: string;
   liftId: string;
 }
+
+export interface ResetResortRequest {
+  guestId: string;
+}
+
+export type ResetResortResponse = GetResortResponse;

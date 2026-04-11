@@ -3,7 +3,7 @@ import { findResortByGuestId, updateResort } from "../db/resortRepository";
 import { bulkUpdateLifts } from "../db/liftRepository";
 import { formatResortResponse } from "../services/resortService";
 import { processOneTick } from "../services/tickService";
-import { buyLift, repairLift } from "../services/liftService";
+import { buyLift, repairLift, resetResort } from "../services/liftService";
 import type { LiftTickState } from "../services/tickService";
 import type { LiftModelKey } from "@val-tick/shared";
 
@@ -68,6 +68,19 @@ resortRouter.post("/repair_lift", async (req, res) => {
   }
 
   const updated = await repairLift(resort, liftId);
+  res.json(formatResortResponse(updated, updated.lifts));
+});
+
+resortRouter.post("/reset", async (req, res) => {
+  const { guestId } = req.body as { guestId: string };
+
+  const resort = await findResortByGuestId(guestId);
+  if (!resort) {
+    res.status(404).json({ error: "Game not found" });
+    return;
+  }
+
+  const updated = await resetResort(resort);
   res.json(formatResortResponse(updated, updated.lifts));
 });
 
