@@ -42,6 +42,7 @@ describe("getLiftModel", () => {
       priceBonusCents: 10,
       repairCostCents: 500,
       initialBreakChance: 0.002,
+      maxOwned: 10,
       iconKey: "magic-carpet",
     });
   });
@@ -51,11 +52,12 @@ describe("getLiftModel", () => {
     expect(model).toEqual({
       key: "cable_car",
       name: "Cable Car",
-      purchasePriceCents: 800000,
+      purchasePriceCents: 5000000,
       capacity: 100,
       priceBonusCents: 200,
-      repairCostCents: 80000,
+      repairCostCents: 500000,
       initialBreakChance: 0.002,
+      maxOwned: 1,
       iconKey: "cable-car",
     });
   });

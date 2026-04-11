@@ -8,6 +8,7 @@ export interface LiftModelDTO {
   priceBonusCents: number;
   repairCostCents: number;
   initialBreakChance: number;
+  maxOwned: number;
   iconKey: string;
 }
 

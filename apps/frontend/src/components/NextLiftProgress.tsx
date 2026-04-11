@@ -1,19 +1,20 @@
-import type { LiftModelDTO } from "@val-tick/shared";
+import type { LiftModelDTO, LiftModelKey } from "@val-tick/shared";
 import { formatMoney } from "../utils/format";
 import styles from "./NextLiftProgress.module.css";
 
 interface Props {
   liftModels: LiftModelDTO[];
   currentMoneyCents: number;
+  ownedModelKeys: Set<LiftModelKey>;
 }
 
-export function NextLiftProgress({ liftModels, currentMoneyCents }: Props) {
-  const nextModel = liftModels.find((m) => currentMoneyCents < m.purchasePriceCents);
+export function NextLiftProgress({ liftModels, currentMoneyCents, ownedModelKeys }: Props) {
+  const nextModel = liftModels.find((m) => !ownedModelKeys.has(m.key));
 
   if (!nextModel) {
     return (
       <div className={styles.container}>
-        <span className={styles.allAffordable}>You can buy anything — nice work.</span>
+        <span className={styles.allAffordable}>You own every lift model — nice work.</span>
       </div>
     );
   }

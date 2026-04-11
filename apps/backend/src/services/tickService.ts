@@ -21,8 +21,9 @@ export function processOneTick(
   // Step 1 & 2: calculate income from working lifts BEFORE any breaks
   const { incomePerSecCents } = calculateSummary(moneyCents, lifts);
 
-  // Step 3: add income
-  const updatedMoneyCents = moneyCents + incomePerSecCents;
+  // Step 3: add income, capped at Postgres INT max (2^31 - 1)
+  const MONEY_CAP = 2_147_483_647;
+  const updatedMoneyCents = Math.min(moneyCents + incomePerSecCents, MONEY_CAP);
 
   // Step 4: roll for breaks on working lifts only
   const updatedLifts = lifts.map((lift) => {
