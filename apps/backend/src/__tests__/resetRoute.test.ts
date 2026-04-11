@@ -28,8 +28,18 @@ describe.skipIf(!HAS_DB)("POST /reset", () => {
         lastTickAt: new Date(),
         lifts: {
           create: [
-            { liftModelKey: "gondola", status: "working", currentBreakProbability: 0.5 },
-            { liftModelKey: "chairlift", status: "broken", currentBreakProbability: 1.0 },
+            {
+              liftModelKey: "gondola",
+              name: "Test Gondola",
+              status: "working",
+              currentBreakProbability: 0.5,
+            },
+            {
+              liftModelKey: "chairlift",
+              name: "Test Chairlift",
+              status: "broken",
+              currentBreakProbability: 1.0,
+            },
           ],
         },
       },
@@ -70,6 +80,12 @@ describe.skipIf(!HAS_DB)("POST /reset", () => {
     const res = await agent.post("/reset").send({});
     expect(res.body.lifts[0].status).toBe("working");
     expect(res.body.lifts[0].currentBreakProbability).toBe(0.002);
+  });
+
+  it("new magic carpet has a name assigned after reset", async () => {
+    const res = await agent.post("/reset").send({});
+    expect(typeof res.body.lifts[0].name).toBe("string");
+    expect(res.body.lifts[0].name.length).toBeGreaterThan(0);
   });
 
   it("response matches full GetResortResponse shape", async () => {

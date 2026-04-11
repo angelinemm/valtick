@@ -29,6 +29,7 @@ describe.skipIf(!HAS_DB)("POST /tick", () => {
         lifts: {
           create: {
             liftModelKey: "magic_carpet",
+            name: "Test Lift",
             status: "working",
             currentBreakProbability: 0.001,
           },

@@ -30,6 +30,7 @@ describe.skipIf(!HAS_DB)("POST /repair_lift", () => {
         lifts: {
           create: {
             liftModelKey: "magic_carpet",
+            name: "Test Lift",
             status: "broken",
             currentBreakProbability: 0.002,
           },
@@ -105,6 +106,7 @@ describe.skipIf(!HAS_DB)("POST /repair_lift", () => {
         lifts: {
           create: {
             liftModelKey: "magic_carpet",
+            name: "Other Lift",
             status: "broken",
             currentBreakProbability: 0.001,
           },
@@ -124,6 +126,7 @@ describe.skipIf(!HAS_DB)("POST /repair_lift", () => {
       data: {
         resortId,
         liftModelKey: "drag_lift",
+        name: "Working Lift",
         status: "working",
         currentBreakProbability: 0.001,
       },
@@ -137,6 +140,7 @@ describe.skipIf(!HAS_DB)("POST /repair_lift", () => {
       data: {
         resortId,
         liftModelKey: "chairlift",
+        name: "Junked Lift",
         status: "junked",
         currentBreakProbability: 1.0,
       },

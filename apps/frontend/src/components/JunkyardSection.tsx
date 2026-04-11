@@ -27,7 +27,10 @@ export function JunkyardSection({ liftModels, junkedLifts }: Props) {
           {lifts.map((lift) => (
             <div key={lift.id} className={`${styles.card} ${styles.junked}`}>
               <img src={liftIcons[model.iconKey]} alt={model.name} width={20} height={20} />
-              <span>{model.name}</span>
+              <div className={styles.nameBlock}>
+                <span className={styles.liftName}>{lift.name}</span>
+                <span className={styles.modelName}>({model.name})</span>
+              </div>
               <span className={styles.junkedLabel}>JUNKED</span>
             </div>
           ))}

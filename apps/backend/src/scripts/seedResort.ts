@@ -1,4 +1,5 @@
 import { prisma } from "../db/prisma";
+import { assignLiftName } from "../utils/liftNameGenerator";
 import type { Resort } from "@prisma/client";
 
 export async function createResort(name: string): Promise<Resort> {
@@ -10,6 +11,7 @@ export async function createResort(name: string): Promise<Resort> {
       lifts: {
         create: {
           liftModelKey: "magic_carpet",
+          name: assignLiftName([]),
           status: "working",
           currentBreakProbability: 0.002,
         },

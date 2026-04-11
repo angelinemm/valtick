@@ -1,5 +1,6 @@
 import type { Resort, Lift } from "@prisma/client";
 import { prisma } from "./prisma";
+import { assignLiftName } from "../utils/liftNameGenerator";
 
 export type { Resort, Lift };
 
@@ -8,14 +9,14 @@ export async function findResortByUserId(
 ): Promise<(Resort & { lifts: Lift[] }) | null> {
   return prisma.resort.findUnique({
     where: { userId },
-    include: { lifts: true },
+    include: { lifts: { orderBy: { createdAt: "asc" } } },
   });
 }
 
 export async function findResortById(id: string): Promise<(Resort & { lifts: Lift[] }) | null> {
   return prisma.resort.findUnique({
     where: { id },
-    include: { lifts: true },
+    include: { lifts: { orderBy: { createdAt: "asc" } } },
   });
 }
 
@@ -42,6 +43,7 @@ export async function createResortForUser(
       lifts: {
         create: {
           liftModelKey: "magic_carpet",
+          name: assignLiftName([]),
           status: "working",
           currentBreakProbability: 0.002,
         },

@@ -71,6 +71,19 @@ describe.skipIf(!HAS_DB)("POST /buy_lift", () => {
     expect(res.body.lifts[0].currentBreakProbability).toBe(0.002);
   });
 
+  it("new lift has a non-empty name assigned", async () => {
+    const res = await agent.post("/buy_lift").send({ liftModelKey: "magic_carpet" });
+    expect(typeof res.body.lifts[0].name).toBe("string");
+    expect(res.body.lifts[0].name.length).toBeGreaterThan(0);
+  });
+
+  it("two lifts bought in the same resort get different names", async () => {
+    await agent.post("/buy_lift").send({ liftModelKey: "magic_carpet" });
+    const res = await agent.post("/buy_lift").send({ liftModelKey: "magic_carpet" });
+    const names = res.body.lifts.map((l: { name: string }) => l.name);
+    expect(new Set(names).size).toBe(names.length);
+  });
+
   it("insufficient funds: resort unchanged, still returns 200", async () => {
     // gondola costs 200000, we only have 10000
     const res = await agent.post("/buy_lift").send({ liftModelKey: "gondola" });
@@ -101,6 +114,7 @@ describe.skipIf(!HAS_DB)("POST /buy_lift", () => {
       data: {
         resortId,
         liftModelKey: "cable_car",
+        name: "Test Cable Car",
         status: "working",
         currentBreakProbability: 0.002,
       },
@@ -117,7 +131,13 @@ describe.skipIf(!HAS_DB)("POST /buy_lift", () => {
   it("junked lifts do not count toward the cap", async () => {
     // cable_car maxOwned=1; seed one junked — should still be able to buy one
     await prisma.lift.create({
-      data: { resortId, liftModelKey: "cable_car", status: "junked", currentBreakProbability: 1 },
+      data: {
+        resortId,
+        liftModelKey: "cable_car",
+        name: "Junked Cable Car",
+        status: "junked",
+        currentBreakProbability: 1,
+      },
     });
     await prisma.resort.update({ where: { id: resortId }, data: { moneyCents: 99999999 } });
     const res = await agent.post("/buy_lift").send({ liftModelKey: "cable_car" });
