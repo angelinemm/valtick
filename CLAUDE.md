@@ -7,6 +7,16 @@
 - When work is complete, push the branch and open a PR against main using `gh pr create`
 - PR title and description should summarise what changed and why
 
+## Testing
+
+- Before pushing, run the full test suite and make sure everything passes:
+  ```bash
+  npm test                                   # backend + shared
+  npm run test --workspace=apps/frontend     # frontend
+  ```
+- Never push with failing tests — fix them first, as part of the same commit or a follow-up commit on the same branch
+- If a UI change breaks a test due to updated markup or props, update the test to match the new behaviour — don't delete or skip it
+
 ## Linting and formatting
 
 - Before committing, run `npm run lint` and `npm run format:check` to catch issues early

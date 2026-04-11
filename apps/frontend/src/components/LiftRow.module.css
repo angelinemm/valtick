@@ -1,17 +1,70 @@
+.card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.4rem 0.7rem;
+  margin: 0.25rem 0;
+  background-color: var(--bg-surface-alt);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--border);
+  border-radius: 4px;
+}
+
+.card.working {
+  border-left-color: #2a6e3f;
+  background-color: #0d1f14;
+}
+
+.card.broken {
+  border-left-color: #8b2020;
+  background-color: #1a0f0f;
+}
+
+.card.junked {
+  border-left-color: #2e3a45;
+  background-color: #111820;
+  opacity: 0.55;
+  filter: saturate(0.3);
+}
+
+.status {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.workingLabel {
+  font-size: 0.75rem;
+  color: #4a9e62;
+}
+
 .brokenLabel {
-  color: #cc0000;
+  font-size: 0.75rem;
   font-weight: bold;
+  color: var(--danger);
+}
+
+.junkedLabel {
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: var(--text-muted);
 }
 
 .repairButton {
-  background-color: #cc0000;
-  color: white;
-  border: none;
+  background-color: #7a1515;
+  color: var(--text-primary);
+  border: 1px solid #a82020;
   padding: 0.25rem 0.5rem;
   cursor: pointer;
+  border-radius: 3px;
+  font-family: var(--font-mono);
+}
+
+.repairButton:hover:not(:disabled) {
+  background-color: #9e1c1c;
 }
 
 .repairButton:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
 }

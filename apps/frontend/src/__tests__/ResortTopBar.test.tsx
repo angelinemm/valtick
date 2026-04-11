@@ -25,7 +25,7 @@ const summary: SummaryDTO = {
 };
 
 function renderBar(onReset = vi.fn()) {
-  render(<ResortTopBar resort={resort} summary={summary} onReset={onReset} />);
+  render(<ResortTopBar resort={resort} summary={summary} tickCount={0} onReset={onReset} />);
 }
 
 describe("ResortTopBar", () => {
@@ -36,7 +36,7 @@ describe("ResortTopBar", () => {
 
   it("renders guest ID", () => {
     renderBar();
-    expect(screen.getByText("guest99")).toBeInTheDocument();
+    expect(screen.getByText("(guest99)")).toBeInTheDocument();
   });
 
   it("renders money as $10.00 when moneyCents=1000", () => {
@@ -69,6 +69,7 @@ describe("ResortTopBar", () => {
       <ResortTopBar
         resort={resort}
         summary={{ ...summary, brokenLiftsCount: 0 }}
+        tickCount={0}
         onReset={vi.fn()}
       />
     );

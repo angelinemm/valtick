@@ -1,0 +1,74 @@
+:root {
+  --font-mono: "JetBrains Mono", monospace;
+  --bg-base: #0d1b2a;
+  --bg-surface: #122030;
+  --bg-surface-alt: #192d42;
+  --border: #2a4060;
+  --text-primary: #ddeaf5;
+  --text-secondary: #8ab4d4;
+  --text-muted: #4d7296;
+  --danger: #e05252;
+  --btn-bg: #1e3a56;
+  --btn-border: #2a5078;
+  --btn-text: #c5dff0;
+  --btn-hover-bg: #2a5078;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+  font-size: 0.9rem;
+}
+
+h1,
+h2 {
+  color: var(--text-primary);
+}
+
+section {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--border);
+}
+
+details {
+  padding: 0.25rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+details > summary {
+  color: var(--text-secondary);
+}
+
+details > summary strong {
+  color: var(--text-primary);
+}
+
+button {
+  background-color: var(--btn-bg);
+  color: var(--btn-text);
+  border: 1px solid var(--btn-border);
+  padding: 0.25rem 0.6rem;
+  cursor: pointer;
+  border-radius: 3px;
+  font-size: 0.85rem;
+}
+
+button:hover:not(:disabled) {
+  background-color: var(--btn-hover-bg);
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

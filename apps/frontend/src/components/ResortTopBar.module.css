@@ -1,0 +1,105 @@
+.header {
+  padding: 0.6rem 1rem 0.5rem;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.mountains {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.meta {
+  margin-bottom: 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.resortName {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.guestId {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-left: 0.4rem;
+}
+
+.statsRow {
+  display: flex;
+  align-items: flex-end;
+  gap: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.statBlock {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.statLabel {
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.statValue {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+}
+
+/* Income block retains its distinct treatment */
+.incomeValue {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #7ec8e3;
+  font-family: var(--font-mono);
+}
+
+@keyframes tickPulse {
+  0% {
+    text-shadow: 0 0 0px #7ec8e3;
+    color: #7ec8e3;
+  }
+  30% {
+    text-shadow: 0 0 8px #7ec8e3;
+    color: #c5eaf7;
+  }
+  100% {
+    text-shadow: 0 0 0px #7ec8e3;
+    color: #7ec8e3;
+  }
+}
+
+.pulse {
+  animation: tickPulse 0.5s ease-out;
+}
+
+.resetButton {
+  background-color: #7a1515;
+  color: var(--text-primary);
+  border: 1px solid #a82020;
+  padding: 0.35rem 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 3px;
+  align-self: center;
+  white-space: nowrap;
+}
+
+.resetButton:hover {
+  background-color: #9e1c1c;
+}
