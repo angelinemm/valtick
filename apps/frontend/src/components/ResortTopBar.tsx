@@ -19,7 +19,8 @@ export function ResortTopBar({ resort, summary, tickCount, onReset }: Props) {
   return (
     <header className={styles.header}>
       <div className={styles.meta}>
-        {resort.name} &middot; {resort.guestId}
+        <span className={styles.resortName}>{resort.name}</span>
+        <span className={styles.guestId}>({resort.guestId})</span>
       </div>
       <div className={styles.statsRow}>
         <div className={styles.statBlock}>

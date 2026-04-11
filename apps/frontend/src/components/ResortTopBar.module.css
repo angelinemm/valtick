@@ -5,10 +5,19 @@
 }
 
 .meta {
-  font-size: 0.72rem;
-  color: var(--text-muted);
   margin-bottom: 0.5rem;
-  letter-spacing: 0.02em;
+}
+
+.resortName {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.guestId {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-left: 0.4rem;
 }
 
 .statsRow {
