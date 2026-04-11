@@ -113,11 +113,8 @@ describe("LiftGroup", () => {
     const rows = screen.getAllByText(/Magic Carpet/);
     // header + 2 rows; the broken row has a BROKEN sibling so check ordering via DOM
     const brokenLabel = screen.getByText("BROKEN");
-    const allRows = document.querySelectorAll("[data-testid='lift-row'], div > div");
     // verify BROKEN appears in the DOM before any row without it
-    const rowDivs = Array.from(
-      document.querySelectorAll("[style*='padding: 0.25rem']")
-    );
+    const rowDivs = Array.from(document.querySelectorAll("[style*='padding: 0.25rem']"));
     const brokenIndex = rowDivs.findIndex((r) => r.textContent?.includes("BROKEN"));
     const workingIndex = rowDivs.findIndex((r) => !r.textContent?.includes("BROKEN"));
     expect(brokenIndex).toBeLessThan(workingIndex);

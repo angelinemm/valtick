@@ -4,3 +4,4 @@ dist/
 *.tsbuildinfo
 .claude/
 todo.md
+.DS_Store
