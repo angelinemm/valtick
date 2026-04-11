@@ -1,40 +1,40 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchResort, postBuyLift, postRepairLift, postResetResort } from "../api/client";
-import type { BuyLiftRequest, RepairLiftRequest, ResetResortRequest } from "@val-tick/shared";
+import type { BuyLiftRequest, RepairLiftRequest } from "@val-tick/shared";
 
-export function useResort(guestId: string) {
+export function useResort() {
   return useQuery({
-    queryKey: ["resort", guestId],
-    queryFn: () => fetchResort(guestId),
+    queryKey: ["resort"],
+    queryFn: fetchResort,
   });
 }
 
-export function useBuyLiftMutation(guestId: string) {
+export function useBuyLiftMutation() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (req: BuyLiftRequest) => postBuyLift(req),
     onSuccess: (data) => {
-      queryClient.setQueryData(["resort", guestId], data);
+      queryClient.setQueryData(["resort"], data);
     },
   });
 }
 
-export function useRepairLiftMutation(guestId: string) {
+export function useRepairLiftMutation() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (req: RepairLiftRequest) => postRepairLift(req),
     onSuccess: (data) => {
-      queryClient.setQueryData(["resort", guestId], data);
+      queryClient.setQueryData(["resort"], data);
     },
   });
 }
 
-export function useResetResortMutation(guestId: string) {
+export function useResetResortMutation() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (req: ResetResortRequest) => postResetResort(req),
+    mutationFn: () => postResetResort(),
     onSuccess: (data) => {
-      queryClient.setQueryData(["resort", guestId], data);
+      queryClient.setQueryData(["resort"], data);
     },
   });
 }

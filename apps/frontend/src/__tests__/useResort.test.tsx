@@ -37,12 +37,14 @@ function makeWrapper() {
   };
 }
 
-afterEach(() => vi.restoreAllMocks());
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 describe("useResort", () => {
   it("returns loading state initially", () => {
     vi.spyOn(client, "fetchResort").mockResolvedValue(mockResponse);
-    const { result } = renderHook(() => useResort("abc123"), {
+    const { result } = renderHook(() => useResort(), {
       wrapper: makeWrapper(),
     });
     expect(result.current.isLoading).toBe(true);
@@ -50,7 +52,7 @@ describe("useResort", () => {
 
   it("returns data on 200 success", async () => {
     vi.spyOn(client, "fetchResort").mockResolvedValue(mockResponse);
-    const { result } = renderHook(() => useResort("abc123"), {
+    const { result } = renderHook(() => useResort(), {
       wrapper: makeWrapper(),
     });
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
@@ -59,7 +61,7 @@ describe("useResort", () => {
 
   it("surfaces NOT_FOUND error on 404", async () => {
     vi.spyOn(client, "fetchResort").mockRejectedValue(new Error("NOT_FOUND"));
-    const { result } = renderHook(() => useResort("nope"), {
+    const { result } = renderHook(() => useResort(), {
       wrapper: makeWrapper(),
     });
     await waitFor(() => expect(result.current.isError).toBe(true));

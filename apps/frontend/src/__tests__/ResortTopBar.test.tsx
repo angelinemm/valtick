@@ -24,8 +24,17 @@ const summary: SummaryDTO = {
   junkedLiftsCount: 0,
 };
 
-function renderBar(onReset = vi.fn()) {
-  render(<ResortTopBar resort={resort} summary={summary} tickCount={0} onReset={onReset} />);
+function renderBar(onReset = vi.fn(), onLogout = vi.fn()) {
+  render(
+    <ResortTopBar
+      resort={resort}
+      summary={summary}
+      tickCount={0}
+      username="skipper"
+      onReset={onReset}
+      onLogout={onLogout}
+    />
+  );
 }
 
 describe("ResortTopBar", () => {
@@ -34,9 +43,9 @@ describe("ResortTopBar", () => {
     expect(screen.getByText("Snowpeak")).toBeInTheDocument();
   });
 
-  it("renders guest ID", () => {
+  it("renders username", () => {
     renderBar();
-    expect(screen.getByText("(guest99)")).toBeInTheDocument();
+    expect(screen.getByText("skipper")).toBeInTheDocument();
   });
 
   it("renders money as $10.00 when moneyCents=1000", () => {
@@ -70,7 +79,9 @@ describe("ResortTopBar", () => {
         resort={resort}
         summary={{ ...summary, brokenLiftsCount: 0 }}
         tickCount={0}
+        username="skipper"
         onReset={vi.fn()}
+        onLogout={vi.fn()}
       />
     );
     expect(screen.getByText("0")).toBeInTheDocument();
@@ -79,6 +90,11 @@ describe("ResortTopBar", () => {
   it("renders a Reset button", () => {
     renderBar();
     expect(screen.getByRole("button", { name: "Reset" })).toBeInTheDocument();
+  });
+
+  it("renders a Log out button", () => {
+    renderBar();
+    expect(screen.getByRole("button", { name: "Log out" })).toBeInTheDocument();
   });
 
   it("calls onReset after user confirms", async () => {
@@ -95,5 +111,12 @@ describe("ResortTopBar", () => {
     renderBar(onReset);
     await userEvent.click(screen.getByRole("button", { name: "Reset" }));
     expect(onReset).not.toHaveBeenCalled();
+  });
+
+  it("calls onLogout when Log out is clicked", async () => {
+    const onLogout = vi.fn();
+    renderBar(vi.fn(), onLogout);
+    await userEvent.click(screen.getByRole("button", { name: "Log out" }));
+    expect(onLogout).toHaveBeenCalledOnce();
   });
 });

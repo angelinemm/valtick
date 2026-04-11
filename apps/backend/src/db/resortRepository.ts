@@ -12,6 +12,22 @@ export async function findResortByGuestId(
   });
 }
 
+export async function findResortByUserId(
+  userId: string
+): Promise<(Resort & { lifts: Lift[] }) | null> {
+  return prisma.resort.findUnique({
+    where: { userId },
+    include: { lifts: true },
+  });
+}
+
+export async function findResortById(id: string): Promise<(Resort & { lifts: Lift[] }) | null> {
+  return prisma.resort.findUnique({
+    where: { id },
+    include: { lifts: true },
+  });
+}
+
 export async function updateResort(
   id: string,
   data: { moneyCents: number; lastTickAt: Date }

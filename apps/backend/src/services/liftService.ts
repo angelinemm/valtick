@@ -1,7 +1,7 @@
 import type { Resort, Lift } from "@prisma/client";
 import type { LiftModelKey } from "@val-tick/shared";
 import { getLiftModel } from "../catalog/liftModelCatalog";
-import { updateResort, findResortByGuestId } from "../db/resortRepository";
+import { updateResort, findResortById } from "../db/resortRepository";
 import { createLift, updateLift, deleteAllLiftsForResort } from "../db/liftRepository";
 
 export async function buyLift(
@@ -33,7 +33,7 @@ export async function buyLift(
     currentBreakProbability: model.initialBreakChance,
   });
 
-  return (await findResortByGuestId(resort.guestId))!;
+  return (await findResortById(resort.id))!;
 }
 
 export async function resetResort(
@@ -47,7 +47,7 @@ export async function resetResort(
     status: "working",
     currentBreakProbability: 0.002,
   });
-  return (await findResortByGuestId(resort.guestId))!;
+  return (await findResortById(resort.id))!;
 }
 
 export async function repairLift(
@@ -73,5 +73,5 @@ export async function repairLift(
 
   await updateLift(liftId, { status: "working" });
 
-  return (await findResortByGuestId(resort.guestId))!;
+  return (await findResortById(resort.id))!;
 }

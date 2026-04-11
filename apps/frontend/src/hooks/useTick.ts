@@ -6,10 +6,10 @@ const ACTIVE_INTERVAL_MS = 1_000;
 const INACTIVE_INTERVAL_MS = 10_000;
 const STOP_AFTER_HIDDEN_MS = 5 * 60 * 1_000;
 
-export function useTick(guestId: string): { tickCount: number } {
+export function useTick(): { tickCount: number } {
   const queryClient = useQueryClient();
   const [tickCount, setTickCount] = useState(0);
-  const { mutate } = useTickMutation(guestId, () => setTickCount((c) => c + 1));
+  const { mutate } = useTickMutation(() => setTickCount((c) => c + 1));
 
   // Keep mutate in a ref so the effect closure never goes stale
   const mutateRef = useRef(mutate);
@@ -51,7 +51,7 @@ export function useTick(guestId: string): { tickCount: number } {
         const wasHiddenFor = hiddenAtRef.current !== null ? Date.now() - hiddenAtRef.current : 0;
         hiddenAtRef.current = null;
         if (wasHiddenFor >= STOP_AFTER_HIDDEN_MS) {
-          queryClient.invalidateQueries({ queryKey: ["resort", guestId] });
+          queryClient.invalidateQueries({ queryKey: ["resort"] });
         }
         startInterval(ACTIVE_INTERVAL_MS);
       }
@@ -67,7 +67,7 @@ export function useTick(guestId: string): { tickCount: number } {
       }
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [guestId, queryClient]);
+  }, [queryClient]);
 
   return { tickCount };
 }

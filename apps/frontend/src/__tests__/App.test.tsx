@@ -6,7 +6,8 @@ import App from "../App";
 import { NotFoundPage } from "../pages/NotFoundPage";
 import { GameNotFoundPage } from "../pages/GameNotFoundPage";
 import * as client from "../api/client";
-import type { GetResortResponse } from "@val-tick/shared";
+import * as authApi from "../api/auth";
+import type { GetResortResponse, UserDTO } from "@val-tick/shared";
 
 const mockResortResponse: GetResortResponse = {
   resort: {
@@ -31,7 +32,11 @@ const mockResortResponse: GetResortResponse = {
   lifts: [],
 };
 
-afterEach(() => vi.restoreAllMocks());
+const mockUser: UserDTO = { id: "u1", username: "testuser", role: "USER" };
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 function renderWithRouter(initialEntry: string) {
   const queryClient = new QueryClient({
@@ -47,10 +52,19 @@ function renderWithRouter(initialEntry: string) {
 }
 
 describe("App routing", () => {
-  it("renders resort name for /resort/:guestId", async () => {
+  it("renders resort name at / when authenticated", async () => {
+    vi.spyOn(authApi, "fetchMe").mockResolvedValue(mockUser);
     vi.spyOn(client, "fetchResort").mockResolvedValue(mockResortResponse);
-    renderWithRouter("/resort/abc123");
+    renderWithRouter("/");
     await waitFor(() => expect(screen.getByText("Snowpeak")).toBeInTheDocument());
+  });
+
+  it("redirects to /login when unauthenticated", async () => {
+    vi.spyOn(authApi, "fetchMe").mockResolvedValue(null);
+    renderWithRouter("/");
+    await waitFor(() =>
+      expect(screen.getByRole("button", { name: /log in/i })).toBeInTheDocument()
+    );
   });
 
   it("renders NotFoundPage for an unknown route", () => {

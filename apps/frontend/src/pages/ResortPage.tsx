@@ -1,25 +1,36 @@
-import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   useResort,
   useBuyLiftMutation,
   useRepairLiftMutation,
   useResetResortMutation,
 } from "../hooks/useResort";
+import { useAuth } from "../hooks/useAuth";
 import { GameNotFoundPage } from "./GameNotFoundPage";
 import { ResortTopBar } from "../components/ResortTopBar";
 import { LiftList } from "../components/LiftList";
 import { JunkyardSection } from "../components/JunkyardSection";
 import { NextLiftProgress } from "../components/NextLiftProgress";
 import { useTick } from "../hooks/useTick";
+import { logout } from "../api/auth";
 
 export function ResortPage() {
-  const { guestId } = useParams<{ guestId: string }>();
-  const { data, isLoading, error } = useResort(guestId!);
-  const buyLift = useBuyLiftMutation(guestId!);
-  const repairLift = useRepairLiftMutation(guestId!);
-  const resetResort = useResetResortMutation(guestId!);
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { user } = useAuth();
+  const { data, isLoading, error } = useResort();
+  const buyLift = useBuyLiftMutation();
+  const repairLift = useRepairLiftMutation();
+  const resetResort = useResetResortMutation();
 
-  const { tickCount } = useTick(guestId!);
+  const { tickCount } = useTick();
+
+  async function handleLogout() {
+    await logout();
+    queryClient.clear();
+    navigate("/login");
+  }
 
   if (isLoading) return <div>Loading...</div>;
   if (error?.message === "NOT_FOUND") return <GameNotFoundPage />;
@@ -34,7 +45,9 @@ export function ResortPage() {
         resort={data.resort}
         summary={data.summary}
         tickCount={tickCount}
-        onReset={() => resetResort.mutate({ guestId: guestId! })}
+        username={user?.username ?? ""}
+        onReset={() => resetResort.mutate()}
+        onLogout={handleLogout}
       />
       <NextLiftProgress
         liftModels={data.liftModels}
@@ -45,8 +58,8 @@ export function ResortPage() {
         liftModels={data.liftModels}
         lifts={activeLifts}
         currentMoneyCents={data.summary.moneyCents}
-        onBuy={(key) => buyLift.mutate({ guestId: guestId!, liftModelKey: key })}
-        onRepair={(id) => repairLift.mutate({ guestId: guestId!, liftId: id })}
+        onBuy={(key) => buyLift.mutate({ liftModelKey: key })}
+        onRepair={(id) => repairLift.mutate({ liftId: id })}
       />
       <JunkyardSection liftModels={data.liftModels} junkedLifts={junkedLifts} />
     </div>

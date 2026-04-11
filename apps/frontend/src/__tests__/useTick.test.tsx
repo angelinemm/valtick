@@ -52,14 +52,14 @@ afterEach(() => {
 describe("useTick", () => {
   it("tick mutation called after 1000ms when tab active", () => {
     const { wrapper } = makeWrapper();
-    renderHook(() => useTick("abc"), { wrapper });
+    renderHook(() => useTick(), { wrapper });
     vi.advanceTimersByTime(1000);
     expect(mutateSpy).toHaveBeenCalledOnce();
   });
 
   it("tick mutation NOT called at 1000ms when tab hidden", () => {
     const { wrapper } = makeWrapper();
-    renderHook(() => useTick("abc"), { wrapper });
+    renderHook(() => useTick(), { wrapper });
     hideTab();
     vi.advanceTimersByTime(1000);
     expect(mutateSpy).not.toHaveBeenCalled();
@@ -67,7 +67,7 @@ describe("useTick", () => {
 
   it("tick mutation called at 10000ms when tab hidden", () => {
     const { wrapper } = makeWrapper();
-    renderHook(() => useTick("abc"), { wrapper });
+    renderHook(() => useTick(), { wrapper });
     hideTab();
     vi.advanceTimersByTime(10_000);
     expect(mutateSpy).toHaveBeenCalledOnce();
@@ -75,7 +75,7 @@ describe("useTick", () => {
 
   it("after 5 minutes hidden, no more ticks fire", () => {
     const { wrapper } = makeWrapper();
-    renderHook(() => useTick("abc"), { wrapper });
+    renderHook(() => useTick(), { wrapper });
     hideTab();
     // Advance to 5 min — the tick at exactly 300s sees hiddenFor>=5min and stops
     vi.advanceTimersByTime(5 * 60 * 1_000);
@@ -89,13 +89,13 @@ describe("useTick", () => {
     const { queryClient, wrapper } = makeWrapper();
     const invalidateSpy = vi.spyOn(queryClient, "invalidateQueries");
 
-    renderHook(() => useTick("abc123"), { wrapper });
+    renderHook(() => useTick(), { wrapper });
     hideTab();
     vi.advanceTimersByTime(5 * 60 * 1_000 + 1_000);
     showTab();
 
     expect(invalidateSpy).toHaveBeenCalledWith({
-      queryKey: ["resort", "abc123"],
+      queryKey: ["resort"],
     });
 
     mutateSpy.mockClear();
@@ -107,7 +107,7 @@ describe("useTick", () => {
     const { queryClient, wrapper } = makeWrapper();
     const invalidateSpy = vi.spyOn(queryClient, "invalidateQueries");
 
-    renderHook(() => useTick("abc"), { wrapper });
+    renderHook(() => useTick(), { wrapper });
     hideTab();
     vi.advanceTimersByTime(60 * 1_000); // 1 minute
     showTab();
@@ -121,7 +121,7 @@ describe("useTick", () => {
 
   it("on unmount, interval is cleared, no more ticks fire", () => {
     const { wrapper } = makeWrapper();
-    const { unmount } = renderHook(() => useTick("abc"), { wrapper });
+    const { unmount } = renderHook(() => useTick(), { wrapper });
 
     vi.advanceTimersByTime(1_000);
     expect(mutateSpy).toHaveBeenCalledOnce();
