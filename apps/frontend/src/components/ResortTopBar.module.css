@@ -69,6 +69,39 @@
   font-family: var(--font-mono);
 }
 
+/* Broken lifts alert treatment */
+.brokenValue {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+}
+
+.brokenValueAlert {
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+}
+
+@keyframes brokenPulse {
+  0% {
+    text-shadow: 0 0 0px #e07070;
+    color: #e07070;
+  }
+  30% {
+    text-shadow: 0 0 8px #e07070;
+    color: #f5a0a0;
+  }
+  100% {
+    text-shadow: 0 0 0px #e07070;
+    color: #e07070;
+  }
+}
+
+.brokenPulse {
+  animation: brokenPulse 0.5s ease-out;
+}
+
 /* Income block retains its distinct treatment */
 .incomeValue {
   font-size: 1.15rem;

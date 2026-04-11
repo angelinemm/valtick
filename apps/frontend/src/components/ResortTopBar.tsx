@@ -75,7 +75,16 @@ export function ResortTopBar({
         </div>
         <div className={styles.statBlock}>
           <span className={styles.statLabel}>Broken</span>
-          <span className={styles.statValue}>{summary.brokenLiftsCount}</span>
+          {summary.brokenLiftsCount > 0 ? (
+            <span
+              key={`broken-${tickCount}`}
+              className={`${styles.brokenValueAlert} ${styles.brokenPulse}`}
+            >
+              {summary.brokenLiftsCount}
+            </span>
+          ) : (
+            <span className={styles.brokenValue}>{summary.brokenLiftsCount}</span>
+          )}
         </div>
         <button className={styles.subtleButton} onClick={() => navigate("/how-to-play")}>
           How to Play
