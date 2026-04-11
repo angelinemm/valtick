@@ -15,7 +15,7 @@ export interface LiftModelDTO {
 export interface ResortDTO {
   id: string;
   name: string;
-  guestId: string;
+  guestId: string | null;
   moneyCents: number;
   lastTickAt: string;
   createdAt: string;

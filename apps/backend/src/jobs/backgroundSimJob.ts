@@ -1,4 +1,4 @@
-import { findIdleResorts, findResortByGuestId, updateResort } from "../db/resortRepository";
+import { findIdleResorts, findResortById, updateResort } from "../db/resortRepository";
 import { bulkUpdateLifts } from "../db/liftRepository";
 import { simulateOfflineTicks } from "../services/offlineSimService";
 import type { LiftTickState } from "../services/tickService";
@@ -14,7 +14,7 @@ export async function runBackgroundSim(): Promise<void> {
 
   for (const idleResort of idleResorts) {
     try {
-      const resort = await findResortByGuestId(idleResort.guestId);
+      const resort = await findResortById(idleResort.id);
       if (!resort) continue;
 
       const liftStates: LiftTickState[] = resort.lifts.map((l) => ({
@@ -37,9 +37,9 @@ export async function runBackgroundSim(): Promise<void> {
       });
       await bulkUpdateLifts(updatedLifts);
 
-      console.log(`[backgroundSim] Resort ${resort.guestId}: simulated ${ticksSimulated} ticks`);
+      console.log(`[backgroundSim] Resort ${resort.id}: simulated ${ticksSimulated} ticks`);
     } catch (e) {
-      console.error(`[backgroundSim] Error processing resort ${idleResort.guestId}:`, e);
+      console.error(`[backgroundSim] Error processing resort ${idleResort.id}:`, e);
     }
   }
 }

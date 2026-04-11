@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { findResortByGuestId, updateResort } from "../db/resortRepository";
+import { findResortByUserId, updateResort } from "../db/resortRepository";
 import { bulkUpdateLifts } from "../db/liftRepository";
 import { formatResortResponse } from "../services/resortService";
 import { processOneTick } from "../services/tickService";
@@ -10,9 +10,7 @@ import type { LiftModelKey } from "@val-tick/shared";
 export const resortRouter = Router();
 
 resortRouter.post("/tick", async (req, res) => {
-  const { guestId } = req.body as { guestId: string };
-
-  const resort = await findResortByGuestId(guestId);
+  const resort = await findResortByUserId(req.user!.id);
   if (!resort) {
     res.status(404).json({ error: "Game not found" });
     return;
@@ -37,12 +35,9 @@ resortRouter.post("/tick", async (req, res) => {
 });
 
 resortRouter.post("/buy_lift", async (req, res) => {
-  const { guestId, liftModelKey } = req.body as {
-    guestId: string;
-    liftModelKey: LiftModelKey;
-  };
+  const { liftModelKey } = req.body as { liftModelKey: LiftModelKey };
 
-  const resort = await findResortByGuestId(guestId);
+  const resort = await findResortByUserId(req.user!.id);
   if (!resort) {
     res.status(404).json({ error: "Game not found" });
     return;
@@ -53,12 +48,9 @@ resortRouter.post("/buy_lift", async (req, res) => {
 });
 
 resortRouter.post("/repair_lift", async (req, res) => {
-  const { guestId, liftId } = req.body as {
-    guestId: string;
-    liftId: string;
-  };
+  const { liftId } = req.body as { liftId: string };
 
-  const resort = await findResortByGuestId(guestId);
+  const resort = await findResortByUserId(req.user!.id);
   if (!resort) {
     res.status(404).json({ error: "Game not found" });
     return;
@@ -69,9 +61,7 @@ resortRouter.post("/repair_lift", async (req, res) => {
 });
 
 resortRouter.post("/reset", async (req, res) => {
-  const { guestId } = req.body as { guestId: string };
-
-  const resort = await findResortByGuestId(guestId);
+  const resort = await findResortByUserId(req.user!.id);
   if (!resort) {
     res.status(404).json({ error: "Game not found" });
     return;
@@ -81,10 +71,8 @@ resortRouter.post("/reset", async (req, res) => {
   res.json(formatResortResponse(updated, updated.lifts));
 });
 
-resortRouter.get("/resort/:guestId", async (req, res) => {
-  const { guestId } = req.params;
-
-  const resort = await findResortByGuestId(guestId);
+resortRouter.get("/resort", async (req, res) => {
+  const resort = await findResortByUserId(req.user!.id);
   if (!resort) {
     res.status(404).json({ error: "Game not found" });
     return;

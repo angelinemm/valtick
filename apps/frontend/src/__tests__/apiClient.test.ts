@@ -25,7 +25,9 @@ const mockResortResponse: GetResortResponse = {
   lifts: [],
 };
 
-afterEach(() => vi.restoreAllMocks());
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 describe("fetchResort", () => {
   it("parses and returns GetResortResponse on 200", async () => {
@@ -37,23 +39,26 @@ describe("fetchResort", () => {
         json: () => Promise.resolve(mockResortResponse),
       })
     );
-    const result = await fetchResort("abc123");
+    const result = await fetchResort();
     expect(result).toEqual(mockResortResponse);
+    const [url, options] = vi.mocked(fetch).mock.calls[0] as [string, RequestInit | undefined];
+    expect(url).toContain("/resort");
+    expect((options as RequestInit).credentials).toBe("include");
   });
 
   it("throws Error('NOT_FOUND') on 404", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 404 }));
-    await expect(fetchResort("nope")).rejects.toThrow("NOT_FOUND");
+    await expect(fetchResort()).rejects.toThrow("NOT_FOUND");
   });
 
   it("throws on 500", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 500 }));
-    await expect(fetchResort("abc123")).rejects.toThrow("HTTP 500");
+    await expect(fetchResort()).rejects.toThrow("HTTP 500");
   });
 });
 
 describe("postTick", () => {
-  it("sends correct body and returns { ok: true }", async () => {
+  it("sends credentials and returns { ok: true }", async () => {
     const mockFetch = vi.fn().mockResolvedValue({
       ok: true,
       status: 200,
@@ -61,16 +66,16 @@ describe("postTick", () => {
     });
     vi.stubGlobal("fetch", mockFetch);
 
-    const result = await postTick("abc123");
+    const result = await postTick();
 
     expect(result).toEqual({ ok: true });
     const [, options] = mockFetch.mock.calls[0] as [string, RequestInit];
-    expect(JSON.parse(options.body as string)).toEqual({ guestId: "abc123" });
+    expect(options.credentials).toBe("include");
   });
 });
 
 describe("postBuyLift", () => {
-  it("sends correct body", async () => {
+  it("sends correct body without guestId", async () => {
     const mockFetch = vi.fn().mockResolvedValue({
       ok: true,
       status: 200,
@@ -78,18 +83,16 @@ describe("postBuyLift", () => {
     });
     vi.stubGlobal("fetch", mockFetch);
 
-    await postBuyLift({ guestId: "abc123", liftModelKey: "magic_carpet" });
+    await postBuyLift({ liftModelKey: "magic_carpet" });
 
     const [, options] = mockFetch.mock.calls[0] as [string, RequestInit];
-    expect(JSON.parse(options.body as string)).toEqual({
-      guestId: "abc123",
-      liftModelKey: "magic_carpet",
-    });
+    expect(JSON.parse(options.body as string)).toEqual({ liftModelKey: "magic_carpet" });
+    expect(options.credentials).toBe("include");
   });
 });
 
 describe("postRepairLift", () => {
-  it("sends correct body", async () => {
+  it("sends correct body without guestId", async () => {
     const mockFetch = vi.fn().mockResolvedValue({
       ok: true,
       status: 200,
@@ -97,12 +100,10 @@ describe("postRepairLift", () => {
     });
     vi.stubGlobal("fetch", mockFetch);
 
-    await postRepairLift({ guestId: "abc123", liftId: "lift-1" });
+    await postRepairLift({ liftId: "lift-1" });
 
     const [, options] = mockFetch.mock.calls[0] as [string, RequestInit];
-    expect(JSON.parse(options.body as string)).toEqual({
-      guestId: "abc123",
-      liftId: "lift-1",
-    });
+    expect(JSON.parse(options.body as string)).toEqual({ liftId: "lift-1" });
+    expect(options.credentials).toBe("include");
   });
 });

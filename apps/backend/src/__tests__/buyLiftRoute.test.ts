@@ -1,94 +1,93 @@
 import { describe, it, expect, beforeEach, afterEach, afterAll } from "vitest";
 import request from "supertest";
+import bcrypt from "bcrypt";
 import { app } from "../index";
 import { prisma } from "../db/prisma";
 
 const HAS_DB = !!process.env.DATABASE_URL;
 
 describe.skipIf(!HAS_DB)("POST /buy_lift", () => {
-  let guestId: string;
+  let agent: ReturnType<typeof request.agent>;
+  let userId: string;
   let resortId: string;
+  let userEmail: string;
 
   beforeEach(async () => {
-    guestId = `test-buy-${Date.now()}-${Math.random()}`;
+    userEmail = `test-buy-${Date.now()}-${Math.random()}@example.com`;
+    const passwordHash = await bcrypt.hash("test-password", 1);
+    const user = await prisma.user.create({
+      data: { email: userEmail, passwordHash, role: "USER" },
+    });
+    userId = user.id;
+
     const resort = await prisma.resort.create({
       data: {
         name: "Buy Test Resort",
-        guestId,
+        userId,
         moneyCents: 10000,
         lastTickAt: new Date(),
       },
     });
     resortId = resort.id;
+
+    agent = request.agent(app);
+    await agent.post("/auth/login").send({ email: userEmail, password: "test-password" });
   });
 
   afterEach(async () => {
     await prisma.resort.deleteMany({ where: { id: resortId } });
+    await prisma.user.deleteMany({ where: { id: userId } });
   });
 
   afterAll(async () => {
     await prisma.$disconnect();
   });
 
-  it("returns 404 for an unknown guestId", async () => {
-    const res = await request(app)
-      .post("/buy_lift")
-      .send({ guestId: "no-such-resort", liftModelKey: "magic_carpet" });
-    expect(res.status).toBe(404);
+  it("returns 401 when not authenticated", async () => {
+    const res = await request(app).post("/buy_lift").send({ liftModelKey: "magic_carpet" });
+    expect(res.status).toBe(401);
   });
 
   it("successful buy: new lift appears in response", async () => {
-    const res = await request(app)
-      .post("/buy_lift")
-      .send({ guestId, liftModelKey: "magic_carpet" });
+    const res = await agent.post("/buy_lift").send({ liftModelKey: "magic_carpet" });
     expect(res.status).toBe(200);
     expect(res.body.lifts).toHaveLength(1);
     expect(res.body.lifts[0].liftModelKey).toBe("magic_carpet");
   });
 
   it("successful buy: money reduced by purchase price", async () => {
-    const res = await request(app)
-      .post("/buy_lift")
-      .send({ guestId, liftModelKey: "magic_carpet" });
+    const res = await agent.post("/buy_lift").send({ liftModelKey: "magic_carpet" });
     // magic_carpet costs 5000 cents, started with 10000
     expect(res.body.resort.moneyCents).toBe(5000);
   });
 
   it("new lift has status working", async () => {
-    const res = await request(app)
-      .post("/buy_lift")
-      .send({ guestId, liftModelKey: "magic_carpet" });
+    const res = await agent.post("/buy_lift").send({ liftModelKey: "magic_carpet" });
     expect(res.body.lifts[0].status).toBe("working");
   });
 
   it("new lift has initial break probability 0.002", async () => {
-    const res = await request(app)
-      .post("/buy_lift")
-      .send({ guestId, liftModelKey: "magic_carpet" });
+    const res = await agent.post("/buy_lift").send({ liftModelKey: "magic_carpet" });
     expect(res.body.lifts[0].currentBreakProbability).toBe(0.002);
   });
 
   it("insufficient funds: resort unchanged, still returns 200", async () => {
     // gondola costs 200000, we only have 10000
-    const res = await request(app).post("/buy_lift").send({ guestId, liftModelKey: "gondola" });
+    const res = await agent.post("/buy_lift").send({ liftModelKey: "gondola" });
     expect(res.status).toBe(200);
     expect(res.body.lifts).toHaveLength(0);
     expect(res.body.resort.moneyCents).toBe(10000);
   });
 
   it("can buy multiple lifts of the same type", async () => {
-    await request(app).post("/buy_lift").send({ guestId, liftModelKey: "magic_carpet" });
-    const res = await request(app)
-      .post("/buy_lift")
-      .send({ guestId, liftModelKey: "magic_carpet" });
+    await agent.post("/buy_lift").send({ liftModelKey: "magic_carpet" });
+    const res = await agent.post("/buy_lift").send({ liftModelKey: "magic_carpet" });
     expect(res.body.lifts).toHaveLength(2);
     expect(res.body.resort.moneyCents).toBe(0);
   });
 
   it("response matches full GetResortResponse shape", async () => {
-    const res = await request(app)
-      .post("/buy_lift")
-      .send({ guestId, liftModelKey: "magic_carpet" });
+    const res = await agent.post("/buy_lift").send({ liftModelKey: "magic_carpet" });
     expect(res.body).toHaveProperty("resort");
     expect(res.body).toHaveProperty("summary");
     expect(res.body).toHaveProperty("liftModels");
@@ -107,7 +106,7 @@ describe.skipIf(!HAS_DB)("POST /buy_lift", () => {
       },
     });
     await prisma.resort.update({ where: { id: resortId }, data: { moneyCents: 99999999 } });
-    const res = await request(app).post("/buy_lift").send({ guestId, liftModelKey: "cable_car" });
+    const res = await agent.post("/buy_lift").send({ liftModelKey: "cable_car" });
     expect(res.status).toBe(200);
     const cableCars = res.body.lifts.filter(
       (l: { liftModelKey: string }) => l.liftModelKey === "cable_car"
@@ -121,7 +120,7 @@ describe.skipIf(!HAS_DB)("POST /buy_lift", () => {
       data: { resortId, liftModelKey: "cable_car", status: "junked", currentBreakProbability: 1 },
     });
     await prisma.resort.update({ where: { id: resortId }, data: { moneyCents: 99999999 } });
-    const res = await request(app).post("/buy_lift").send({ guestId, liftModelKey: "cable_car" });
+    const res = await agent.post("/buy_lift").send({ liftModelKey: "cable_car" });
     expect(res.status).toBe(200);
     const activeCableCars = res.body.lifts.filter(
       (l: { liftModelKey: string; status: string }) =>
