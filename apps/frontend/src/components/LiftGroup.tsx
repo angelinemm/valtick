@@ -36,7 +36,7 @@ export function LiftGroup({ model, lifts, onBuy, onRepair, canAffordBuy, canAffo
           Buy ({formatMoney(model.purchasePriceCents)})
         </button>
       </summary>
-      <div style={{ paddingLeft: "1rem" }}>
+      <div style={{ paddingLeft: "0.5rem" }}>
         {sortedLifts.map((lift) => (
           <LiftRow
             key={lift.id}

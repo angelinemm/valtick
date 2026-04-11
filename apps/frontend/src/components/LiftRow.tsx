@@ -14,11 +14,11 @@ export function LiftRow({ lift, model, onRepair, canAffordRepair }: Props) {
   const isBroken = lift.status === "broken";
 
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "0.25rem 0" }}>
-      <img src={liftIcons[model.iconKey]} alt={model.name} width={24} height={24} />
+    <div className={`${styles.card} ${isBroken ? styles.broken : ""}`}>
+      <img src={liftIcons[model.iconKey]} alt={model.name} width={20} height={20} />
       <span>{model.name}</span>
-      <span>{model.capacity}/sec</span>
-      {isBroken && (
+      <span className={styles.status}>{model.capacity}/sec</span>
+      {isBroken ? (
         <>
           <span className={styles.brokenLabel}>BROKEN</span>
           <button
@@ -29,6 +29,8 @@ export function LiftRow({ lift, model, onRepair, canAffordRepair }: Props) {
             Repair ({formatMoney(model.repairCostCents)})
           </button>
         </>
+      ) : (
+        <span className={styles.status}>working</span>
       )}
     </div>
   );

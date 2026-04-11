@@ -1,6 +1,28 @@
+.card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.4rem 0.7rem;
+  margin: 0.25rem 0;
+  background-color: var(--bg-surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.card.broken {
+  border-color: #6b2020;
+  background-color: #1a1010;
+}
+
+.status {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
 .brokenLabel {
   color: var(--danger);
   font-weight: bold;
+  font-size: 0.75rem;
 }
 
 .repairButton {
