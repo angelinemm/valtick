@@ -46,6 +46,7 @@ export function ResortPage() {
         summary={data.summary}
         tickCount={tickCount}
         username={user?.username ?? ""}
+        isAdmin={user?.role === "ADMIN"}
         onReset={() => resetResort.mutate()}
         onLogout={handleLogout}
       />

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import type { ResortDTO, SummaryDTO } from "@val-tick/shared";
 import { formatMoney, formatMoneyPerSec } from "../utils/format";
 import styles from "./ResortTopBar.module.css";
@@ -7,11 +8,20 @@ interface Props {
   summary: SummaryDTO;
   tickCount: number;
   username: string;
+  isAdmin?: boolean;
   onReset: () => void;
   onLogout: () => void;
 }
 
-export function ResortTopBar({ resort, summary, tickCount, username, onReset, onLogout }: Props) {
+export function ResortTopBar({
+  resort,
+  summary,
+  tickCount,
+  username,
+  isAdmin,
+  onReset,
+  onLogout,
+}: Props) {
   function handleReset() {
     if (window.confirm("Are you sure you want to reset your resort? This cannot be undone.")) {
       onReset();
@@ -41,6 +51,11 @@ export function ResortTopBar({ resort, summary, tickCount, username, onReset, on
       <div className={styles.meta}>
         <span className={styles.resortName}>{resort.name}</span>
         <span className={styles.username}>{username}</span>
+        {isAdmin && (
+          <Link to="/admin" className={styles.adminLink}>
+            Admin
+          </Link>
+        )}
       </div>
       <div className={styles.statsRow}>
         <div className={styles.statBlock}>

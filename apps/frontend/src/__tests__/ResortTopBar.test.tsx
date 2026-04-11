@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
 import { ResortTopBar } from "../components/ResortTopBar";
 import type { ResortDTO, SummaryDTO } from "@val-tick/shared";
@@ -23,16 +24,20 @@ const summary: SummaryDTO = {
   junkedLiftsCount: 0,
 };
 
-function renderBar(onReset = vi.fn(), onLogout = vi.fn()) {
+function renderBar(opts: { isAdmin?: boolean; onReset?: () => void; onLogout?: () => void } = {}) {
+  const { isAdmin = false, onReset = vi.fn(), onLogout = vi.fn() } = opts;
   render(
-    <ResortTopBar
-      resort={resort}
-      summary={summary}
-      tickCount={0}
-      username="skipper"
-      onReset={onReset}
-      onLogout={onLogout}
-    />
+    <MemoryRouter>
+      <ResortTopBar
+        resort={resort}
+        summary={summary}
+        tickCount={0}
+        username="skipper"
+        isAdmin={isAdmin}
+        onReset={onReset}
+        onLogout={onLogout}
+      />
+    </MemoryRouter>
   );
 }
 
@@ -74,14 +79,16 @@ describe("ResortTopBar", () => {
 
   it("renders brokenLiftsCount of 0 when there are no broken lifts", () => {
     render(
-      <ResortTopBar
-        resort={resort}
-        summary={{ ...summary, brokenLiftsCount: 0 }}
-        tickCount={0}
-        username="skipper"
-        onReset={vi.fn()}
-        onLogout={vi.fn()}
-      />
+      <MemoryRouter>
+        <ResortTopBar
+          resort={resort}
+          summary={{ ...summary, brokenLiftsCount: 0 }}
+          tickCount={0}
+          username="skipper"
+          onReset={vi.fn()}
+          onLogout={vi.fn()}
+        />
+      </MemoryRouter>
     );
     expect(screen.getByText("0")).toBeInTheDocument();
   });
@@ -96,10 +103,20 @@ describe("ResortTopBar", () => {
     expect(screen.getByRole("button", { name: "Log out" })).toBeInTheDocument();
   });
 
+  it("does not render Admin link for non-admin users", () => {
+    renderBar({ isAdmin: false });
+    expect(screen.queryByRole("link", { name: "Admin" })).toBeNull();
+  });
+
+  it("renders Admin link for admin users", () => {
+    renderBar({ isAdmin: true });
+    expect(screen.getByRole("link", { name: "Admin" })).toBeInTheDocument();
+  });
+
   it("calls onReset after user confirms", async () => {
     const onReset = vi.fn();
     vi.spyOn(window, "confirm").mockReturnValue(true);
-    renderBar(onReset);
+    renderBar({ onReset });
     await userEvent.click(screen.getByRole("button", { name: "Reset" }));
     expect(onReset).toHaveBeenCalledOnce();
   });
@@ -107,14 +124,14 @@ describe("ResortTopBar", () => {
   it("does NOT call onReset if user cancels confirm", async () => {
     const onReset = vi.fn();
     vi.spyOn(window, "confirm").mockReturnValue(false);
-    renderBar(onReset);
+    renderBar({ onReset });
     await userEvent.click(screen.getByRole("button", { name: "Reset" }));
     expect(onReset).not.toHaveBeenCalled();
   });
 
   it("calls onLogout when Log out is clicked", async () => {
     const onLogout = vi.fn();
-    renderBar(vi.fn(), onLogout);
+    renderBar({ onLogout });
     await userEvent.click(screen.getByRole("button", { name: "Log out" }));
     expect(onLogout).toHaveBeenCalledOnce();
   });
