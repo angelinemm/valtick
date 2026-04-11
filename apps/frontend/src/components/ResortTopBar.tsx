@@ -46,16 +46,12 @@ export function ResortTopBar({ resort, summary, onReset }: Props) {
         <strong>Broken:</strong> {summary.brokenLiftsCount}
       </span>
       <button
+        className="reset-button"
         onClick={handleReset}
         style={{
           marginLeft: "auto",
-          backgroundColor: "#cc0000",
-          color: "white",
-          border: "none",
           padding: "0.4rem 1rem",
           fontWeight: "bold",
-          cursor: "pointer",
-          borderRadius: "4px",
         }}
       >
         Reset

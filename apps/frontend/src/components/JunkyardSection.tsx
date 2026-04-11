@@ -35,7 +35,7 @@ export function JunkyardSection({ liftModels, junkedLifts }: Props) {
             >
               <img src={liftIcons[model.iconKey]} alt={model.name} width={24} height={24} />
               <span>{model.name}</span>
-              <span style={{ color: "#888", fontWeight: "bold" }}>JUNKED</span>
+              <span style={{ color: "var(--text-muted)", fontWeight: "bold" }}>JUNKED</span>
             </div>
           ))}
         </div>

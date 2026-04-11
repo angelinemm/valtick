@@ -1,17 +1,22 @@
 .brokenLabel {
-  color: #cc0000;
+  color: var(--danger);
   font-weight: bold;
 }
 
 .repairButton {
-  background-color: #cc0000;
-  color: white;
-  border: none;
+  background-color: #7a1515;
+  color: var(--text-primary);
+  border: 1px solid #a82020;
   padding: 0.25rem 0.5rem;
   cursor: pointer;
+  border-radius: 3px;
+}
+
+.repairButton:hover:not(:disabled) {
+  background-color: #9e1c1c;
 }
 
 .repairButton:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
 }
