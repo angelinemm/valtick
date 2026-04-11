@@ -18,6 +18,24 @@ export function ResortTopBar({ resort, summary, tickCount, onReset }: Props) {
 
   return (
     <header className={styles.header}>
+      <svg
+        className={styles.mountains}
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 1200 80"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        {/* Far range — lighter, taller peaks */}
+        <path
+          d="M0,80 L0,55 L70,22 L140,48 L230,8 L320,35 L420,15 L520,40 L630,5 L720,32 L820,18 L920,44 L1020,12 L1120,38 L1200,28 L1200,80 Z"
+          fill="#16293e"
+        />
+        {/* Near range — darker foreground silhouette */}
+        <path
+          d="M0,80 L0,68 L90,52 L180,64 L270,44 L370,60 L460,46 L560,62 L660,48 L760,65 L860,50 L960,66 L1060,54 L1160,67 L1200,58 L1200,80 Z"
+          fill="#0c1a25"
+        />
+      </svg>
       <div className={styles.meta}>
         <span className={styles.resortName}>{resort.name}</span>
         <span className={styles.guestId}>({resort.guestId})</span>

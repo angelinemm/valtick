@@ -2,6 +2,16 @@
   padding: 0.6rem 1rem 0.5rem;
   background-color: var(--bg-surface);
   border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.mountains {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
 
 .meta {
