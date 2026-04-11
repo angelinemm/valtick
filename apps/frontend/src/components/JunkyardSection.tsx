@@ -1,5 +1,6 @@
 import type { LiftDTO, LiftModelDTO } from "@val-tick/shared";
 import { liftIcons } from "../assets/liftIcons";
+import styles from "./LiftRow.module.css";
 
 interface Props {
   liftModels: LiftModelDTO[];
@@ -24,18 +25,10 @@ export function JunkyardSection({ liftModels, junkedLifts }: Props) {
         <div key={model.key}>
           <strong>{model.name}</strong>
           {lifts.map((lift) => (
-            <div
-              key={lift.id}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.75rem",
-                padding: "0.25rem 0",
-              }}
-            >
-              <img src={liftIcons[model.iconKey]} alt={model.name} width={24} height={24} />
+            <div key={lift.id} className={`${styles.card} ${styles.junked}`}>
+              <img src={liftIcons[model.iconKey]} alt={model.name} width={20} height={20} />
               <span>{model.name}</span>
-              <span style={{ color: "var(--text-muted)", fontWeight: "bold" }}>JUNKED</span>
+              <span className={styles.junkedLabel}>JUNKED</span>
             </div>
           ))}
         </div>
