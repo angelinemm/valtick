@@ -32,6 +32,14 @@
   margin-left: 0.4rem;
 }
 
+.adminButton {
+  background-color: var(--btn-bg);
+  border-color: var(--btn-border);
+  color: var(--text-muted);
+  align-self: center;
+  white-space: nowrap;
+}
+
 .statsRow {
   display: flex;
   align-items: flex-end;

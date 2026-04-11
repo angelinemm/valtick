@@ -5,6 +5,7 @@ import session from "express-session";
 import connectPgSimple from "connect-pg-simple";
 import { resortRouter } from "./routes/resort";
 import { authRouter } from "./routes/auth";
+import { adminRouter } from "./routes/admin";
 import { requireAuth } from "./middleware/requireAuth";
 
 const PgStore = connectPgSimple(session);
@@ -46,6 +47,7 @@ app.use("/auth", authRouter);
 
 app.use(requireAuth);
 
+app.use("/admin", adminRouter);
 app.use("/", resortRouter);
 
 export { app };

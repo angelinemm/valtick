@@ -29,6 +29,28 @@ export async function updateResort(
   });
 }
 
+export async function createResortForUser(
+  userId: string,
+  name: string
+): Promise<Resort & { lifts: Lift[] }> {
+  return prisma.resort.create({
+    data: {
+      name,
+      userId,
+      moneyCents: 500,
+      lastTickAt: new Date(),
+      lifts: {
+        create: {
+          liftModelKey: "magic_carpet",
+          status: "working",
+          currentBreakProbability: 0.002,
+        },
+      },
+    },
+    include: { lifts: true },
+  });
+}
+
 export async function findIdleResorts(idleThreshold: Date): Promise<Resort[]> {
   return prisma.resort.findMany({
     where: { lastTickAt: { lt: idleThreshold } },

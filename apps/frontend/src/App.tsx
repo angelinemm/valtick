@@ -1,8 +1,10 @@
 import { Routes, Route } from "react-router-dom";
 import { ResortPage } from "./pages/ResortPage";
 import { LoginPage } from "./pages/LoginPage";
+import { AdminPage } from "./pages/AdminPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { RequireAuth } from "./components/RequireAuth";
+import { RequireAdmin } from "./components/RequireAdmin";
 
 export default function App() {
   return (
@@ -14,6 +16,14 @@ export default function App() {
           <RequireAuth>
             <ResortPage />
           </RequireAuth>
+        }
+      />
+      <Route
+        path="/admin"
+        element={
+          <RequireAdmin>
+            <AdminPage />
+          </RequireAdmin>
         }
       />
       <Route path="*" element={<NotFoundPage />} />

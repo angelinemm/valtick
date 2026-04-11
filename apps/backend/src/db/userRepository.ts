@@ -25,3 +25,20 @@ export async function createUser(data: {
 export async function updateUserPasswordHash(username: string, passwordHash: string) {
   return prisma.user.update({ where: { username }, data: { passwordHash } });
 }
+
+export async function updateUserPasswordHashById(id: string, passwordHash: string) {
+  return prisma.user.update({ where: { id }, data: { passwordHash } });
+}
+
+export async function findAllUsersWithResorts() {
+  return prisma.user.findMany({
+    include: {
+      resort: {
+        include: {
+          _count: { select: { lifts: true } },
+        },
+      },
+    },
+    orderBy: { createdAt: "asc" },
+  });
+}
