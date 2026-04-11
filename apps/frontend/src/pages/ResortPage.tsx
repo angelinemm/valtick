@@ -36,7 +36,11 @@ export function ResortPage() {
         tickCount={tickCount}
         onReset={() => resetResort.mutate({ guestId: guestId! })}
       />
-      <NextLiftProgress liftModels={data.liftModels} currentMoneyCents={data.summary.moneyCents} />
+      <NextLiftProgress
+        liftModels={data.liftModels}
+        currentMoneyCents={data.summary.moneyCents}
+        ownedModelKeys={new Set(activeLifts.map((l) => l.liftModelKey))}
+      />
       <LiftList
         liftModels={data.liftModels}
         lifts={activeLifts}
