@@ -1,8 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  getLiftModel,
-  getAllLiftModels,
-} from "../catalog/liftModelCatalog";
+import { getLiftModel, getAllLiftModels } from "../catalog/liftModelCatalog";
 import type { LiftModelKey } from "@val-tick/shared";
 
 describe("getAllLiftModels", () => {
@@ -18,13 +15,7 @@ describe("getAllLiftModels", () => {
 
   it("is ordered smallest to largest", () => {
     const keys = getAllLiftModels().map((m) => m.key);
-    expect(keys).toEqual([
-      "magic_carpet",
-      "drag_lift",
-      "chairlift",
-      "gondola",
-      "cable_car",
-    ]);
+    expect(keys).toEqual(["magic_carpet", "drag_lift", "chairlift", "gondola", "cable_car"]);
   });
 
   it("every model has initialBreakChance === 0.002", () => {

@@ -17,10 +17,7 @@ describe.skipIf(!HAS_DB)("createResort", () => {
   });
 
   async function seed(suffix = "") {
-    const resort = await createResort(
-      "Test Resort",
-      `seed-test-${Date.now()}${suffix}`
-    );
+    const resort = await createResort("Test Resort", `seed-test-${Date.now()}${suffix}`);
     createdIds.push(resort.id);
     return resort;
   }
@@ -47,8 +44,6 @@ describe.skipIf(!HAS_DB)("createResort", () => {
 
   it("throws if guestId already exists", async () => {
     const resort = await seed("-dup");
-    await expect(
-      createResort("Another Resort", resort.guestId)
-    ).rejects.toThrow();
+    await expect(createResort("Another Resort", resort.guestId)).rejects.toThrow();
   });
 });

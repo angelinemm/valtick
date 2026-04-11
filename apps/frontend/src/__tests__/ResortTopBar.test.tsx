@@ -66,7 +66,11 @@ describe("ResortTopBar", () => {
 
   it("renders brokenLiftsCount of 0 when there are no broken lifts", () => {
     render(
-      <ResortTopBar resort={resort} summary={{ ...summary, brokenLiftsCount: 0 }} onReset={vi.fn()} />
+      <ResortTopBar
+        resort={resort}
+        summary={{ ...summary, brokenLiftsCount: 0 }}
+        onReset={vi.fn()}
+      />
     );
     expect(screen.getByText("0")).toBeInTheDocument();
   });

@@ -26,7 +26,12 @@ export function JunkyardSection({ liftModels, junkedLifts }: Props) {
           {lifts.map((lift) => (
             <div
               key={lift.id}
-              style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "0.25rem 0" }}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.75rem",
+                padding: "0.25rem 0",
+              }}
             >
               <img src={liftIcons[model.iconKey]} alt={model.name} width={24} height={24} />
               <span>{model.name}</span>

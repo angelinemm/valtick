@@ -70,18 +70,14 @@ describe.skipIf(!HAS_DB)("POST /buy_lift", () => {
 
   it("insufficient funds: resort unchanged, still returns 200", async () => {
     // gondola costs 200000, we only have 10000
-    const res = await request(app)
-      .post("/buy_lift")
-      .send({ guestId, liftModelKey: "gondola" });
+    const res = await request(app).post("/buy_lift").send({ guestId, liftModelKey: "gondola" });
     expect(res.status).toBe(200);
     expect(res.body.lifts).toHaveLength(0);
     expect(res.body.resort.moneyCents).toBe(10000);
   });
 
   it("can buy multiple lifts of the same type", async () => {
-    await request(app)
-      .post("/buy_lift")
-      .send({ guestId, liftModelKey: "magic_carpet" });
+    await request(app).post("/buy_lift").send({ guestId, liftModelKey: "magic_carpet" });
     const res = await request(app)
       .post("/buy_lift")
       .send({ guestId, liftModelKey: "magic_carpet" });

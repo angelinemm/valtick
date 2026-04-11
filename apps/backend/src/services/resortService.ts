@@ -1,5 +1,11 @@
 import type { Resort, Lift } from "@prisma/client";
-import type { GetResortResponse, ResortDTO, LiftDTO, LiftStatus, LiftModelKey } from "@val-tick/shared";
+import type {
+  GetResortResponse,
+  ResortDTO,
+  LiftDTO,
+  LiftStatus,
+  LiftModelKey,
+} from "@val-tick/shared";
 import { calculateSummary } from "./summaryService";
 import { getAllLiftModels } from "../catalog/liftModelCatalog";
 
@@ -27,10 +33,7 @@ function toLiftDTO(lift: Lift): LiftDTO {
   };
 }
 
-export function formatResortResponse(
-  resort: Resort,
-  lifts: Lift[]
-): GetResortResponse {
+export function formatResortResponse(resort: Resort, lifts: Lift[]): GetResortResponse {
   const liftDTOs = lifts.map(toLiftDTO);
   const summary = calculateSummary(resort.moneyCents, liftDTOs);
 

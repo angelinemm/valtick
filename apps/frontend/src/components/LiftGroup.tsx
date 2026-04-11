@@ -11,14 +11,7 @@ interface Props {
   canAffordRepair: (repairCostCents: number) => boolean;
 }
 
-export function LiftGroup({
-  model,
-  lifts,
-  onBuy,
-  onRepair,
-  canAffordBuy,
-  canAffordRepair,
-}: Props) {
+export function LiftGroup({ model, lifts, onBuy, onRepair, canAffordBuy, canAffordRepair }: Props) {
   const brokenCount = lifts.filter((l) => l.status === "broken").length;
   const sortedLifts = [...lifts].sort((a, b) => {
     if (a.status === "broken" && b.status !== "broken") return -1;
@@ -36,11 +29,9 @@ export function LiftGroup({
         {formatMoney(model.purchasePriceCents)} to buy
         {" | "}
         {model.capacity}/sec capacity
+        {" | "}+{formatMoney(model.priceBonusCents)}/sec bonus
         {" | "}
-        +{formatMoney(model.priceBonusCents)}/sec bonus
-        {" | "}
-        {formatMoney(model.repairCostCents)} to repair
-        {" "}
+        {formatMoney(model.repairCostCents)} to repair{" "}
         <button onClick={onBuy} disabled={!canAffordBuy}>
           Buy ({formatMoney(model.purchasePriceCents)})
         </button>

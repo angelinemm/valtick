@@ -29,12 +29,7 @@ function makeLift(status: "working" | "broken"): LiftDTO {
 describe("LiftRow", () => {
   it("broken LiftRow has the broken CSS class on the label", () => {
     render(
-      <LiftRow
-        lift={makeLift("broken")}
-        model={model}
-        onRepair={vi.fn()}
-        canAffordRepair={true}
-      />
+      <LiftRow lift={makeLift("broken")} model={model} onRepair={vi.fn()} canAffordRepair={true} />
     );
     const label = screen.getByText("BROKEN");
     expect(label.className).toContain("brokenLabel");
@@ -42,12 +37,7 @@ describe("LiftRow", () => {
 
   it("working LiftRow does not have the broken CSS class", () => {
     render(
-      <LiftRow
-        lift={makeLift("working")}
-        model={model}
-        onRepair={vi.fn()}
-        canAffordRepair={true}
-      />
+      <LiftRow lift={makeLift("working")} model={model} onRepair={vi.fn()} canAffordRepair={true} />
     );
     expect(screen.queryByText("BROKEN")).not.toBeInTheDocument();
   });

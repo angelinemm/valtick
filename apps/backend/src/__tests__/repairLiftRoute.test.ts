@@ -48,26 +48,20 @@ describe.skipIf(!HAS_DB)("POST /repair_lift", () => {
   });
 
   it("valid repair: lift status changes to working", async () => {
-    const res = await request(app)
-      .post("/repair_lift")
-      .send({ guestId, liftId: brokenLiftId });
+    const res = await request(app).post("/repair_lift").send({ guestId, liftId: brokenLiftId });
     expect(res.status).toBe(200);
     const lift = res.body.lifts.find((l: { id: string }) => l.id === brokenLiftId);
     expect(lift.status).toBe("working");
   });
 
   it("valid repair: money reduced by repairCostCents", async () => {
-    const res = await request(app)
-      .post("/repair_lift")
-      .send({ guestId, liftId: brokenLiftId });
+    const res = await request(app).post("/repair_lift").send({ guestId, liftId: brokenLiftId });
     // magic_carpet repairCostCents = 500
     expect(res.body.resort.moneyCents).toBe(4500);
   });
 
   it("repair does not change currentBreakProbability", async () => {
-    const res = await request(app)
-      .post("/repair_lift")
-      .send({ guestId, liftId: brokenLiftId });
+    const res = await request(app).post("/repair_lift").send({ guestId, liftId: brokenLiftId });
     const lift = res.body.lifts.find((l: { id: string }) => l.id === brokenLiftId);
     expect(lift.currentBreakProbability).toBe(0.002);
   });
@@ -77,9 +71,7 @@ describe.skipIf(!HAS_DB)("POST /repair_lift", () => {
       where: { id: resortId },
       data: { moneyCents: 499 }, // less than 500 repair cost
     });
-    const res = await request(app)
-      .post("/repair_lift")
-      .send({ guestId, liftId: brokenLiftId });
+    const res = await request(app).post("/repair_lift").send({ guestId, liftId: brokenLiftId });
     expect(res.status).toBe(200);
     const lift = res.body.lifts.find((l: { id: string }) => l.id === brokenLiftId);
     expect(lift.status).toBe("broken");
@@ -128,9 +120,7 @@ describe.skipIf(!HAS_DB)("POST /repair_lift", () => {
         currentBreakProbability: 0.001,
       },
     });
-    const res = await request(app)
-      .post("/repair_lift")
-      .send({ guestId, liftId: workingLift.id });
+    const res = await request(app).post("/repair_lift").send({ guestId, liftId: workingLift.id });
     expect(res.body.resort.moneyCents).toBe(5000);
   });
 
@@ -143,9 +133,7 @@ describe.skipIf(!HAS_DB)("POST /repair_lift", () => {
         currentBreakProbability: 1.0,
       },
     });
-    const res = await request(app)
-      .post("/repair_lift")
-      .send({ guestId, liftId: junkedLift.id });
+    const res = await request(app).post("/repair_lift").send({ guestId, liftId: junkedLift.id });
     expect(res.body.resort.moneyCents).toBe(5000);
   });
 });

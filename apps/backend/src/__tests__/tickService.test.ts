@@ -5,9 +5,7 @@ import type { LiftTickState } from "../services/tickService";
 const alwaysBreaks = () => 0;
 const neverBreaks = () => 1;
 
-function makeLift(
-  overrides: Partial<LiftTickState> = {}
-): LiftTickState {
+function makeLift(overrides: Partial<LiftTickState> = {}): LiftTickState {
   return {
     id: "lift-1",
     liftModelKey: "magic_carpet",
@@ -19,11 +17,7 @@ function makeLift(
 
 describe("income calculation", () => {
   it("one working magic_carpet adds 100 cents", () => {
-    const { updatedMoneyCents } = processOneTick(
-      1000,
-      [makeLift()],
-      neverBreaks
-    );
+    const { updatedMoneyCents } = processOneTick(1000, [makeLift()], neverBreaks);
     expect(updatedMoneyCents).toBe(1100);
   });
 
@@ -107,11 +101,7 @@ describe("tick ordering", () => {
   it("a lift that breaks this tick still contributed income this tick", () => {
     // magic_carpet: income = 5 * 20 = 100 — earned before break roll
     const lift = makeLift({ currentBreakProbability: 0.001 });
-    const { updatedMoneyCents, updatedLifts } = processOneTick(
-      0,
-      [lift],
-      alwaysBreaks
-    );
+    const { updatedMoneyCents, updatedLifts } = processOneTick(0, [lift], alwaysBreaks);
     expect(updatedLifts[0].status).toBe("broken");
     expect(updatedMoneyCents).toBe(100);
   });
@@ -126,10 +116,7 @@ describe("immutability", () => {
   });
 
   it("returned lifts carry the correct IDs", () => {
-    const lifts = [
-      makeLift({ id: "aaa" }),
-      makeLift({ id: "bbb", status: "broken" }),
-    ];
+    const lifts = [makeLift({ id: "aaa" }), makeLift({ id: "bbb", status: "broken" })];
     const { updatedLifts } = processOneTick(0, lifts, neverBreaks);
     expect(updatedLifts[0].id).toBe("aaa");
     expect(updatedLifts[1].id).toBe("bbb");

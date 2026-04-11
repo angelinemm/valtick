@@ -40,9 +40,7 @@ function makeJunked(id: string, modelKey: "magic_carpet" | "chairlift"): LiftDTO
 
 describe("JunkyardSection", () => {
   it("returns null when junkedLifts is empty", () => {
-    const { container } = render(
-      <JunkyardSection liftModels={liftModels} junkedLifts={[]} />
-    );
+    const { container } = render(<JunkyardSection liftModels={liftModels} junkedLifts={[]} />);
     expect(container.firstChild).toBeNull();
   });
 

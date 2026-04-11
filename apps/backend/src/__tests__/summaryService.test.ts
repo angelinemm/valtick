@@ -13,27 +13,21 @@ describe("calculateSummary", () => {
   });
 
   it("one working magic_carpet: correct capacity, pass price, income", () => {
-    const result = calculateSummary(1000, [
-      { status: "working", liftModelKey: "magic_carpet" },
-    ]);
+    const result = calculateSummary(1000, [{ status: "working", liftModelKey: "magic_carpet" }]);
     expect(result.capacityPerSec).toBe(5);
     expect(result.passPriceCents).toBe(20); // 10 base + 10 bonus
     expect(result.incomePerSecCents).toBe(100); // 5 * 20
   });
 
   it("one broken magic_carpet: contributes nothing", () => {
-    const result = calculateSummary(1000, [
-      { status: "broken", liftModelKey: "magic_carpet" },
-    ]);
+    const result = calculateSummary(1000, [{ status: "broken", liftModelKey: "magic_carpet" }]);
     expect(result.capacityPerSec).toBe(0);
     expect(result.passPriceCents).toBe(10);
     expect(result.incomePerSecCents).toBe(0);
   });
 
   it("one junked magic_carpet: contributes nothing", () => {
-    const result = calculateSummary(1000, [
-      { status: "junked", liftModelKey: "magic_carpet" },
-    ]);
+    const result = calculateSummary(1000, [{ status: "junked", liftModelKey: "magic_carpet" }]);
     expect(result.capacityPerSec).toBe(0);
     expect(result.passPriceCents).toBe(10);
     expect(result.incomePerSecCents).toBe(0);
@@ -60,9 +54,7 @@ describe("calculateSummary", () => {
   });
 
   it("one working cable_car: correct values", () => {
-    const result = calculateSummary(1000, [
-      { status: "working", liftModelKey: "cable_car" },
-    ]);
+    const result = calculateSummary(1000, [{ status: "working", liftModelKey: "cable_car" }]);
     expect(result.capacityPerSec).toBe(100);
     expect(result.passPriceCents).toBe(210); // 10 + 200
     expect(result.incomePerSecCents).toBe(21000); // 100 * 210

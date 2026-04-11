@@ -28,9 +28,7 @@ export async function postTick(guestId: string): Promise<TickResponse> {
   return res.json();
 }
 
-export async function postBuyLift(
-  req: BuyLiftRequest
-): Promise<MutationResortResponse> {
+export async function postBuyLift(req: BuyLiftRequest): Promise<MutationResortResponse> {
   const res = await fetch(`${API_BASE}/buy_lift`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -40,9 +38,7 @@ export async function postBuyLift(
   return res.json();
 }
 
-export async function postRepairLift(
-  req: RepairLiftRequest
-): Promise<MutationResortResponse> {
+export async function postRepairLift(req: RepairLiftRequest): Promise<MutationResortResponse> {
   const res = await fetch(`${API_BASE}/repair_lift`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -52,9 +48,7 @@ export async function postRepairLift(
   return res.json();
 }
 
-export async function postResetResort(
-  req: ResetResortRequest
-): Promise<MutationResortResponse> {
+export async function postResetResort(req: ResetResortRequest): Promise<MutationResortResponse> {
   const res = await fetch(`${API_BASE}/reset`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
