@@ -32,7 +32,7 @@ export function LiftGroup({ model, lifts, onBuy, onRepair, canAffordBuy, canAffo
         {" | "}+{formatMoney(model.priceBonusCents)}/sec bonus
         {" | "}
         {formatMoney(model.repairCostCents)} to repair{" "}
-        <button onClick={onBuy} disabled={!canAffordBuy}>
+        <button onClick={onBuy} disabled={!canAffordBuy} style={{ fontFamily: "var(--font-mono)" }}>
           Buy ({formatMoney(model.purchasePriceCents)})
         </button>
       </summary>

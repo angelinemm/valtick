@@ -29,3 +29,7 @@
   color: var(--text-secondary);
   font-style: italic;
 }
+
+.mono {
+  font-family: var(--font-mono);
+}

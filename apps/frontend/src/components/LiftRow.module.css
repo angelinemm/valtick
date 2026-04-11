@@ -30,6 +30,7 @@
 .status {
   font-size: 0.75rem;
   color: var(--text-muted);
+  font-family: var(--font-mono);
 }
 
 .workingLabel {
@@ -56,6 +57,7 @@
   padding: 0.25rem 0.5rem;
   cursor: pointer;
   border-radius: 3px;
+  font-family: var(--font-mono);
 }
 
 .repairButton:hover:not(:disabled) {

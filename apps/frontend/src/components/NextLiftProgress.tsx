@@ -23,8 +23,10 @@ export function NextLiftProgress({ liftModels, currentMoneyCents }: Props) {
   return (
     <div className={styles.container}>
       <div className={styles.label}>
-        Next: <strong>{nextModel.name}</strong> — {formatMoney(currentMoneyCents)} /{" "}
-        {formatMoney(nextModel.purchasePriceCents)}
+        Next: <strong>{nextModel.name}</strong> —{" "}
+        <span className={styles.mono}>{formatMoney(currentMoneyCents)}</span>
+        {" / "}
+        <span className={styles.mono}>{formatMoney(nextModel.purchasePriceCents)}</span>
       </div>
       <div className={styles.track}>
         <div className={styles.fill} style={{ width: `${pct}%` }} />

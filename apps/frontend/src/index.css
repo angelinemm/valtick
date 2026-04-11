@@ -1,4 +1,5 @@
 :root {
+  --font-mono: "JetBrains Mono", monospace;
   --bg-base: #0d1b2a;
   --bg-surface: #122030;
   --bg-surface-alt: #192d42;
