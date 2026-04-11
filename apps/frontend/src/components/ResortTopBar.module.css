@@ -1,0 +1,24 @@
+.income {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #7ec8e3;
+}
+
+@keyframes tickPulse {
+  0% {
+    text-shadow: 0 0 0px #7ec8e3;
+    color: #7ec8e3;
+  }
+  30% {
+    text-shadow: 0 0 8px #7ec8e3;
+    color: #c5eaf7;
+  }
+  100% {
+    text-shadow: 0 0 0px #7ec8e3;
+    color: #7ec8e3;
+  }
+}
+
+.pulse {
+  animation: tickPulse 0.5s ease-out;
+}

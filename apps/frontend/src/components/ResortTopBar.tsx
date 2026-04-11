@@ -1,13 +1,15 @@
 import type { ResortDTO, SummaryDTO } from "@val-tick/shared";
 import { formatMoney, formatMoneyPerSec } from "../utils/format";
+import styles from "./ResortTopBar.module.css";
 
 interface Props {
   resort: ResortDTO;
   summary: SummaryDTO;
+  tickCount: number;
   onReset: () => void;
 }
 
-export function ResortTopBar({ resort, summary, onReset }: Props) {
+export function ResortTopBar({ resort, summary, tickCount, onReset }: Props) {
   function handleReset() {
     if (window.confirm("Are you sure you want to reset your resort? This cannot be undone.")) {
       onReset();
@@ -33,7 +35,7 @@ export function ResortTopBar({ resort, summary, onReset }: Props) {
       <span>
         <strong>Money:</strong> {formatMoney(summary.moneyCents)}
       </span>
-      <span>
+      <span key={tickCount} className={`${styles.income} ${styles.pulse}`}>
         <strong>Income:</strong> {formatMoneyPerSec(summary.incomePerSecCents)}
       </span>
       <span>

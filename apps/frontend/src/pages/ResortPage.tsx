@@ -19,7 +19,7 @@ export function ResortPage() {
   const repairLift = useRepairLiftMutation(guestId!);
   const resetResort = useResetResortMutation(guestId!);
 
-  useTick(guestId!);
+  const { tickCount } = useTick(guestId!);
 
   if (isLoading) return <div>Loading...</div>;
   if (error?.message === "NOT_FOUND") return <GameNotFoundPage />;
@@ -33,6 +33,7 @@ export function ResortPage() {
       <ResortTopBar
         resort={data.resort}
         summary={data.summary}
+        tickCount={tickCount}
         onReset={() => resetResort.mutate({ guestId: guestId! })}
       />
       <NextLiftProgress liftModels={data.liftModels} currentMoneyCents={data.summary.moneyCents} />
