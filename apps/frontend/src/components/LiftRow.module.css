@@ -27,6 +27,27 @@
   filter: saturate(0.3);
 }
 
+.nameBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.liftName {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.modelName {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
 .status {
   font-size: 0.75rem;
   color: var(--text-muted);

@@ -90,6 +90,7 @@ describe.skipIf(!HAS_DB)("Admin routes", () => {
           lifts: {
             create: {
               liftModelKey: "magic_carpet",
+              name: "Test Lift",
               status: "working",
               currentBreakProbability: 0.002,
             },
@@ -187,8 +188,18 @@ describe.skipIf(!HAS_DB)("Admin routes", () => {
           lastTickAt: new Date(),
           lifts: {
             create: [
-              { liftModelKey: "magic_carpet", status: "working", currentBreakProbability: 0.002 },
-              { liftModelKey: "chairlift", status: "broken", currentBreakProbability: 0.1 },
+              {
+                liftModelKey: "magic_carpet",
+                name: "Test Carpet",
+                status: "working",
+                currentBreakProbability: 0.002,
+              },
+              {
+                liftModelKey: "chairlift",
+                name: "Test Chair",
+                status: "broken",
+                currentBreakProbability: 0.1,
+              },
             ],
           },
         },

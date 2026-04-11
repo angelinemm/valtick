@@ -3,6 +3,7 @@ import type { LiftModelKey } from "@val-tick/shared";
 import { getLiftModel } from "../catalog/liftModelCatalog";
 import { updateResort, findResortById } from "../db/resortRepository";
 import { createLift, updateLift, deleteAllLiftsForResort } from "../db/liftRepository";
+import { assignLiftName } from "../utils/liftNameGenerator";
 
 export async function buyLift(
   resort: Resort & { lifts: Lift[] },
@@ -29,6 +30,7 @@ export async function buyLift(
   await createLift({
     resortId: resort.id,
     liftModelKey,
+    name: assignLiftName(resort.lifts),
     status: "working",
     currentBreakProbability: model.initialBreakChance,
   });
@@ -44,6 +46,7 @@ export async function resetResort(
   await createLift({
     resortId: resort.id,
     liftModelKey: "magic_carpet",
+    name: assignLiftName([]),
     status: "working",
     currentBreakProbability: 0.002,
   });

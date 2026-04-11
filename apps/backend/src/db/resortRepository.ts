@@ -1,5 +1,6 @@
 import type { Resort, Lift } from "@prisma/client";
 import { prisma } from "./prisma";
+import { assignLiftName } from "../utils/liftNameGenerator";
 
 export type { Resort, Lift };
 
@@ -42,6 +43,7 @@ export async function createResortForUser(
       lifts: {
         create: {
           liftModelKey: "magic_carpet",
+          name: assignLiftName([]),
           status: "working",
           currentBreakProbability: 0.002,
         },

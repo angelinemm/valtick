@@ -46,6 +46,7 @@ describe.skipIf(!HAS_DB)("repositories", () => {
       const lift = await createLift({
         resortId,
         liftModelKey: "chairlift",
+        name: "Test Lift",
         currentBreakProbability: 0.001,
         status: "working",
       });
@@ -63,6 +64,7 @@ describe.skipIf(!HAS_DB)("repositories", () => {
         data: {
           resortId,
           liftModelKey: "magic_carpet",
+          name: "Test Lift",
           currentBreakProbability: 0.001,
           status: "working",
         },
@@ -79,6 +81,7 @@ describe.skipIf(!HAS_DB)("repositories", () => {
           data: {
             resortId,
             liftModelKey: "magic_carpet",
+            name: "Test Lift A",
             currentBreakProbability: 0.001,
             status: "working",
           },
@@ -87,6 +90,7 @@ describe.skipIf(!HAS_DB)("repositories", () => {
           data: {
             resortId,
             liftModelKey: "drag_lift",
+            name: "Test Lift B",
             currentBreakProbability: 0.001,
             status: "working",
           },

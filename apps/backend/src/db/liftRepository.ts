@@ -4,6 +4,7 @@ import { prisma } from "./prisma";
 export async function createLift(data: {
   resortId: string;
   liftModelKey: string;
+  name: string;
   currentBreakProbability: number;
   status: "working" | "broken" | "junked";
 }): Promise<Lift> {

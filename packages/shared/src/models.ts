@@ -25,6 +25,7 @@ export interface LiftDTO {
   id: string;
   resortId: string;
   liftModelKey: LiftModelKey;
+  name: string;
   currentBreakProbability: number;
   status: LiftStatus;
   createdAt: string;

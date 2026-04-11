@@ -41,4 +41,11 @@ describe.skipIf(!HAS_DB)("createResort", () => {
     expect(lift.status).toBe("working");
     expect(lift.currentBreakProbability).toBe(0.002);
   });
+
+  it("the starting lift has a name assigned", async () => {
+    const resort = await seed();
+    const lifts = await prisma.lift.findMany({ where: { resortId: resort.id } });
+    expect(typeof lifts[0].name).toBe("string");
+    expect(lifts[0].name.length).toBeGreaterThan(0);
+  });
 });

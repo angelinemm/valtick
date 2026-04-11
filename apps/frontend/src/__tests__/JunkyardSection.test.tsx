@@ -12,6 +12,7 @@ const liftModels: LiftModelDTO[] = [
     priceBonusCents: 10,
     repairCostCents: 100,
     initialBreakChance: 0.001,
+    maxOwned: 10,
     iconKey: "magic-carpet",
   },
   {
@@ -22,15 +23,21 @@ const liftModels: LiftModelDTO[] = [
     priceBonusCents: 50,
     repairCostCents: 500,
     initialBreakChance: 0.001,
+    maxOwned: 6,
     iconKey: "chairlift",
   },
 ];
 
-function makeJunked(id: string, modelKey: "magic_carpet" | "chairlift"): LiftDTO {
+function makeJunked(
+  id: string,
+  modelKey: "magic_carpet" | "chairlift",
+  name = "Old Powder Keg"
+): LiftDTO {
   return {
     id,
     resortId: "r1",
     liftModelKey: modelKey,
+    name,
     currentBreakProbability: 1.0,
     status: "junked",
     createdAt: "2024-01-01T00:00:00.000Z",
@@ -86,7 +93,22 @@ describe("JunkyardSection", () => {
         junkedLifts={[makeJunked("l1", "magic_carpet"), makeJunked("l2", "chairlift")]}
       />
     );
-    expect(screen.getAllByText("Magic Carpet").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("Chairlift").length).toBeGreaterThan(0);
+    // Group headers still use the model name
+    expect(screen.getByText("Magic Carpet")).toBeInTheDocument();
+    expect(screen.getByText("Chairlift")).toBeInTheDocument();
+  });
+
+  it("renders each lift's name in its card", () => {
+    render(
+      <JunkyardSection
+        liftModels={liftModels}
+        junkedLifts={[
+          makeJunked("l1", "magic_carpet", "Powder Keg"),
+          makeJunked("l2", "chairlift", "Glacier Gallop"),
+        ]}
+      />
+    );
+    expect(screen.getByText("Powder Keg")).toBeInTheDocument();
+    expect(screen.getByText("Glacier Gallop")).toBeInTheDocument();
   });
 });

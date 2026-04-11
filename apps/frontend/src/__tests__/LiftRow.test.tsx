@@ -11,6 +11,7 @@ const model: LiftModelDTO = {
   priceBonusCents: 10,
   repairCostCents: 100,
   initialBreakChance: 0.001,
+  maxOwned: 10,
   iconKey: "magic-carpet",
 };
 
@@ -19,6 +20,7 @@ function makeLift(status: "working" | "broken"): LiftDTO {
     id: "l1",
     resortId: "r1",
     liftModelKey: "magic_carpet",
+    name: "Powder Keg",
     currentBreakProbability: 0.001,
     status,
     createdAt: "2024-01-01T00:00:00.000Z",
@@ -27,6 +29,20 @@ function makeLift(status: "working" | "broken"): LiftDTO {
 }
 
 describe("LiftRow", () => {
+  it("renders the lift name prominently", () => {
+    render(
+      <LiftRow lift={makeLift("working")} model={model} onRepair={vi.fn()} canAffordRepair={true} />
+    );
+    expect(screen.getByText("Powder Keg")).toBeInTheDocument();
+  });
+
+  it("renders the model name in parentheses below the lift name", () => {
+    render(
+      <LiftRow lift={makeLift("working")} model={model} onRepair={vi.fn()} canAffordRepair={true} />
+    );
+    expect(screen.getByText("(Magic Carpet)")).toBeInTheDocument();
+  });
+
   it("broken LiftRow has the broken CSS class on the label", () => {
     render(
       <LiftRow lift={makeLift("broken")} model={model} onRepair={vi.fn()} canAffordRepair={true} />

@@ -34,6 +34,7 @@ describe.skipIf(!HAS_DB)("GET /resort", () => {
       data: {
         resortId,
         liftModelKey: "magic_carpet",
+        name: "Test Lift",
         currentBreakProbability: 0.001,
         status: "working",
       },

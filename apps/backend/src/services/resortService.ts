@@ -25,6 +25,7 @@ function toLiftDTO(lift: Lift): LiftDTO {
     id: lift.id,
     resortId: lift.resortId,
     liftModelKey: lift.liftModelKey as LiftModelKey,
+    name: lift.name,
     currentBreakProbability: lift.currentBreakProbability,
     status: lift.status as LiftStatus,
     createdAt: lift.createdAt.toISOString(),
