@@ -17,47 +17,37 @@ export function ResortTopBar({ resort, summary, tickCount, onReset }: Props) {
   }
 
   return (
-    <header
-      style={{
-        display: "flex",
-        gap: "1.5rem",
-        padding: "0.75rem 1rem",
-        flexWrap: "wrap",
-        alignItems: "center",
-      }}
-    >
-      <span>
-        <strong>Resort:</strong> {resort.name}
-      </span>
-      <span>
-        <strong>Guest ID:</strong> {resort.guestId}
-      </span>
-      <span>
-        <strong>Money:</strong> {formatMoney(summary.moneyCents)}
-      </span>
-      <span key={tickCount} className={`${styles.income} ${styles.pulse}`}>
-        <strong>Income:</strong> {formatMoneyPerSec(summary.incomePerSecCents)}
-      </span>
-      <span>
-        <strong>Capacity:</strong> {summary.capacityPerSec}/sec
-      </span>
-      <span>
-        <strong>Lifts:</strong> {summary.totalLifts}
-      </span>
-      <span>
-        <strong>Broken:</strong> {summary.brokenLiftsCount}
-      </span>
-      <button
-        className="reset-button"
-        onClick={handleReset}
-        style={{
-          marginLeft: "auto",
-          padding: "0.4rem 1rem",
-          fontWeight: "bold",
-        }}
-      >
-        Reset
-      </button>
+    <header className={styles.header}>
+      <div className={styles.meta}>
+        {resort.name} &middot; {resort.guestId}
+      </div>
+      <div className={styles.statsRow}>
+        <div className={styles.statBlock}>
+          <span className={styles.statLabel}>Money</span>
+          <span className={styles.statValue}>{formatMoney(summary.moneyCents)}</span>
+        </div>
+        <div className={styles.statBlock}>
+          <span className={styles.statLabel}>Income/sec</span>
+          <span key={tickCount} className={`${styles.incomeValue} ${styles.pulse}`}>
+            {formatMoneyPerSec(summary.incomePerSecCents)}
+          </span>
+        </div>
+        <div className={styles.statBlock}>
+          <span className={styles.statLabel}>Capacity</span>
+          <span className={styles.statValue}>{summary.capacityPerSec}/sec</span>
+        </div>
+        <div className={styles.statBlock}>
+          <span className={styles.statLabel}>Lifts</span>
+          <span className={styles.statValue}>{summary.totalLifts}</span>
+        </div>
+        <div className={styles.statBlock}>
+          <span className={styles.statLabel}>Broken</span>
+          <span className={styles.statValue}>{summary.brokenLiftsCount}</span>
+        </div>
+        <button className={styles.resetButton} onClick={handleReset}>
+          Reset
+        </button>
+      </div>
     </header>
   );
 }
