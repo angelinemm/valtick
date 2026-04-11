@@ -96,6 +96,22 @@
   animation: tickPulse 0.5s ease-out;
 }
 
+.subtleButton {
+  background-color: var(--btn-bg);
+  color: var(--text-muted);
+  border: 1px solid var(--btn-border);
+  padding: 0.35rem 0.9rem;
+  cursor: pointer;
+  border-radius: 3px;
+  align-self: center;
+  white-space: nowrap;
+}
+
+.subtleButton:hover {
+  background-color: var(--btn-hover-bg);
+  color: var(--btn-text);
+}
+
 .resetButton {
   background-color: #7a1515;
   color: var(--text-primary);

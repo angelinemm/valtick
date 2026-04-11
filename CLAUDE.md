@@ -25,6 +25,11 @@
 - ESLint covers TypeScript rules (including `@typescript-eslint`) and React hooks rules
 - Prettier handles all formatting — do not manually adjust indentation or quotes
 
+## How to Play page
+
+- Whenever a new game feature is added or existing game logic changes in a way that affects how the player plays, update `/how-to-play` accordingly
+- This is mandatory, not optional — treat it like updating a test
+
 ## README
 
 - At the end of every task, consider whether the README needs updating
