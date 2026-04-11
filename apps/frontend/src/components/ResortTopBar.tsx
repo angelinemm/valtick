@@ -77,6 +77,9 @@ export function ResortTopBar({
           <span className={styles.statLabel}>Broken</span>
           <span className={styles.statValue}>{summary.brokenLiftsCount}</span>
         </div>
+        <button className={styles.subtleButton} onClick={() => navigate("/how-to-play")}>
+          How to Play
+        </button>
         {isAdmin && (
           <button className={styles.adminButton} onClick={() => navigate("/admin")}>
             Admin
