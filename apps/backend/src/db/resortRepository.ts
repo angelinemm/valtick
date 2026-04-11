@@ -3,15 +3,6 @@ import { prisma } from "./prisma";
 
 export type { Resort, Lift };
 
-export async function findResortByGuestId(
-  guestId: string
-): Promise<(Resort & { lifts: Lift[] }) | null> {
-  return prisma.resort.findUnique({
-    where: { guestId },
-    include: { lifts: true },
-  });
-}
-
 export async function findResortByUserId(
   userId: string
 ): Promise<(Resort & { lifts: Lift[] }) | null> {

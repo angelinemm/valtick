@@ -33,7 +33,6 @@ model User {
 model Resort {
   id         String    @id @default(uuid())
   name       String
-  guestId    String?   @unique
   userId     String?   @unique
   moneyCents Int
   lastTickAt DateTime

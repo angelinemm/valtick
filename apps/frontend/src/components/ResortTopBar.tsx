@@ -40,7 +40,7 @@ export function ResortTopBar({ resort, summary, tickCount, username, onReset, on
       </svg>
       <div className={styles.meta}>
         <span className={styles.resortName}>{resort.name}</span>
-        <span className={styles.guestId}>{username}</span>
+        <span className={styles.username}>{username}</span>
       </div>
       <div className={styles.statsRow}>
         <div className={styles.statBlock}>

@@ -66,14 +66,14 @@ val-tick/
 
 ## API endpoints
 
-| Method | Path               | Description                    |
-| ------ | ------------------ | ------------------------------ |
-| GET    | `/health`          | Health check                   |
-| GET    | `/resort/:guestId` | Fetch resort state             |
-| POST   | `/tick`            | Process one game tick          |
-| POST   | `/buy_lift`        | Purchase a lift                |
-| POST   | `/repair_lift`     | Repair a broken lift           |
-| POST   | `/reset`           | Reset resort to starting state |
+| Method | Path           | Description                    |
+| ------ | -------------- | ------------------------------ |
+| GET    | `/health`      | Health check                   |
+| GET    | `/resort`      | Fetch resort state             |
+| POST   | `/tick`        | Process one game tick          |
+| POST   | `/buy_lift`    | Purchase a lift                |
+| POST   | `/repair_lift` | Repair a broken lift           |
+| POST   | `/reset`       | Reset resort to starting state |
 
 ## Game features
 
@@ -84,12 +84,12 @@ val-tick/
 - **Junkyard** — junked lifts shown in a separate section, non-interactive
 - **Reset** — big red button in the top bar wipes the resort back to starting state ($10, 1 magic carpet) after confirmation
 
-## Creating a resort (admin only)
+## Creating a user (admin only)
 
-Players can't create resorts themselves. Use the seed script:
+Players can't sign up themselves. Create accounts via the CLI:
 
 ```bash
-npm run seed --workspace=apps/backend -- "My Resort" your-guest-id
+npm run create-user --workspace=apps/backend -- <username> <password> [USER|ADMIN]
 ```
 
-Share the guest ID with the player — they access the game at `http://localhost:5173/resort/<guest-id>`.
+The user logs in at `http://localhost:5173/login`. Their resort is created automatically on first login.

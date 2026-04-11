@@ -1,19 +1,17 @@
 import { describe, it, expect, beforeEach, afterEach, afterAll } from "vitest";
 import { prisma } from "../db/prisma";
-import { findResortByGuestId, updateResort } from "../db/resortRepository";
+import { updateResort } from "../db/resortRepository";
 import { createLift, updateLift, bulkUpdateLifts } from "../db/liftRepository";
 
 const HAS_DB = !!process.env.DATABASE_URL;
 
 describe.skipIf(!HAS_DB)("repositories", () => {
-  const guestId = `test-repo-${Date.now()}`;
   let resortId: string;
 
   beforeEach(async () => {
     const resort = await prisma.resort.create({
       data: {
         name: "Test Resort",
-        guestId: `${guestId}-${Math.random()}`,
         moneyCents: 1000,
         lastTickAt: new Date(),
       },
@@ -29,35 +27,6 @@ describe.skipIf(!HAS_DB)("repositories", () => {
 
   afterAll(async () => {
     await prisma.$disconnect();
-  });
-
-  describe("findResortByGuestId", () => {
-    it("returns null for an unknown guestId", async () => {
-      const result = await findResortByGuestId("does-not-exist");
-      expect(result).toBeNull();
-    });
-
-    it("returns resort with an empty lifts array when no lifts exist", async () => {
-      const resort = await prisma.resort.findUnique({ where: { id: resortId } });
-      const result = await findResortByGuestId(resort!.guestId);
-      expect(result).not.toBeNull();
-      expect(result!.lifts).toEqual([]);
-    });
-
-    it("returns resort with populated lifts array", async () => {
-      const resort = await prisma.resort.findUnique({ where: { id: resortId } });
-      await prisma.lift.create({
-        data: {
-          resortId,
-          liftModelKey: "magic_carpet",
-          currentBreakProbability: 0.001,
-          status: "working",
-        },
-      });
-      const result = await findResortByGuestId(resort!.guestId);
-      expect(result!.lifts).toHaveLength(1);
-      expect(result!.lifts[0].liftModelKey).toBe("magic_carpet");
-    });
   });
 
   describe("updateResort", () => {

@@ -7,7 +7,6 @@ import type { ResortDTO, SummaryDTO } from "@val-tick/shared";
 const resort: ResortDTO = {
   id: "r1",
   name: "Snowpeak",
-  guestId: "guest99",
   moneyCents: 1000,
   lastTickAt: "2024-01-01T00:00:00.000Z",
   createdAt: "2024-01-01T00:00:00.000Z",

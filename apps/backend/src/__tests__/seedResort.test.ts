@@ -16,8 +16,8 @@ describe.skipIf(!HAS_DB)("createResort", () => {
     await prisma.$disconnect();
   });
 
-  async function seed(suffix = "") {
-    const resort = await createResort("Test Resort", `seed-test-${Date.now()}${suffix}`);
+  async function seed() {
+    const resort = await createResort("Test Resort");
     createdIds.push(resort.id);
     return resort;
   }
@@ -28,22 +28,17 @@ describe.skipIf(!HAS_DB)("createResort", () => {
   });
 
   it("creates exactly one lift", async () => {
-    const resort = await seed("-lifts");
+    const resort = await seed();
     const lifts = await prisma.lift.findMany({ where: { resortId: resort.id } });
     expect(lifts).toHaveLength(1);
   });
 
   it("the lift is a working magic_carpet with correct break probability", async () => {
-    const resort = await seed("-lift-check");
+    const resort = await seed();
     const lifts = await prisma.lift.findMany({ where: { resortId: resort.id } });
     const lift = lifts[0];
     expect(lift.liftModelKey).toBe("magic_carpet");
     expect(lift.status).toBe("working");
     expect(lift.currentBreakProbability).toBe(0.002);
-  });
-
-  it("throws if guestId already exists", async () => {
-    const resort = await seed("-dup");
-    await expect(createResort("Another Resort", resort.guestId)).rejects.toThrow();
   });
 });
