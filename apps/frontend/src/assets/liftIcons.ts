@@ -8,6 +8,6 @@ export const liftIcons: Record<string, string> = {
   "magic-carpet": magicCarpet,
   "drag-lift":    dragLift,
   "chairlift":    chairlift,
-  "gondola":      gondola,
-  "cable-car":    cableCar,
+  "gondola":      cableCar,
+  "cable-car":    gondola,
 };
