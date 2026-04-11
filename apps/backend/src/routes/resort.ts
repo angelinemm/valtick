@@ -25,10 +25,7 @@ resortRouter.post("/tick", async (req, res) => {
     currentBreakProbability: l.currentBreakProbability,
   }));
 
-  const { updatedMoneyCents, updatedLifts } = processOneTick(
-    resort.moneyCents,
-    liftStates
-  );
+  const { updatedMoneyCents, updatedLifts } = processOneTick(resort.moneyCents, liftStates);
 
   await updateResort(resort.id, {
     moneyCents: updatedMoneyCents,

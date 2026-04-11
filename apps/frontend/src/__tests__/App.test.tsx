@@ -50,9 +50,7 @@ describe("App routing", () => {
   it("renders resort name for /resort/:guestId", async () => {
     vi.spyOn(client, "fetchResort").mockResolvedValue(mockResortResponse);
     renderWithRouter("/resort/abc123");
-    await waitFor(() =>
-      expect(screen.getByText("Snowpeak")).toBeInTheDocument()
-    );
+    await waitFor(() => expect(screen.getByText("Snowpeak")).toBeInTheDocument());
   });
 
   it("renders NotFoundPage for an unknown route", () => {
@@ -65,17 +63,13 @@ describe("NotFoundPage", () => {
   it("renders the expected message", () => {
     render(<NotFoundPage />);
     expect(screen.getByText("Game not found.")).toBeInTheDocument();
-    expect(
-      screen.getByText("Check your URL or ask for a valid guest ID.")
-    ).toBeInTheDocument();
+    expect(screen.getByText("Check your URL or ask for a valid guest ID.")).toBeInTheDocument();
   });
 });
 
 describe("GameNotFoundPage", () => {
   it("renders the expected message", () => {
     render(<GameNotFoundPage />);
-    expect(
-      screen.getByText("This resort doesn't exist.")
-    ).toBeInTheDocument();
+    expect(screen.getByText("This resort doesn't exist.")).toBeInTheDocument();
   });
 });

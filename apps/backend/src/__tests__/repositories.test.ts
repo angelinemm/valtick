@@ -1,14 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, afterAll } from "vitest";
 import { prisma } from "../db/prisma";
-import {
-  findResortByGuestId,
-  updateResort,
-} from "../db/resortRepository";
-import {
-  createLift,
-  updateLift,
-  bulkUpdateLifts,
-} from "../db/liftRepository";
+import { findResortByGuestId, updateResort } from "../db/resortRepository";
+import { createLift, updateLift, bulkUpdateLifts } from "../db/liftRepository";
 
 const HAS_DB = !!process.env.DATABASE_URL;
 
@@ -114,10 +107,20 @@ describe.skipIf(!HAS_DB)("repositories", () => {
     it("updates multiple lifts atomically", async () => {
       const [a, b] = await Promise.all([
         prisma.lift.create({
-          data: { resortId, liftModelKey: "magic_carpet", currentBreakProbability: 0.001, status: "working" },
+          data: {
+            resortId,
+            liftModelKey: "magic_carpet",
+            currentBreakProbability: 0.001,
+            status: "working",
+          },
         }),
         prisma.lift.create({
-          data: { resortId, liftModelKey: "drag_lift", currentBreakProbability: 0.001, status: "working" },
+          data: {
+            resortId,
+            liftModelKey: "drag_lift",
+            currentBreakProbability: 0.001,
+            status: "working",
+          },
         }),
       ]);
 

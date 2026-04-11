@@ -24,13 +24,12 @@ export async function runBackgroundSim(): Promise<void> {
         currentBreakProbability: l.currentBreakProbability,
       }));
 
-      const { updatedMoneyCents, updatedLifts, ticksSimulated } =
-        simulateOfflineTicks({
-          moneyCents: resort.moneyCents,
-          lifts: liftStates,
-          lastTickAt: resort.lastTickAt,
-          now,
-        });
+      const { updatedMoneyCents, updatedLifts, ticksSimulated } = simulateOfflineTicks({
+        moneyCents: resort.moneyCents,
+        lifts: liftStates,
+        lastTickAt: resort.lastTickAt,
+        now,
+      });
 
       await updateResort(resort.id, {
         moneyCents: updatedMoneyCents,
@@ -38,14 +37,9 @@ export async function runBackgroundSim(): Promise<void> {
       });
       await bulkUpdateLifts(updatedLifts);
 
-      console.log(
-        `[backgroundSim] Resort ${resort.guestId}: simulated ${ticksSimulated} ticks`
-      );
+      console.log(`[backgroundSim] Resort ${resort.guestId}: simulated ${ticksSimulated} ticks`);
     } catch (e) {
-      console.error(
-        `[backgroundSim] Error processing resort ${idleResort.guestId}:`,
-        e
-      );
+      console.error(`[backgroundSim] Error processing resort ${idleResort.guestId}:`, e);
     }
   }
 }

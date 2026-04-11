@@ -12,7 +12,9 @@ export function useTick(guestId: string): void {
 
   // Keep mutate in a ref so the effect closure never goes stale
   const mutateRef = useRef(mutate);
-  mutateRef.current = mutate;
+  useEffect(() => {
+    mutateRef.current = mutate;
+  });
 
   const hiddenAtRef = useRef<number | null>(null);
   const intervalIdRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -45,8 +47,7 @@ export function useTick(guestId: string): void {
         hiddenAtRef.current = Date.now();
         startInterval(INACTIVE_INTERVAL_MS);
       } else {
-        const wasHiddenFor =
-          hiddenAtRef.current !== null ? Date.now() - hiddenAtRef.current : 0;
+        const wasHiddenFor = hiddenAtRef.current !== null ? Date.now() - hiddenAtRef.current : 0;
         hiddenAtRef.current = null;
         if (wasHiddenFor >= STOP_AFTER_HIDDEN_MS) {
           queryClient.invalidateQueries({ queryKey: ["resort", guestId] });

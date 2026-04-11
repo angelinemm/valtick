@@ -42,18 +42,12 @@ describe("fetchResort", () => {
   });
 
   it("throws Error('NOT_FOUND') on 404", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn().mockResolvedValue({ ok: false, status: 404 })
-    );
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 404 }));
     await expect(fetchResort("nope")).rejects.toThrow("NOT_FOUND");
   });
 
   it("throws on 500", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn().mockResolvedValue({ ok: false, status: 500 })
-    );
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 500 }));
     await expect(fetchResort("abc123")).rejects.toThrow("HTTP 500");
   });
 });

@@ -105,9 +105,7 @@ describe("simulateOfflineTicks", () => {
       random: alwaysBreaks,
     });
     expect(result.ticksSimulated).toBe(1);
-    expect(
-      result.updatedLifts.every((l) => l.status !== "working")
-    ).toBe(true);
+    expect(result.updatedLifts.every((l) => l.status !== "working")).toBe(true);
   });
 
   it("empty lifts array: ticksSimulated equals elapsed seconds (no early stop)", () => {

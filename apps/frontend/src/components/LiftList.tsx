@@ -9,13 +9,7 @@ interface Props {
   onRepair: (liftId: string) => void;
 }
 
-export function LiftList({
-  liftModels,
-  lifts,
-  currentMoneyCents,
-  onBuy,
-  onRepair,
-}: Props) {
+export function LiftList({ liftModels, lifts, currentMoneyCents, onBuy, onRepair }: Props) {
   return (
     <div>
       {liftModels.map((model) => {

@@ -6,8 +6,8 @@ import cableCar from "./cable_car.png";
 
 export const liftIcons: Record<string, string> = {
   "magic-carpet": magicCarpet,
-  "drag-lift":    dragLift,
-  "chairlift":    chairlift,
-  "gondola":      gondola,
-  "cable-car":    cableCar,
+  "drag-lift": dragLift,
+  chairlift: chairlift,
+  gondola: gondola,
+  "cable-car": cableCar,
 };

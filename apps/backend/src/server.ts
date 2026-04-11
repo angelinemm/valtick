@@ -8,8 +8,6 @@ app.listen(PORT, () => {
   console.log(`Backend running on http://localhost:${PORT}`);
 
   setInterval(() => {
-    runBackgroundSim().catch((e) =>
-      console.error("[backgroundSim] Unhandled error:", e)
-    );
+    runBackgroundSim().catch((e) => console.error("[backgroundSim] Unhandled error:", e));
   }, BACKGROUND_JOB_INTERVAL_MS);
 });

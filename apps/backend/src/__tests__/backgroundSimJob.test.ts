@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, afterAll } from "vitest";
+import { describe, it, expect, afterEach, afterAll } from "vitest";
 import { prisma } from "../db/prisma";
 import { runBackgroundSim } from "../jobs/backgroundSimJob";
 
@@ -11,9 +11,7 @@ describe.skipIf(!HAS_DB)("runBackgroundSim", () => {
     idleHours: number;
     liftStatus?: "working" | "broken" | "junked";
   }) {
-    const hoursAgo = new Date(
-      Date.now() - opts.idleHours * 60 * 60 * 1000
-    );
+    const hoursAgo = new Date(Date.now() - opts.idleHours * 60 * 60 * 1000);
     const resort = await prisma.resort.create({
       data: {
         name: "Sim Test Resort",
@@ -73,9 +71,7 @@ describe.skipIf(!HAS_DB)("runBackgroundSim", () => {
 
     const after = await prisma.resort.findUnique({ where: { id: resort.id } });
     expect(after!.moneyCents).toBe(0);
-    expect(after!.lastTickAt.getTime()).toBeGreaterThan(
-      resort.lastTickAt.getTime()
-    );
+    expect(after!.lastTickAt.getTime()).toBeGreaterThan(resort.lastTickAt.getTime());
   });
 
   it("resort with all junked lifts: money unchanged, lastTickAt updated", async () => {
@@ -85,9 +81,7 @@ describe.skipIf(!HAS_DB)("runBackgroundSim", () => {
 
     const after = await prisma.resort.findUnique({ where: { id: resort.id } });
     expect(after!.moneyCents).toBe(0);
-    expect(after!.lastTickAt.getTime()).toBeGreaterThan(
-      resort.lastTickAt.getTime()
-    );
+    expect(after!.lastTickAt.getTime()).toBeGreaterThan(resort.lastTickAt.getTime());
   });
 
   it("error in one resort does not prevent others from being processed", async () => {

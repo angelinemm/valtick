@@ -1,10 +1,7 @@
 import { prisma } from "../db/prisma";
 import type { Resort } from "@prisma/client";
 
-export async function createResort(
-  name: string,
-  guestId: string
-): Promise<Resort> {
+export async function createResort(name: string, guestId: string): Promise<Resort> {
   const resort = await prisma.resort.create({
     data: {
       name,

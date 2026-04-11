@@ -11,10 +11,34 @@
     "dev:frontend": "npm run dev --workspace=apps/frontend",
     "db:generate": "prisma generate --schema=prisma/schema.prisma",
     "db:migrate": "prisma migrate dev --schema=prisma/schema.prisma",
-    "db:migrate:deploy": "prisma migrate deploy --schema=prisma/schema.prisma"
+    "db:migrate:deploy": "prisma migrate deploy --schema=prisma/schema.prisma",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{js,json,md,css}": [
+      "prettier --write"
+    ]
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.2.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.8.2",
     "prisma": "^5.22.0",
+    "@testing-library/dom": "^10.4.1",
+    "typescript-eslint": "^8.58.1",
     "vitest": "^1.6.0"
   }
 }

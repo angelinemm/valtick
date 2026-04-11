@@ -8,10 +8,7 @@ type LiftSummaryInput = {
 
 const BASE_PASS_PRICE_CENTS = 10;
 
-export function calculateSummary(
-  moneyCents: number,
-  lifts: LiftSummaryInput[]
-): SummaryDTO {
+export function calculateSummary(moneyCents: number, lifts: LiftSummaryInput[]): SummaryDTO {
   const workingLifts = lifts.filter((l) => l.status === "working");
 
   const capacityPerSec = workingLifts.reduce((sum, l) => {

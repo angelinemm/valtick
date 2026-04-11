@@ -66,14 +66,14 @@ val-tick/
 
 ## API endpoints
 
-| Method | Path | Description |
-|--------|------|-------------|
-| GET | `/health` | Health check |
-| GET | `/resort/:guestId` | Fetch resort state |
-| POST | `/tick` | Process one game tick |
-| POST | `/buy_lift` | Purchase a lift |
-| POST | `/repair_lift` | Repair a broken lift |
-| POST | `/reset` | Reset resort to starting state |
+| Method | Path               | Description                    |
+| ------ | ------------------ | ------------------------------ |
+| GET    | `/health`          | Health check                   |
+| GET    | `/resort/:guestId` | Fetch resort state             |
+| POST   | `/tick`            | Process one game tick          |
+| POST   | `/buy_lift`        | Purchase a lift                |
+| POST   | `/repair_lift`     | Repair a broken lift           |
+| POST   | `/reset`           | Reset resort to starting state |
 
 ## Game features
 

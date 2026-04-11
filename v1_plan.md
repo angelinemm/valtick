@@ -4,15 +4,15 @@
 
 ### Phases at a Glance
 
-| Phase | Focus | Prompts |
-|---|---|---|
-| 1 — Foundation | Monorepo, types, DB schema | 1–3 |
-| 2 — Backend Logic | Catalog, economy, tick engine | 4–6 |
-| 3 — Offline Sim | Idle catch-up simulation | 7 |
-| 4 — API Layer | Repositories, routes, seed | 8–13 |
-| 5 — Frontend Shell | Scaffold, routing, API client | 14–16 |
-| 6 — Frontend UI | Components, interactions | 17–19 |
-| 7 — Game Loop | Adaptive ticking, wiring | 20 |
+| Phase              | Focus                         | Prompts |
+| ------------------ | ----------------------------- | ------- |
+| 1 — Foundation     | Monorepo, types, DB schema    | 1–3     |
+| 2 — Backend Logic  | Catalog, economy, tick engine | 4–6     |
+| 3 — Offline Sim    | Idle catch-up simulation      | 7       |
+| 4 — API Layer      | Repositories, routes, seed    | 8–13    |
+| 5 — Frontend Shell | Scaffold, routing, API client | 14–16   |
+| 6 — Frontend UI    | Components, interactions      | 17–19   |
+| 7 — Game Loop      | Adaptive ticking, wiring      | 20      |
 
 ### Key Ordering Constraints
 
@@ -24,7 +24,7 @@
 
 ### Highest-Risk Areas
 
-- **Tick order** — income is earned *before* break rolls; easy to get wrong
+- **Tick order** — income is earned _before_ break rolls; easy to get wrong
 - **Junk boundary** — "break at >=1.0 → junk" vs "reach 1.0 after doubling → still repairable" is subtle
 - **Integer cents** — never use floats for money; test this explicitly
 - **Offline simulation** — tick count off-by-one errors are silent
@@ -34,19 +34,23 @@
 ## Chunk & Step Breakdown
 
 ### Phase 1: Foundation
+
 - **Chunk A**: Monorepo scaffold → root workspace, backend shell, frontend shell, shared shell
 - **Chunk B**: Shared types → all DTOs, request/response shapes, enums
 - **Chunk C**: Database schema → Prisma models, migration, DB client singleton
 
 ### Phase 2: Backend Logic
+
 - **Chunk D**: Lift model catalog → hardcoded constants, lookup helpers
 - **Chunk E**: Summary service → pass price, capacity, income calculation (pure)
 - **Chunk F**: Tick service → per-tick simulation engine (pure, injectable random)
 
 ### Phase 3: Offline Simulation
+
 - **Chunk G**: Offline sim → tick replay from `lastTickAt`, early stop
 
 ### Phase 4: API Layer
+
 - **Chunk H**: Repositories → Prisma queries for resort + lift CRUD
 - **Chunk I**: GET /resort/:guestId + resortService
 - **Chunk J**: Seed script → admin creation of a starting resort
@@ -56,16 +60,19 @@
 - **Chunk N**: Background job → periodic offline sim worker
 
 ### Phase 5: Frontend Shell
+
 - **Chunk O**: Frontend scaffold → Vite, React Router, React Query
 - **Chunk P**: API client → typed fetch functions
 - **Chunk Q**: useResort hook → data fetching, loading/error states
 
 ### Phase 6: Frontend UI
+
 - **Chunk R**: Top bar → resort stats display
 - **Chunk S**: Lift groups → grouped list, collapsible, buy button, lift rows
 - **Chunk T**: Broken + junkyard → repair interaction, junkyard section
 
 ### Phase 7: Game Loop
+
 - **Chunk U**: Adaptive ticking → Page Visibility API, useTick hook, full wiring
 
 ---

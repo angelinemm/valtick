@@ -1,5 +1,10 @@
 import { useParams } from "react-router-dom";
-import { useResort, useBuyLiftMutation, useRepairLiftMutation, useResetResortMutation } from "../hooks/useResort";
+import {
+  useResort,
+  useBuyLiftMutation,
+  useRepairLiftMutation,
+  useResetResortMutation,
+} from "../hooks/useResort";
 import { GameNotFoundPage } from "./GameNotFoundPage";
 import { ResortTopBar } from "../components/ResortTopBar";
 import { LiftList } from "../components/LiftList";
