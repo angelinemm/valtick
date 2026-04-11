@@ -51,10 +51,10 @@ describe("getLiftModel", () => {
     expect(model).toEqual({
       key: "cable_car",
       name: "Cable Car",
-      purchasePriceCents: 800000,
+      purchasePriceCents: 5000000,
       capacity: 100,
       priceBonusCents: 200,
-      repairCostCents: 80000,
+      repairCostCents: 500000,
       initialBreakChance: 0.002,
       iconKey: "cable-car",
     });
