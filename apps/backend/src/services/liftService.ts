@@ -33,12 +33,12 @@ export async function resetResort(
   resort: Resort & { lifts: Lift[] }
 ): Promise<Resort & { lifts: Lift[] }> {
   await deleteAllLiftsForResort(resort.id);
-  await updateResort(resort.id, { moneyCents: 1000, lastTickAt: new Date() });
+  await updateResort(resort.id, { moneyCents: 500, lastTickAt: new Date() });
   await createLift({
     resortId: resort.id,
     liftModelKey: "magic_carpet",
     status: "working",
-    currentBreakProbability: 0.001,
+    currentBreakProbability: 0.002,
   });
   return (await findResortByGuestId(resort.guestId))!;
 }

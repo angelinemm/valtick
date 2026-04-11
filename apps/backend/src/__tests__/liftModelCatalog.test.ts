@@ -27,9 +27,9 @@ describe("getAllLiftModels", () => {
     ]);
   });
 
-  it("every model has initialBreakChance === 0.001", () => {
+  it("every model has initialBreakChance === 0.002", () => {
     getAllLiftModels().forEach((m) => {
-      expect(m.initialBreakChance).toBe(0.001);
+      expect(m.initialBreakChance).toBe(0.002);
     });
   });
 
@@ -46,11 +46,11 @@ describe("getLiftModel", () => {
     expect(model).toEqual({
       key: "magic_carpet",
       name: "Magic Carpet",
-      purchasePriceCents: 1000,
+      purchasePriceCents: 5000,
       capacity: 5,
       priceBonusCents: 10,
-      repairCostCents: 100,
-      initialBreakChance: 0.001,
+      repairCostCents: 500,
+      initialBreakChance: 0.002,
       iconKey: "magic-carpet",
     });
   });
@@ -60,11 +60,11 @@ describe("getLiftModel", () => {
     expect(model).toEqual({
       key: "cable_car",
       name: "Cable Car",
-      purchasePriceCents: 50000,
+      purchasePriceCents: 800000,
       capacity: 100,
       priceBonusCents: 200,
-      repairCostCents: 5000,
-      initialBreakChance: 0.001,
+      repairCostCents: 80000,
+      initialBreakChance: 0.002,
       iconKey: "cable-car",
     });
   });

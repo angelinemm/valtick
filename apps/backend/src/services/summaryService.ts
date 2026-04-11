@@ -6,7 +6,7 @@ type LiftSummaryInput = {
   liftModelKey: LiftModelKey;
 };
 
-const BASE_PASS_PRICE_CENTS = 100;
+const BASE_PASS_PRICE_CENTS = 10;
 
 export function calculateSummary(
   moneyCents: number,

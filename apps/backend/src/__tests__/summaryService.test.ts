@@ -4,7 +4,7 @@ import { calculateSummary } from "../services/summaryService";
 describe("calculateSummary", () => {
   it("empty lifts: base pass price, zero capacity and income", () => {
     const result = calculateSummary(500, []);
-    expect(result.passPriceCents).toBe(100);
+    expect(result.passPriceCents).toBe(10);
     expect(result.capacityPerSec).toBe(0);
     expect(result.incomePerSecCents).toBe(0);
     expect(result.totalLifts).toBe(0);
@@ -17,8 +17,8 @@ describe("calculateSummary", () => {
       { status: "working", liftModelKey: "magic_carpet" },
     ]);
     expect(result.capacityPerSec).toBe(5);
-    expect(result.passPriceCents).toBe(110); // 100 base + 10 bonus
-    expect(result.incomePerSecCents).toBe(550); // 5 * 110
+    expect(result.passPriceCents).toBe(20); // 10 base + 10 bonus
+    expect(result.incomePerSecCents).toBe(100); // 5 * 20
   });
 
   it("one broken magic_carpet: contributes nothing", () => {
@@ -26,7 +26,7 @@ describe("calculateSummary", () => {
       { status: "broken", liftModelKey: "magic_carpet" },
     ]);
     expect(result.capacityPerSec).toBe(0);
-    expect(result.passPriceCents).toBe(100);
+    expect(result.passPriceCents).toBe(10);
     expect(result.incomePerSecCents).toBe(0);
   });
 
@@ -35,7 +35,7 @@ describe("calculateSummary", () => {
       { status: "junked", liftModelKey: "magic_carpet" },
     ]);
     expect(result.capacityPerSec).toBe(0);
-    expect(result.passPriceCents).toBe(100);
+    expect(result.passPriceCents).toBe(10);
     expect(result.incomePerSecCents).toBe(0);
   });
 
@@ -45,8 +45,8 @@ describe("calculateSummary", () => {
       { status: "broken", liftModelKey: "chairlift" },
     ]);
     expect(result.capacityPerSec).toBe(5);
-    expect(result.passPriceCents).toBe(110);
-    expect(result.incomePerSecCents).toBe(550);
+    expect(result.passPriceCents).toBe(20);
+    expect(result.incomePerSecCents).toBe(100);
   });
 
   it("two working magic_carpets: capacity and bonus stack", () => {
@@ -55,8 +55,8 @@ describe("calculateSummary", () => {
       { status: "working", liftModelKey: "magic_carpet" },
     ]);
     expect(result.capacityPerSec).toBe(10);
-    expect(result.passPriceCents).toBe(120); // 100 + 10 + 10
-    expect(result.incomePerSecCents).toBe(1200); // 10 * 120
+    expect(result.passPriceCents).toBe(30); // 10 + 10 + 10
+    expect(result.incomePerSecCents).toBe(300); // 10 * 30
   });
 
   it("one working cable_car: correct values", () => {
@@ -64,8 +64,8 @@ describe("calculateSummary", () => {
       { status: "working", liftModelKey: "cable_car" },
     ]);
     expect(result.capacityPerSec).toBe(100);
-    expect(result.passPriceCents).toBe(300); // 100 + 200
-    expect(result.incomePerSecCents).toBe(30000); // 100 * 300
+    expect(result.passPriceCents).toBe(210); // 10 + 200
+    expect(result.incomePerSecCents).toBe(21000); // 100 * 210
   });
 
   it("totalLifts counts working, broken, and junked", () => {

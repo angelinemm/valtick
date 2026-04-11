@@ -9,13 +9,13 @@ export async function createResort(
     data: {
       name,
       guestId,
-      moneyCents: 1000,
+      moneyCents: 500,
       lastTickAt: new Date(),
       lifts: {
         create: {
           liftModelKey: "magic_carpet",
           status: "working",
-          currentBreakProbability: 0.001,
+          currentBreakProbability: 0.002,
         },
       },
     },

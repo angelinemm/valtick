@@ -34,7 +34,7 @@ describe("simulateOfflineTicks", () => {
   });
 
   it("3 seconds elapsed, no breaks: simulates 3 ticks, income accumulates", () => {
-    // magic_carpet: 550 cents per tick
+    // magic_carpet: 100 cents per tick (5 capacity * 20 pass price)
     const result = simulateOfflineTicks({
       moneyCents: 0,
       lifts: [makeWorkingLift()],
@@ -43,7 +43,7 @@ describe("simulateOfflineTicks", () => {
       random: neverBreaks,
     });
     expect(result.ticksSimulated).toBe(3);
-    expect(result.updatedMoneyCents).toBe(1650); // 3 * 550
+    expect(result.updatedMoneyCents).toBe(300); // 3 * 100
   });
 
   it("partial second is floored: 3.9 seconds → 3 ticks", () => {

@@ -60,8 +60,8 @@ describe.skipIf(!HAS_DB)("POST /repair_lift", () => {
     const res = await request(app)
       .post("/repair_lift")
       .send({ guestId, liftId: brokenLiftId });
-    // magic_carpet repairCostCents = 100
-    expect(res.body.resort.moneyCents).toBe(4900);
+    // magic_carpet repairCostCents = 500
+    expect(res.body.resort.moneyCents).toBe(4500);
   });
 
   it("repair does not change currentBreakProbability", async () => {
@@ -75,7 +75,7 @@ describe.skipIf(!HAS_DB)("POST /repair_lift", () => {
   it("insufficient funds: resort unchanged, still 200", async () => {
     await prisma.resort.update({
       where: { id: resortId },
-      data: { moneyCents: 50 }, // less than 100 repair cost
+      data: { moneyCents: 499 }, // less than 500 repair cost
     });
     const res = await request(app)
       .post("/repair_lift")

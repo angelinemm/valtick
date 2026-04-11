@@ -54,8 +54,8 @@ describe.skipIf(!HAS_DB)("POST /tick", () => {
     await request(app).post("/tick").send({ guestId });
 
     const res = await request(app).get(`/resort/${guestId}`);
-    // magic_carpet: 5 * 110 = 550 cents added to starting 1000
-    expect(res.body.resort.moneyCents).toBe(1550);
+    // magic_carpet: 5 * 20 = 100 cents added to starting 1000
+    expect(res.body.resort.moneyCents).toBe(1100);
   });
 
   it("updates lastTickAt after a tick", async () => {

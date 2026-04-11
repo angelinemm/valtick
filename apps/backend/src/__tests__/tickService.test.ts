@@ -18,13 +18,13 @@ function makeLift(
 }
 
 describe("income calculation", () => {
-  it("one working magic_carpet adds 550 cents", () => {
+  it("one working magic_carpet adds 100 cents", () => {
     const { updatedMoneyCents } = processOneTick(
       1000,
       [makeLift()],
       neverBreaks
     );
-    expect(updatedMoneyCents).toBe(1550);
+    expect(updatedMoneyCents).toBe(1100);
   });
 
   it("one broken lift: money unchanged", () => {
@@ -41,13 +41,14 @@ describe("income calculation", () => {
     expect(updatedMoneyCents).toBe(1000);
   });
 
-  it("two working magic_carpets adds 1200 cents", () => {
+  it("two working magic_carpets adds 300 cents", () => {
     const { updatedMoneyCents } = processOneTick(
       0,
       [makeLift({ id: "a" }), makeLift({ id: "b" })],
       neverBreaks
     );
-    expect(updatedMoneyCents).toBe(1200);
+    // capacity=10, passPriceCents=10+10+10=30, income=10*30=300
+    expect(updatedMoneyCents).toBe(300);
   });
 });
 
@@ -104,7 +105,7 @@ describe("junk boundary", () => {
 
 describe("tick ordering", () => {
   it("a lift that breaks this tick still contributed income this tick", () => {
-    // magic_carpet: income = 5 * 110 = 550 — earned before break roll
+    // magic_carpet: income = 5 * 20 = 100 — earned before break roll
     const lift = makeLift({ currentBreakProbability: 0.001 });
     const { updatedMoneyCents, updatedLifts } = processOneTick(
       0,
@@ -112,7 +113,7 @@ describe("tick ordering", () => {
       alwaysBreaks
     );
     expect(updatedLifts[0].status).toBe("broken");
-    expect(updatedMoneyCents).toBe(550);
+    expect(updatedMoneyCents).toBe(100);
   });
 });
 

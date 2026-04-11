@@ -25,9 +25,9 @@ describe.skipIf(!HAS_DB)("createResort", () => {
     return resort;
   }
 
-  it("creates a resort with moneyCents=1000", async () => {
+  it("creates a resort with moneyCents=500", async () => {
     const resort = await seed();
-    expect(resort.moneyCents).toBe(1000);
+    expect(resort.moneyCents).toBe(500);
   });
 
   it("creates exactly one lift", async () => {
@@ -42,7 +42,7 @@ describe.skipIf(!HAS_DB)("createResort", () => {
     const lift = lifts[0];
     expect(lift.liftModelKey).toBe("magic_carpet");
     expect(lift.status).toBe("working");
-    expect(lift.currentBreakProbability).toBe(0.001);
+    expect(lift.currentBreakProbability).toBe(0.002);
   });
 
   it("throws if guestId already exists", async () => {

@@ -50,26 +50,26 @@ describe.skipIf(!HAS_DB)("POST /buy_lift", () => {
     const res = await request(app)
       .post("/buy_lift")
       .send({ guestId, liftModelKey: "magic_carpet" });
-    // magic_carpet costs 1000 cents, started with 10000
-    expect(res.body.resort.moneyCents).toBe(9000);
+    // magic_carpet costs 5000 cents, started with 10000
+    expect(res.body.resort.moneyCents).toBe(5000);
   });
 
   it("new lift has status working", async () => {
     const res = await request(app)
       .post("/buy_lift")
-      .send({ guestId, liftModelKey: "chairlift" });
+      .send({ guestId, liftModelKey: "magic_carpet" });
     expect(res.body.lifts[0].status).toBe("working");
   });
 
-  it("new lift has initial break probability 0.001", async () => {
+  it("new lift has initial break probability 0.002", async () => {
     const res = await request(app)
       .post("/buy_lift")
       .send({ guestId, liftModelKey: "magic_carpet" });
-    expect(res.body.lifts[0].currentBreakProbability).toBe(0.001);
+    expect(res.body.lifts[0].currentBreakProbability).toBe(0.002);
   });
 
   it("insufficient funds: resort unchanged, still returns 200", async () => {
-    // gondola costs 20000, we only have 10000
+    // gondola costs 200000, we only have 10000
     const res = await request(app)
       .post("/buy_lift")
       .send({ guestId, liftModelKey: "gondola" });
@@ -86,7 +86,7 @@ describe.skipIf(!HAS_DB)("POST /buy_lift", () => {
       .post("/buy_lift")
       .send({ guestId, liftModelKey: "magic_carpet" });
     expect(res.body.lifts).toHaveLength(2);
-    expect(res.body.resort.moneyCents).toBe(8000);
+    expect(res.body.resort.moneyCents).toBe(0);
   });
 
   it("response matches full GetResortResponse shape", async () => {

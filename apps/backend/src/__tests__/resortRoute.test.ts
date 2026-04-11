@@ -68,9 +68,9 @@ describe.skipIf(!HAS_DB)("GET /resort/:guestId", () => {
   it("summary reflects the one working magic_carpet", async () => {
     const res = await request(app).get(`/resort/${guestId}`);
     const { summary } = res.body;
-    expect(summary.incomePerSecCents).toBe(550);
+    expect(summary.incomePerSecCents).toBe(100);
     expect(summary.capacityPerSec).toBe(5);
-    expect(summary.passPriceCents).toBe(110);
+    expect(summary.passPriceCents).toBe(20);
     expect(summary.totalLifts).toBe(1);
     expect(summary.brokenLiftsCount).toBe(0);
   });

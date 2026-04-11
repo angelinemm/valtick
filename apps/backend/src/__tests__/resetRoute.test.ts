@@ -41,10 +41,10 @@ describe.skipIf(!HAS_DB)("POST /reset", () => {
     expect(res.status).toBe(404);
   });
 
-  it("resets money to 1000 cents", async () => {
+  it("resets money to 500 cents", async () => {
     const res = await request(app).post("/reset").send({ guestId });
     expect(res.status).toBe(200);
-    expect(res.body.resort.moneyCents).toBe(1000);
+    expect(res.body.resort.moneyCents).toBe(500);
   });
 
   it("wipes existing lifts and replaces with 1 magic carpet", async () => {
@@ -53,10 +53,10 @@ describe.skipIf(!HAS_DB)("POST /reset", () => {
     expect(res.body.lifts[0].liftModelKey).toBe("magic_carpet");
   });
 
-  it("new magic carpet is working with 0.001 break probability", async () => {
+  it("new magic carpet is working with 0.002 break probability", async () => {
     const res = await request(app).post("/reset").send({ guestId });
     expect(res.body.lifts[0].status).toBe("working");
-    expect(res.body.lifts[0].currentBreakProbability).toBe(0.001);
+    expect(res.body.lifts[0].currentBreakProbability).toBe(0.002);
   });
 
   it("response matches full GetResortResponse shape", async () => {
