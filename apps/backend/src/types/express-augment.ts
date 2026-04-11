@@ -1,4 +1,5 @@
-import type { UserRole } from "@prisma/client";
+/* eslint-disable @typescript-eslint/no-namespace */
+export {};
 
 declare global {
   namespace Express {
@@ -7,7 +8,7 @@ declare global {
         id: string;
         username: string;
         email?: string;
-        role: UserRole;
+        role: "USER" | "ADMIN";
       };
     }
   }
