@@ -10,13 +10,13 @@ describe.skipIf(!HAS_DB)("POST /tick", () => {
   let agent: ReturnType<typeof request.agent>;
   let userId: string;
   let resortId: string;
-  let userEmail: string;
+  let username: string;
 
   beforeEach(async () => {
-    userEmail = `test-tick-${Date.now()}-${Math.random()}@example.com`;
+    username = `ticktest_${Date.now()}_${String(Math.random()).slice(2)}`;
     const passwordHash = await bcrypt.hash("test-password", 1);
     const user = await prisma.user.create({
-      data: { email: userEmail, passwordHash, role: "USER" },
+      data: { username, passwordHash, role: "USER" },
     });
     userId = user.id;
 
@@ -38,7 +38,7 @@ describe.skipIf(!HAS_DB)("POST /tick", () => {
     resortId = resort.id;
 
     agent = request.agent(app);
-    await agent.post("/auth/login").send({ email: userEmail, password: "test-password" });
+    await agent.post("/auth/login").send({ username, password: "test-password" });
   });
 
   afterEach(async () => {

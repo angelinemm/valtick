@@ -2,12 +2,13 @@ export type UserRole = "USER" | "ADMIN";
 
 export interface UserDTO {
   id: string;
-  email: string;
+  username: string;
+  email?: string;
   role: UserRole;
 }
 
 export interface LoginRequest {
-  email: string;
+  username: string;
   password: string;
 }
 

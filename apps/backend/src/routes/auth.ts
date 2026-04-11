@@ -1,31 +1,41 @@
 import { Router } from "express";
 import bcrypt from "bcrypt";
-import { findUserByEmail, findUserById } from "../db/userRepository";
+import { findUserByUsername, findUserById } from "../db/userRepository";
 import type { UserDTO } from "@val-tick/shared";
 
 export const authRouter = Router();
 
-function toUserDTO(user: { id: string; email: string; role: string }): UserDTO {
-  return { id: user.id, email: user.email, role: user.role as UserDTO["role"] };
+function toUserDTO(user: {
+  id: string;
+  username: string;
+  email: string | null;
+  role: string;
+}): UserDTO {
+  return {
+    id: user.id,
+    username: user.username,
+    ...(user.email ? { email: user.email } : {}),
+    role: user.role as UserDTO["role"],
+  };
 }
 
 authRouter.post("/login", async (req, res) => {
-  const { email, password } = req.body as { email: string; password: string };
+  const { username, password } = req.body as { username: string; password: string };
 
-  if (!email || !password) {
-    res.status(400).json({ error: "Email and password required" });
+  if (!username || !password) {
+    res.status(400).json({ error: "Username and password required" });
     return;
   }
 
-  const user = await findUserByEmail(email);
+  const user = await findUserByUsername(username);
   if (!user) {
-    res.status(401).json({ error: "Invalid email or password" });
+    res.status(401).json({ error: "Invalid username or password" });
     return;
   }
 
   const match = await bcrypt.compare(password, user.passwordHash);
   if (!match) {
-    res.status(401).json({ error: "Invalid email or password" });
+    res.status(401).json({ error: "Invalid username or password" });
     return;
   }
 

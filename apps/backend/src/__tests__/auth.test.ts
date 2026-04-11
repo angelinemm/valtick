@@ -9,13 +9,13 @@ const HAS_DB = !!process.env.DATABASE_URL;
 describe.skipIf(!HAS_DB)("Auth routes", () => {
   let userId: string;
   let resortId: string;
-  let userEmail: string;
+  let username: string;
 
   beforeEach(async () => {
-    userEmail = `auth-test-${Date.now()}-${Math.random()}@example.com`;
+    username = `authtest_${Date.now()}_${String(Math.random()).slice(2)}`;
     const passwordHash = await bcrypt.hash("correct-password", 1);
     const user = await prisma.user.create({
-      data: { email: userEmail, passwordHash, role: "USER" },
+      data: { username, passwordHash, role: "USER" },
     });
     userId = user.id;
 
@@ -38,23 +38,23 @@ describe.skipIf(!HAS_DB)("Auth routes", () => {
     it("succeeds with correct credentials and sets a cookie", async () => {
       const res = await request(app)
         .post("/auth/login")
-        .send({ email: userEmail, password: "correct-password" });
+        .send({ username, password: "correct-password" });
       expect(res.status).toBe(200);
-      expect(res.body.user.email).toBe(userEmail);
+      expect(res.body.user.username).toBe(username);
       expect(res.headers["set-cookie"]).toBeDefined();
     });
 
     it("returns 401 with wrong password", async () => {
       const res = await request(app)
         .post("/auth/login")
-        .send({ email: userEmail, password: "wrong-password" });
+        .send({ username, password: "wrong-password" });
       expect(res.status).toBe(401);
     });
 
-    it("returns 401 with unknown email", async () => {
+    it("returns 401 with unknown username", async () => {
       const res = await request(app)
         .post("/auth/login")
-        .send({ email: "nobody@example.com", password: "correct-password" });
+        .send({ username: "nobody_does_not_exist", password: "correct-password" });
       expect(res.status).toBe(401);
     });
   });
@@ -67,17 +67,17 @@ describe.skipIf(!HAS_DB)("Auth routes", () => {
 
     it("returns user info when authenticated", async () => {
       const agent = request.agent(app);
-      await agent.post("/auth/login").send({ email: userEmail, password: "correct-password" });
+      await agent.post("/auth/login").send({ username, password: "correct-password" });
       const res = await agent.get("/auth/me");
       expect(res.status).toBe(200);
-      expect(res.body.user.email).toBe(userEmail);
+      expect(res.body.user.username).toBe(username);
     });
   });
 
   describe("POST /auth/logout", () => {
     it("clears the session and subsequent requests return 401", async () => {
       const agent = request.agent(app);
-      await agent.post("/auth/login").send({ email: userEmail, password: "correct-password" });
+      await agent.post("/auth/login").send({ username, password: "correct-password" });
 
       // Confirm we're logged in
       const meRes = await agent.get("/auth/me");
@@ -108,7 +108,7 @@ describe.skipIf(!HAS_DB)("Auth routes", () => {
   describe("GET /resort with valid session", () => {
     it("returns 200 with the user's resort", async () => {
       const agent = request.agent(app);
-      await agent.post("/auth/login").send({ email: userEmail, password: "correct-password" });
+      await agent.post("/auth/login").send({ username, password: "correct-password" });
       const res = await agent.get("/resort");
       expect(res.status).toBe(200);
       expect(res.body.resort.name).toBe("Auth Test Resort");

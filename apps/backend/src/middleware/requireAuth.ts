@@ -13,6 +13,11 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
     res.status(401).json({ error: "Unauthorized" });
     return;
   }
-  req.user = { id: user.id, email: user.email, role: user.role };
+  req.user = {
+    id: user.id,
+    username: user.username,
+    ...(user.email ? { email: user.email } : {}),
+    role: user.role,
+  };
   next();
 }

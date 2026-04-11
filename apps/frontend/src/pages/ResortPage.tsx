@@ -45,7 +45,7 @@ export function ResortPage() {
         resort={data.resort}
         summary={data.summary}
         tickCount={tickCount}
-        userEmail={user?.email ?? ""}
+        username={user?.username ?? ""}
         onReset={() => resetResort.mutate()}
         onLogout={handleLogout}
       />

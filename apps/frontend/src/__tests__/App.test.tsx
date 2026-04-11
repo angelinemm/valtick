@@ -32,7 +32,7 @@ const mockResortResponse: GetResortResponse = {
   lifts: [],
 };
 
-const mockUser: UserDTO = { id: "u1", email: "test@example.com", role: "USER" };
+const mockUser: UserDTO = { id: "u1", username: "testuser", role: "USER" };
 
 afterEach(() => {
   vi.restoreAllMocks();

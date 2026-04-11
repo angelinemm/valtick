@@ -6,12 +6,12 @@ interface Props {
   resort: ResortDTO;
   summary: SummaryDTO;
   tickCount: number;
-  userEmail: string;
+  username: string;
   onReset: () => void;
   onLogout: () => void;
 }
 
-export function ResortTopBar({ resort, summary, tickCount, userEmail, onReset, onLogout }: Props) {
+export function ResortTopBar({ resort, summary, tickCount, username, onReset, onLogout }: Props) {
   function handleReset() {
     if (window.confirm("Are you sure you want to reset your resort? This cannot be undone.")) {
       onReset();
@@ -40,7 +40,7 @@ export function ResortTopBar({ resort, summary, tickCount, userEmail, onReset, o
       </svg>
       <div className={styles.meta}>
         <span className={styles.resortName}>{resort.name}</span>
-        <span className={styles.guestId}>{userEmail}</span>
+        <span className={styles.guestId}>{username}</span>
       </div>
       <div className={styles.statsRow}>
         <div className={styles.statBlock}>

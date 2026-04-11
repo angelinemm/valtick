@@ -6,7 +6,7 @@ import { login } from "../api/auth";
 export function LoginPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -16,11 +16,11 @@ export function LoginPage() {
     setError(null);
     setLoading(true);
     try {
-      const data = await login({ email, password });
+      const data = await login({ username, password });
       queryClient.setQueryData(["me"], data.user);
       navigate("/");
     } catch {
-      setError("Invalid email or password");
+      setError("Invalid username or password");
     } finally {
       setLoading(false);
     }
@@ -41,12 +41,12 @@ export function LoginPage() {
       >
         <h1 style={{ textAlign: "center", marginBottom: "0.5rem" }}>Val-Tick</h1>
         <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           required
-          autoComplete="email"
+          autoComplete="username"
         />
         <input
           type="password"

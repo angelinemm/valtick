@@ -30,7 +30,7 @@ function renderBar(onReset = vi.fn(), onLogout = vi.fn()) {
       resort={resort}
       summary={summary}
       tickCount={0}
-      userEmail="ski@example.com"
+      username="skipper"
       onReset={onReset}
       onLogout={onLogout}
     />
@@ -43,9 +43,9 @@ describe("ResortTopBar", () => {
     expect(screen.getByText("Snowpeak")).toBeInTheDocument();
   });
 
-  it("renders user email", () => {
+  it("renders username", () => {
     renderBar();
-    expect(screen.getByText("ski@example.com")).toBeInTheDocument();
+    expect(screen.getByText("skipper")).toBeInTheDocument();
   });
 
   it("renders money as $10.00 when moneyCents=1000", () => {
@@ -79,7 +79,7 @@ describe("ResortTopBar", () => {
         resort={resort}
         summary={{ ...summary, brokenLiftsCount: 0 }}
         tickCount={0}
-        userEmail="ski@example.com"
+        username="skipper"
         onReset={vi.fn()}
         onLogout={vi.fn()}
       />

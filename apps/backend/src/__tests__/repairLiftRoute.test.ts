@@ -11,13 +11,13 @@ describe.skipIf(!HAS_DB)("POST /repair_lift", () => {
   let userId: string;
   let resortId: string;
   let brokenLiftId: string;
-  let userEmail: string;
+  let username: string;
 
   beforeEach(async () => {
-    userEmail = `test-repair-${Date.now()}-${Math.random()}@example.com`;
+    username = `repairtest_${Date.now()}_${String(Math.random()).slice(2)}`;
     const passwordHash = await bcrypt.hash("test-password", 1);
     const user = await prisma.user.create({
-      data: { email: userEmail, passwordHash, role: "USER" },
+      data: { username, passwordHash, role: "USER" },
     });
     userId = user.id;
 
@@ -41,7 +41,7 @@ describe.skipIf(!HAS_DB)("POST /repair_lift", () => {
     brokenLiftId = resort.lifts[0].id;
 
     agent = request.agent(app);
-    await agent.post("/auth/login").send({ email: userEmail, password: "test-password" });
+    await agent.post("/auth/login").send({ username, password: "test-password" });
   });
 
   afterEach(async () => {
