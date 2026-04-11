@@ -15,7 +15,6 @@ describe.skipIf(!HAS_DB)("runBackgroundSim", () => {
     const resort = await prisma.resort.create({
       data: {
         name: "Sim Test Resort",
-        guestId: `sim-test-${Date.now()}-${Math.random()}`,
         moneyCents: 0,
         lastTickAt: hoursAgo,
         lifts: opts.liftStatus
@@ -92,7 +91,6 @@ describe.skipIf(!HAS_DB)("runBackgroundSim", () => {
     const badResort = await prisma.resort.create({
       data: {
         name: "Bad Resort",
-        guestId: `bad-resort-${Date.now()}`,
         moneyCents: 0,
         lastTickAt: new Date(Date.now() - 3 * 60 * 60 * 1000),
         lifts: {
@@ -111,7 +109,7 @@ describe.skipIf(!HAS_DB)("runBackgroundSim", () => {
 
     // The valid resort should still have been processed
     const validResort = await prisma.resort.findFirst({
-      where: { id: { in: resortIds }, guestId: { not: badResort.guestId } },
+      where: { id: { in: resortIds.filter((id) => id !== badResort.id) } },
     });
     expect(validResort!.moneyCents).toBeGreaterThan(0);
   });

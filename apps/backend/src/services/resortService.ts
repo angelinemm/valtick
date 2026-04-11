@@ -13,7 +13,6 @@ function toResortDTO(resort: Resort): ResortDTO {
   return {
     id: resort.id,
     name: resort.name,
-    guestId: resort.guestId,
     moneyCents: resort.moneyCents,
     lastTickAt: resort.lastTickAt.toISOString(),
     createdAt: resort.createdAt.toISOString(),

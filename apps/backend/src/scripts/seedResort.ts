@@ -1,11 +1,10 @@
 import { prisma } from "../db/prisma";
 import type { Resort } from "@prisma/client";
 
-export async function createResort(name: string, guestId: string): Promise<Resort> {
+export async function createResort(name: string): Promise<Resort> {
   const resort = await prisma.resort.create({
     data: {
       name,
-      guestId,
       moneyCents: 500,
       lastTickAt: new Date(),
       lifts: {
@@ -22,19 +21,18 @@ export async function createResort(name: string, guestId: string): Promise<Resor
 }
 
 async function main() {
-  const [, , name, guestId] = process.argv;
+  const [, , name] = process.argv;
 
-  if (!name || !guestId) {
-    console.error("Usage: ts-node src/scripts/seedResort.ts <name> <guestId>");
+  if (!name) {
+    console.error("Usage: ts-node src/scripts/seedResort.ts <name>");
     process.exit(1);
   }
 
-  const resort = await createResort(name, guestId);
+  const resort = await createResort(name);
   console.log(`Resort created:`);
-  console.log(`  id:       ${resort.id}`);
-  console.log(`  name:     ${resort.name}`);
-  console.log(`  guest ID: ${resort.guestId}`);
-  console.log(`  money:    $${(resort.moneyCents / 100).toFixed(2)}`);
+  console.log(`  id:    ${resort.id}`);
+  console.log(`  name:  ${resort.name}`);
+  console.log(`  money: $${(resort.moneyCents / 100).toFixed(2)}`);
 
   await prisma.$disconnect();
 }
