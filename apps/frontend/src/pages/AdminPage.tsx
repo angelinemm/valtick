@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   fetchAdminUsers,
@@ -10,6 +11,7 @@ import type { AdminUserDTO } from "@val-tick/shared";
 import styles from "./AdminPage.module.css";
 
 export function AdminPage() {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { data: users = [], isLoading } = useQuery({
     queryKey: ["admin", "users"],
@@ -40,6 +42,7 @@ export function AdminPage() {
       <h1 className={styles.heading}>Admin — Users &amp; Resorts</h1>
 
       <div className={styles.toolbar}>
+        <button onClick={() => navigate("/")}>← Back to game</button>
         <button
           onClick={() => {
             setRevealedPassword(null);

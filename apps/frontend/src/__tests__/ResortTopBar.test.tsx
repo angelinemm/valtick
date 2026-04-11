@@ -103,14 +103,14 @@ describe("ResortTopBar", () => {
     expect(screen.getByRole("button", { name: "Log out" })).toBeInTheDocument();
   });
 
-  it("does not render Admin link for non-admin users", () => {
+  it("does not render Admin button for non-admin users", () => {
     renderBar({ isAdmin: false });
-    expect(screen.queryByRole("link", { name: "Admin" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Admin" })).toBeNull();
   });
 
-  it("renders Admin link for admin users", () => {
+  it("renders Admin button for admin users", () => {
     renderBar({ isAdmin: true });
-    expect(screen.getByRole("link", { name: "Admin" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Admin" })).toBeInTheDocument();
   });
 
   it("calls onReset after user confirms", async () => {

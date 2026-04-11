@@ -32,17 +32,12 @@
   margin-left: 0.4rem;
 }
 
-.adminLink {
-  font-size: 0.7rem;
+.adminButton {
+  background-color: var(--btn-bg);
+  border-color: var(--btn-border);
   color: var(--text-muted);
-  margin-left: 0.6rem;
-  text-decoration: none;
-  opacity: 0.6;
-}
-
-.adminLink:hover {
-  opacity: 1;
-  color: var(--text-secondary);
+  align-self: center;
+  white-space: nowrap;
 }
 
 .statsRow {

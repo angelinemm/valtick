@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import type { ResortDTO, SummaryDTO } from "@val-tick/shared";
 import { formatMoney, formatMoneyPerSec } from "../utils/format";
 import styles from "./ResortTopBar.module.css";
@@ -22,6 +22,8 @@ export function ResortTopBar({
   onReset,
   onLogout,
 }: Props) {
+  const navigate = useNavigate();
+
   function handleReset() {
     if (window.confirm("Are you sure you want to reset your resort? This cannot be undone.")) {
       onReset();
@@ -51,11 +53,6 @@ export function ResortTopBar({
       <div className={styles.meta}>
         <span className={styles.resortName}>{resort.name}</span>
         <span className={styles.username}>{username}</span>
-        {isAdmin && (
-          <Link to="/admin" className={styles.adminLink}>
-            Admin
-          </Link>
-        )}
       </div>
       <div className={styles.statsRow}>
         <div className={styles.statBlock}>
@@ -80,6 +77,11 @@ export function ResortTopBar({
           <span className={styles.statLabel}>Broken</span>
           <span className={styles.statValue}>{summary.brokenLiftsCount}</span>
         </div>
+        {isAdmin && (
+          <button className={styles.adminButton} onClick={() => navigate("/admin")}>
+            Admin
+          </button>
+        )}
         <button className={styles.resetButton} onClick={handleReset}>
           Reset
         </button>
