@@ -42,6 +42,7 @@ describe("getLiftModel", () => {
       priceBonusCents: 10,
       repairCostCents: 500,
       initialBreakChance: 0.002,
+      maxOwned: 10,
       iconKey: "magic-carpet",
     });
   });
@@ -56,6 +57,7 @@ describe("getLiftModel", () => {
       priceBonusCents: 200,
       repairCostCents: 500000,
       initialBreakChance: 0.002,
+      maxOwned: 1,
       iconKey: "cable-car",
     });
   });

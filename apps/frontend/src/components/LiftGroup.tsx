@@ -13,6 +13,7 @@ interface Props {
 
 export function LiftGroup({ model, lifts, onBuy, onRepair, canAffordBuy, canAffordRepair }: Props) {
   const brokenCount = lifts.filter((l) => l.status === "broken").length;
+  const atCap = lifts.length >= model.maxOwned;
   const sortedLifts = [...lifts].sort((a, b) => {
     if (a.status === "broken" && b.status !== "broken") return -1;
     if (a.status !== "broken" && b.status === "broken") return 1;
@@ -24,7 +25,7 @@ export function LiftGroup({ model, lifts, onBuy, onRepair, canAffordBuy, canAffo
       <summary style={{ cursor: "pointer", padding: "0.5rem 0" }}>
         <strong>{model.name}</strong>
         {" — "}
-        {lifts.length} owned, {brokenCount} broken
+        {lifts.length}/{model.maxOwned} owned, {brokenCount} broken
         {" | "}
         {formatMoney(model.purchasePriceCents)} to buy
         {" | "}
@@ -32,9 +33,19 @@ export function LiftGroup({ model, lifts, onBuy, onRepair, canAffordBuy, canAffo
         {" | "}+{formatMoney(model.priceBonusCents)}/sec bonus
         {" | "}
         {formatMoney(model.repairCostCents)} to repair{" "}
-        <button onClick={onBuy} disabled={!canAffordBuy} style={{ fontFamily: "var(--font-mono)" }}>
-          Buy ({formatMoney(model.purchasePriceCents)})
-        </button>
+        {atCap ? (
+          <span style={{ color: "var(--text-muted)", fontStyle: "italic", fontSize: "0.85rem" }}>
+            Max capacity
+          </span>
+        ) : (
+          <button
+            onClick={onBuy}
+            disabled={!canAffordBuy}
+            style={{ fontFamily: "var(--font-mono)" }}
+          >
+            Buy ({formatMoney(model.purchasePriceCents)})
+          </button>
+        )}
       </summary>
       <div style={{ paddingLeft: "0.5rem" }}>
         {sortedLifts.map((lift) => (

@@ -14,6 +14,13 @@ export async function buyLift(
     return resort;
   }
 
+  const activeCount = resort.lifts.filter(
+    (l) => l.liftModelKey === liftModelKey && l.status !== "junked"
+  ).length;
+  if (activeCount >= model.maxOwned) {
+    return resort;
+  }
+
   await updateResort(resort.id, {
     moneyCents: resort.moneyCents - model.purchasePriceCents,
     lastTickAt: resort.lastTickAt,

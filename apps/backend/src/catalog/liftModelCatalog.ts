@@ -9,6 +9,7 @@ const LIFT_MODELS: LiftModelDTO[] = [
     priceBonusCents: 10,
     repairCostCents: 500,
     initialBreakChance: 0.002,
+    maxOwned: 10,
     iconKey: "magic-carpet",
   },
   {
@@ -19,6 +20,7 @@ const LIFT_MODELS: LiftModelDTO[] = [
     priceBonusCents: 20,
     repairCostCents: 1500,
     initialBreakChance: 0.002,
+    maxOwned: 8,
     iconKey: "drag-lift",
   },
   {
@@ -29,6 +31,7 @@ const LIFT_MODELS: LiftModelDTO[] = [
     priceBonusCents: 50,
     repairCostCents: 5000,
     initialBreakChance: 0.002,
+    maxOwned: 6,
     iconKey: "chairlift",
   },
   {
@@ -39,6 +42,7 @@ const LIFT_MODELS: LiftModelDTO[] = [
     priceBonusCents: 100,
     repairCostCents: 80000,
     initialBreakChance: 0.002,
+    maxOwned: 4,
     iconKey: "gondola",
   },
   {
@@ -49,6 +53,7 @@ const LIFT_MODELS: LiftModelDTO[] = [
     priceBonusCents: 200,
     repairCostCents: 500000,
     initialBreakChance: 0.002,
+    maxOwned: 1,
     iconKey: "cable-car",
   },
 ];

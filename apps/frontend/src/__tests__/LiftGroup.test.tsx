@@ -12,6 +12,7 @@ const model: LiftModelDTO = {
   priceBonusCents: 10,
   repairCostCents: 100,
   initialBreakChance: 0.001,
+  maxOwned: 10,
   iconKey: "magic-carpet",
 };
 
@@ -61,7 +62,7 @@ describe("LiftGroup", () => {
 
   it("shows correct owned count", () => {
     renderGroup([makeLift("l1", "working"), makeLift("l2", "working")]);
-    expect(screen.getByText(/2 owned/)).toBeInTheDocument();
+    expect(screen.getByText(/2\/10 owned/)).toBeInTheDocument();
   });
 
   it("shows correct broken count", () => {
