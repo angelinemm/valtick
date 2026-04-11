@@ -114,9 +114,9 @@ describe("LiftGroup", () => {
     // header + 2 rows; the broken row has a BROKEN sibling so check ordering via DOM
     const brokenLabel = screen.getByText("BROKEN");
     // verify BROKEN appears in the DOM before any row without it
-    const rowDivs = Array.from(document.querySelectorAll("[style*='padding: 0.25rem']"));
-    const brokenIndex = rowDivs.findIndex((r) => r.textContent?.includes("BROKEN"));
-    const workingIndex = rowDivs.findIndex((r) => !r.textContent?.includes("BROKEN"));
+    const cardDivs = Array.from(document.querySelectorAll("details > div > div"));
+    const brokenIndex = cardDivs.findIndex((r) => r.textContent?.includes("BROKEN"));
+    const workingIndex = cardDivs.findIndex((r) => !r.textContent?.includes("BROKEN"));
     expect(brokenIndex).toBeLessThan(workingIndex);
     expect(rows.length).toBeGreaterThan(0);
     expect(brokenLabel).toBeInTheDocument();
