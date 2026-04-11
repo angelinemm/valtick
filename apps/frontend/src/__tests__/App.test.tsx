@@ -13,7 +13,6 @@ const mockResortResponse: GetResortResponse = {
   resort: {
     id: "r1",
     name: "Snowpeak",
-    guestId: "abc123",
     moneyCents: 1000,
     lastTickAt: "2024-01-01T00:00:00.000Z",
     createdAt: "2024-01-01T00:00:00.000Z",
@@ -77,7 +76,7 @@ describe("NotFoundPage", () => {
   it("renders the expected message", () => {
     render(<NotFoundPage />);
     expect(screen.getByText("Game not found.")).toBeInTheDocument();
-    expect(screen.getByText("Check your URL or ask for a valid guest ID.")).toBeInTheDocument();
+    expect(screen.getByText("Check your URL.")).toBeInTheDocument();
   });
 });
 

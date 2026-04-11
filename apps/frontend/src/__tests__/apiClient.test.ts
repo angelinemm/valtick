@@ -6,7 +6,6 @@ const mockResortResponse: GetResortResponse = {
   resort: {
     id: "r1",
     name: "Val Thorens",
-    guestId: "abc123",
     moneyCents: 1000,
     lastTickAt: "2024-01-01T00:00:00.000Z",
     createdAt: "2024-01-01T00:00:00.000Z",
