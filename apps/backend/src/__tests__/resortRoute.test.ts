@@ -41,7 +41,7 @@ describe.skipIf(!HAS_DB)("GET /resort", () => {
     });
 
     agent = request.agent(app);
-    await agent.post("/auth/login").send({ username, password: "test-password" });
+    await agent.post("/api/auth/login").send({ username, password: "test-password" });
   });
 
   afterEach(async () => {
@@ -54,27 +54,27 @@ describe.skipIf(!HAS_DB)("GET /resort", () => {
   });
 
   it("returns 401 when not authenticated", async () => {
-    const res = await request(app).get("/resort");
+    const res = await request(app).get("/api/resort");
     expect(res.status).toBe(401);
   });
 
   it("returns 404 when user has no resort", async () => {
     await prisma.resort.deleteMany({ where: { id: resortId } });
     resortId = "";
-    const res = await agent.get("/resort");
+    const res = await agent.get("/api/resort");
     expect(res.status).toBe(404);
     expect(res.body).toEqual({ error: "Game not found" });
   });
 
   it("returns 200 with the correct resort shape", async () => {
-    const res = await agent.get("/resort");
+    const res = await agent.get("/api/resort");
     expect(res.status).toBe(200);
     expect(res.body.resort.name).toBe("Test Resort");
     expect(res.body.resort.moneyCents).toBe(1000);
   });
 
   it("response includes all 5 liftModels", async () => {
-    const res = await agent.get("/resort");
+    const res = await agent.get("/api/resort");
     expect(res.body.liftModels).toHaveLength(5);
     const keys = res.body.liftModels.map((m: { key: string }) => m.key);
     expect(keys).toContain("magic_carpet");
@@ -82,7 +82,7 @@ describe.skipIf(!HAS_DB)("GET /resort", () => {
   });
 
   it("summary reflects the one working magic_carpet", async () => {
-    const res = await agent.get("/resort");
+    const res = await agent.get("/api/resort");
     const { summary } = res.body;
     expect(summary.incomePerSecCents).toBe(100);
     expect(summary.capacityPerSec).toBe(5);
@@ -92,7 +92,7 @@ describe.skipIf(!HAS_DB)("GET /resort", () => {
   });
 
   it("lifts array contains the created lift with correct fields", async () => {
-    const res = await agent.get("/resort");
+    const res = await agent.get("/api/resort");
     expect(res.body.lifts).toHaveLength(1);
     const lift = res.body.lifts[0];
     expect(lift.liftModelKey).toBe("magic_carpet");

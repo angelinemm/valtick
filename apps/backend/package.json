@@ -8,7 +8,8 @@
     "seed": "ts-node src/scripts/seedResort.ts",
     "create-user": "ts-node src/scripts/createUser.ts",
     "reset-password": "ts-node src/scripts/resetPassword.ts",
-    "migrate-guests": "ts-node src/scripts/migrateGuestData.ts"
+    "migrate-guests": "ts-node src/scripts/migrateGuestData.ts",
+    "start": "node dist/server.js"
   },
   "dependencies": {
     "@prisma/client": "^5.14.0",
