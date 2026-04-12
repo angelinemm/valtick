@@ -84,12 +84,22 @@ val-tick/
 - **Junkyard** — junked lifts shown in a separate section, non-interactive
 - **Reset** — big red button in the top bar wipes the resort back to starting state ($10, 1 magic carpet) after confirmation
 
-## Creating a user (admin only)
+## Creating users
 
-Players can't sign up themselves. Create accounts via the CLI:
+Players can't sign up themselves — accounts are created by an admin.
+
+### First user (CLI)
+
+There's no admin UI until you have an admin account, so create the first one via the CLI:
 
 ```bash
-npm run create-user --workspace=apps/backend -- <username> <password> [USER|ADMIN]
+npm run create-user --workspace=apps/backend -- <username> <password> ADMIN
 ```
 
-The user logs in at `http://localhost:5173/login`. Their resort is created automatically on first login.
+Log in at `/login`. If the account has no resort, one is created automatically on first access to the game.
+
+### Subsequent users (Admin page)
+
+Once you're logged in as an admin, go to `/admin` to create further accounts. The admin page creates the user **and** their starting resort in one step — no CLI needed.
+
+The CLI script accepts an optional role argument (`USER` or `ADMIN`, defaults to `USER`) and is still useful if you need to create accounts outside the browser.
