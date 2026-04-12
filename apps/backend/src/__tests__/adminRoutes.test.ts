@@ -124,7 +124,7 @@ describe.skipIf(!HAS_DB)("Admin routes", () => {
       expect(res.status).toBe(201);
       expect(res.body.user.username).toBe(newUsername);
       expect(typeof res.body.password).toBe("string");
-      expect(res.body.password).toMatch(/^[a-z]+-[a-z]+$/);
+      expect(res.body.password).toMatch(/^[a-z]+-[a-z]+-[a-z]+-\d$/);
       createdUserId = res.body.user.id;
     });
 
@@ -165,7 +165,7 @@ describe.skipIf(!HAS_DB)("Admin routes", () => {
       const res = await adminAgent.post(`/api/admin/users/${userId}/reset-password`);
       expect(res.status).toBe(200);
       expect(typeof res.body.password).toBe("string");
-      expect(res.body.password).toMatch(/^[a-z]+-[a-z]+$/);
+      expect(res.body.password).toMatch(/^[a-z]+-[a-z]+-[a-z]+-\d$/);
     });
 
     it("new password is correctly hashed in DB", async () => {
