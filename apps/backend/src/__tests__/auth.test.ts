@@ -126,6 +126,36 @@ describe.skipIf(!HAS_DB)("Auth routes", () => {
       expect(after!.firstLoginAt).not.toBeNull();
     });
 
+    it("resets resort lastTickAt to firstLoginAt on first login", async () => {
+      // Wind the resort's lastTickAt back to simulate an old account
+      const longAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+      await prisma.resort.update({ where: { id: resortId }, data: { lastTickAt: longAgo } });
+
+      const loginTime = Date.now();
+      await request(app).post("/api/auth/login").send({ username, password: "correct-password" });
+
+      const resort = await prisma.resort.findUnique({ where: { id: resortId } });
+      expect(resort!.lastTickAt.getTime()).toBeGreaterThanOrEqual(loginTime);
+    });
+
+    it("does not reset resort lastTickAt on subsequent logins", async () => {
+      // First login resets it
+      await request(app).post("/api/auth/login").send({ username, password: "correct-password" });
+      const afterFirst = await prisma.resort.findUnique({ where: { id: resortId } });
+      const firstLastTickAt = afterFirst!.lastTickAt;
+
+      // Simulate some time passing and a tick occurring
+      await prisma.resort.update({
+        where: { id: resortId },
+        data: { lastTickAt: new Date(firstLastTickAt.getTime() + 60_000) },
+      });
+
+      // Second login should not touch lastTickAt
+      await request(app).post("/api/auth/login").send({ username, password: "correct-password" });
+      const afterSecond = await prisma.resort.findUnique({ where: { id: resortId } });
+      expect(afterSecond!.lastTickAt.getTime()).toBe(firstLastTickAt.getTime() + 60_000);
+    });
+
     it("does not overwrite firstLoginAt on subsequent logins", async () => {
       // First login sets it
       await request(app).post("/api/auth/login").send({ username, password: "correct-password" });

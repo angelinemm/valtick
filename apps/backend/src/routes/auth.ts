@@ -1,6 +1,7 @@
 import { Router } from "express";
 import bcrypt from "bcrypt";
 import { findUserByUsername, findUserById, setFirstLoginAt } from "../db/userRepository";
+import { resetResortTickBaseline } from "../db/resortRepository";
 import type { UserDTO } from "@val-tick/shared";
 
 export const authRouter = Router();
@@ -40,7 +41,9 @@ authRouter.post("/login", async (req, res) => {
   }
 
   if (!user.firstLoginAt) {
-    await setFirstLoginAt(user.id, new Date());
+    const now = new Date();
+    await setFirstLoginAt(user.id, now);
+    await resetResortTickBaseline(user.id, now);
   }
 
   req.session.userId = user.id;
