@@ -58,3 +58,14 @@ export async function postResetResort(): Promise<MutationResortResponse> {
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json();
 }
+
+export async function patchRenameResort(name: string): Promise<{ name: string }> {
+  const res = await fetch(`${BASE}/api/rename`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ name }),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}

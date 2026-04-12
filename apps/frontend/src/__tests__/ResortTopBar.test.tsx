@@ -24,8 +24,15 @@ const summary: SummaryDTO = {
   junkedLiftsCount: 0,
 };
 
-function renderBar(opts: { isAdmin?: boolean; onReset?: () => void; onLogout?: () => void } = {}) {
-  const { isAdmin = false, onReset = vi.fn(), onLogout = vi.fn() } = opts;
+function renderBar(
+  opts: {
+    isAdmin?: boolean;
+    onReset?: () => void;
+    onRename?: () => void;
+    onLogout?: () => void;
+  } = {}
+) {
+  const { isAdmin = false, onReset = vi.fn(), onRename = vi.fn(), onLogout = vi.fn() } = opts;
   render(
     <MemoryRouter>
       <ResortTopBar
@@ -35,6 +42,7 @@ function renderBar(opts: { isAdmin?: boolean; onReset?: () => void; onLogout?: (
         username="skipper"
         isAdmin={isAdmin}
         onReset={onReset}
+        onRename={onRename}
         onLogout={onLogout}
       />
     </MemoryRouter>
@@ -86,6 +94,7 @@ describe("ResortTopBar", () => {
           tickCount={0}
           username="skipper"
           onReset={vi.fn()}
+          onRename={vi.fn()}
           onLogout={vi.fn()}
         />
       </MemoryRouter>

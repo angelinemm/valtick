@@ -5,6 +5,7 @@ import {
   useBuyLiftMutation,
   useRepairLiftMutation,
   useResetResortMutation,
+  useRenameResortMutation,
 } from "../hooks/useResort";
 import { useAuth } from "../hooks/useAuth";
 import { GameNotFoundPage } from "./GameNotFoundPage";
@@ -24,6 +25,7 @@ export function ResortPage() {
   const repairLift = useRepairLiftMutation();
   const resetResort = useResetResortMutation();
 
+  const renameResort = useRenameResortMutation();
   const { tickCount } = useTick();
 
   async function handleLogout() {
@@ -48,6 +50,7 @@ export function ResortPage() {
         username={user?.username ?? ""}
         isAdmin={user?.role === "ADMIN"}
         onReset={() => resetResort.mutate()}
+        onRename={(name) => renameResort.mutate(name)}
         onLogout={handleLogout}
       />
       <NextLiftProgress
