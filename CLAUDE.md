@@ -14,7 +14,8 @@
   npm test                                   # backend + shared
   npm run test --workspace=apps/frontend     # frontend
   ```
-- Never push with failing tests — fix them first, as part of the same commit or a follow-up commit on the same branch
+- **Never push with failing tests — this is non-negotiable.** Fix them first, as part of the same commit or a follow-up commit on the same branch
+- This applies to data-only changes too: if you change a JSON file, a seed list, or any content the tests depend on, run the tests and fix any failures before pushing
 - If a UI change breaks a test due to updated markup or props, update the test to match the new behaviour — don't delete or skip it
 
 ## Linting and formatting

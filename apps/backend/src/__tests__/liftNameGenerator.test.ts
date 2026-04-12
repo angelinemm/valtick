@@ -15,7 +15,7 @@ describe("assignLiftName", () => {
   });
 
   it("returns a name not used by any active lift", () => {
-    const usedName = "Aspen Glide";
+    const usedName = liftNames[0];
     const existing = [makeLift(usedName, "working")];
     // Run many times to account for randomness — should never return the used name
     for (let i = 0; i < 50; i++) {
@@ -24,11 +24,11 @@ describe("assignLiftName", () => {
   });
 
   it("junked lifts free their name — it can be reused", () => {
-    // Use all names as active except "Aspen Glide" which is junked
+    // Use all names as active except the first, which is junked
     const active = liftNames.slice(1).map((n) => makeLift(n, "working"));
-    const junked = makeLift("Aspen Glide", "junked");
+    const junked = makeLift(liftNames[0], "junked");
     const result = assignLiftName([...active, junked]);
-    expect(result).toBe("Aspen Glide");
+    expect(result).toBe(liftNames[0]);
   });
 
   it("appends ' 2' when all 100 base names are taken by active lifts", () => {
