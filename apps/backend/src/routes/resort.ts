@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { findResortByUserId, updateResort } from "../db/resortRepository";
+import { findResortByUserId, updateResort, createResortForUser } from "../db/resortRepository";
 import { bulkUpdateLifts } from "../db/liftRepository";
 import { formatResortResponse } from "../services/resortService";
 import { processOneTick } from "../services/tickService";
@@ -72,11 +72,9 @@ resortRouter.post("/reset", async (req, res) => {
 });
 
 resortRouter.get("/resort", async (req, res) => {
-  const resort = await findResortByUserId(req.user!.id);
-  if (!resort) {
-    res.status(404).json({ error: "Game not found" });
-    return;
-  }
+  const user = req.user!;
+  const resort =
+    (await findResortByUserId(user.id)) ?? (await createResortForUser(user.id, user.username));
 
   res.json(formatResortResponse(resort, resort.lifts));
 });
