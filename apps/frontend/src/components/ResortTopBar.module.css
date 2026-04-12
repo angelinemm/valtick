@@ -20,10 +20,49 @@
   z-index: 1;
 }
 
+.resortNameGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  cursor: pointer;
+}
+
 .resortName {
   font-size: 1rem;
   font-weight: 600;
   color: var(--text-primary);
+}
+
+.pencil {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  opacity: 0;
+  transition: opacity 0.15s;
+  line-height: 1;
+}
+
+.resortNameGroup:hover .pencil {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .pencil {
+    opacity: 1;
+  }
+}
+
+.renameInput {
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--text-secondary);
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: inherit;
+  padding: 0;
+  outline: none;
+  width: 14ch;
+  max-width: 200px;
 }
 
 .username {

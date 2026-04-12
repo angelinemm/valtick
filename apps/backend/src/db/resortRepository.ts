@@ -30,6 +30,13 @@ export async function updateResort(
   });
 }
 
+export async function renameResort(id: string, name: string): Promise<Resort> {
+  return prisma.resort.update({
+    where: { id },
+    data: { name },
+  });
+}
+
 export async function createResortForUser(
   userId: string,
   name: string

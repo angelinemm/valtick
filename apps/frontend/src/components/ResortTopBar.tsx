@@ -1,3 +1,4 @@
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import type { ResortDTO, SummaryDTO } from "@val-tick/shared";
 import { formatMoney, formatMoneyPerSec } from "../utils/format";
@@ -10,6 +11,7 @@ interface Props {
   username: string;
   isAdmin?: boolean;
   onReset: () => void;
+  onRename: (name: string) => void;
   onLogout: () => void;
 }
 
@@ -20,9 +22,40 @@ export function ResortTopBar({
   username,
   isAdmin,
   onReset,
+  onRename,
   onLogout,
 }: Props) {
   const navigate = useNavigate();
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState(resort.name);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (editing) inputRef.current?.select();
+  }, [editing]);
+
+  function startEdit() {
+    setDraft(resort.name);
+    setEditing(true);
+  }
+
+  function confirm() {
+    const trimmed = draft.trim();
+    if (trimmed && trimmed !== resort.name) {
+      onRename(trimmed);
+    }
+    setEditing(false);
+  }
+
+  function cancel() {
+    setEditing(false);
+    setDraft(resort.name);
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === "Enter") confirm();
+    if (e.key === "Escape") cancel();
+  }
 
   function handleReset() {
     if (window.confirm("Are you sure you want to reset your resort? This cannot be undone.")) {
@@ -51,7 +84,24 @@ export function ResortTopBar({
         />
       </svg>
       <div className={styles.meta}>
-        <span className={styles.resortName}>{resort.name}</span>
+        {editing ? (
+          <input
+            ref={inputRef}
+            className={styles.renameInput}
+            value={draft}
+            maxLength={30}
+            onChange={(e) => setDraft(e.target.value)}
+            onBlur={confirm}
+            onKeyDown={handleKeyDown}
+          />
+        ) : (
+          <span className={styles.resortNameGroup} onClick={startEdit}>
+            <span className={styles.resortName}>{resort.name}</span>
+            <span className={styles.pencil} aria-label="Rename resort">
+              ✎
+            </span>
+          </span>
+        )}
         <span className={styles.username}>{username}</span>
       </div>
       <div className={styles.statsRow}>

@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { findResortByUserId, updateResort, createResortForUser } from "../db/resortRepository";
+import {
+  findResortByUserId,
+  updateResort,
+  renameResort,
+  createResortForUser,
+} from "../db/resortRepository";
 import { bulkUpdateLifts } from "../db/liftRepository";
 import { formatResortResponse } from "../services/resortService";
 import { processOneTick } from "../services/tickService";
@@ -69,6 +74,28 @@ resortRouter.post("/reset", async (req, res) => {
 
   const updated = await resetResort(resort);
   res.json(formatResortResponse(updated, updated.lifts));
+});
+
+resortRouter.patch("/rename", async (req, res) => {
+  const { name } = req.body as { name: string };
+
+  if (!name || name.trim().length === 0) {
+    res.status(400).json({ error: "Name cannot be empty" });
+    return;
+  }
+  if (name.length > 30) {
+    res.status(400).json({ error: "Name cannot exceed 30 characters" });
+    return;
+  }
+
+  const resort = await findResortByUserId(req.user!.id);
+  if (!resort) {
+    res.status(404).json({ error: "Game not found" });
+    return;
+  }
+
+  const updated = await renameResort(resort.id, name.trim());
+  res.json({ name: updated.name });
 });
 
 resortRouter.get("/resort", async (req, res) => {
