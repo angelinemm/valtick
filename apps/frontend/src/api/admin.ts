@@ -46,3 +46,11 @@ export async function adminResetResort(userId: string): Promise<void> {
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
 }
+
+export async function adminDeleteUser(userId: string): Promise<void> {
+  const res = await fetch(`${BASE}/api/admin/users/${userId}`, {
+    method: "DELETE",
+    credentials: "include",
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+}

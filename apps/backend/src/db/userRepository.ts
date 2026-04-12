@@ -30,6 +30,10 @@ export async function updateUserPasswordHashById(id: string, passwordHash: strin
   return prisma.user.update({ where: { id }, data: { passwordHash } });
 }
 
+export async function deleteUserById(id: string) {
+  return prisma.user.delete({ where: { id } });
+}
+
 export async function findAllUsersWithResorts() {
   return prisma.user.findMany({
     include: {

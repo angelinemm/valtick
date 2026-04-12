@@ -235,4 +235,64 @@ describe.skipIf(!HAS_DB)("Admin routes", () => {
       expect(res.status).toBe(403);
     });
   });
+
+  describe("DELETE /admin/users/:id", () => {
+    it("admin can delete a regular user", async () => {
+      const res = await adminAgent.delete(`/api/admin/users/${userId}`);
+      expect(res.status).toBe(200);
+      expect(res.body.ok).toBe(true);
+
+      const gone = await prisma.user.findUnique({ where: { id: userId } });
+      expect(gone).toBeNull();
+      userId = ""; // already deleted — skip afterEach cleanup
+    });
+
+    it("deleting a user cascades to their resort and lifts", async () => {
+      const resort = await prisma.resort.create({
+        data: {
+          name: "Doomed Resort",
+          userId,
+          moneyCents: 1000,
+          lastTickAt: new Date(),
+          lifts: {
+            create: {
+              liftModelKey: "magic_carpet",
+              name: "Doomed Carpet",
+              status: "working",
+              currentBreakProbability: 0.002,
+            },
+          },
+        },
+      });
+
+      await adminAgent.delete(`/api/admin/users/${userId}`);
+
+      const goneResort = await prisma.resort.findUnique({ where: { id: resort.id } });
+      expect(goneResort).toBeNull();
+      const goneLifts = await prisma.lift.findMany({ where: { resortId: resort.id } });
+      expect(goneLifts).toHaveLength(0);
+      userId = ""; // already deleted — skip afterEach cleanup
+    });
+
+    it("returns 403 when trying to delete an admin user", async () => {
+      const res = await adminAgent.delete(`/api/admin/users/${adminId}`);
+      expect(res.status).toBe(403);
+    });
+
+    it("returns 403 when trying to delete yourself", async () => {
+      // adminId === req.user.id — self-delete check fires before role check
+      const res = await adminAgent.delete(`/api/admin/users/${adminId}`);
+      expect(res.status).toBe(403);
+    });
+
+    it("returns 404 for unknown user", async () => {
+      const res = await adminAgent.delete(`/api/admin/users/nonexistent-id`);
+      expect(res.status).toBe(404);
+    });
+
+    it("returns 401 if not authenticated as admin", async () => {
+      const res = await request(app).delete(`/api/admin/users/${userId}`);
+      expect(res.status).toBe(401);
+    });
+  });
 });
