@@ -50,15 +50,17 @@ app.get("/api/health", (_req, res) => {
 
 app.use("/api/auth", authRouter);
 
-app.use(requireAuth);
-
-app.use("/api/admin", adminRouter);
-app.use("/api", resortRouter);
-
 if (isProd) {
   const staticPath = path.join(__dirname, "..", "static");
   app.use(express.static(staticPath));
-  app.get(/^(?!\/api)/, (_req, res) => {
+}
+
+app.use("/api/admin", requireAuth, adminRouter);
+app.use("/api", requireAuth, resortRouter);
+
+if (isProd) {
+  const staticPath = path.join(__dirname, "..", "static");
+  app.get("*", (_req, res) => {
     res.sendFile(path.join(staticPath, "index.html"));
   });
 }
