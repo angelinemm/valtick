@@ -9,6 +9,7 @@ import {
 import { findResortByUserId, createResortForUser } from "../db/resortRepository";
 import { resetResort } from "../services/liftService";
 import { generatePassword } from "../utils/passwordGenerator";
+import { generateResortName } from "../utils/resortNameGenerator";
 import type { AdminUserDTO, CreateAdminUserRequest } from "@val-tick/shared";
 
 export const adminRouter = Router();
@@ -57,7 +58,7 @@ adminRouter.post("/users", async (req, res) => {
     role: "USER",
   });
 
-  const resort = await createResortForUser(user.id, "My Resort");
+  const resort = await createResortForUser(user.id, generateResortName());
 
   const adminUserDTO: AdminUserDTO = {
     id: user.id,
@@ -92,7 +93,7 @@ adminRouter.post("/users/:id/reset-resort", async (req, res) => {
   const resort = await findResortByUserId(id);
 
   if (!resort) {
-    await createResortForUser(id, "My Resort");
+    await createResortForUser(id, generateResortName());
   } else {
     await resetResort(resort);
   }

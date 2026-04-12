@@ -131,7 +131,8 @@ describe.skipIf(!HAS_DB)("Admin routes", () => {
       const res = await adminAgent.post("/admin/users").send({ username: newUsername });
       createdUserId = res.body.user.id;
 
-      expect(res.body.user.resort.name).toBe("My Resort");
+      expect(typeof res.body.user.resort.name).toBe("string");
+      expect(res.body.user.resort.name.length).toBeGreaterThan(0);
       expect(res.body.user.resort.moneyCents).toBe(500);
       expect(res.body.user.resort.liftsCount).toBe(1);
     });
