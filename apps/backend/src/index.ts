@@ -7,6 +7,7 @@ import connectPgSimple from "connect-pg-simple";
 import { resortRouter } from "./routes/resort";
 import { authRouter } from "./routes/auth";
 import { adminRouter } from "./routes/admin";
+import { profileRouter } from "./routes/profile";
 import { requireAuth } from "./middleware/requireAuth";
 
 const PgStore = connectPgSimple(session);
@@ -57,6 +58,7 @@ if (isProd) {
 }
 
 app.use("/api/admin", requireAuth, adminRouter);
+app.use("/api/profile", requireAuth, profileRouter);
 app.use("/api", requireAuth, resortRouter);
 
 if (isProd) {

@@ -89,6 +89,9 @@ export function ResortTopBar({
         <button className={styles.subtleButton} onClick={() => navigate("/how-to-play")}>
           How to Play
         </button>
+        <button className={styles.subtleButton} onClick={() => navigate("/profile")}>
+          Profile
+        </button>
         {isAdmin && (
           <button className={styles.adminButton} onClick={() => navigate("/admin")}>
             Admin

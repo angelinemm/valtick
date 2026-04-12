@@ -3,6 +3,7 @@ import { ResortPage } from "./pages/ResortPage";
 import { LoginPage } from "./pages/LoginPage";
 import { AdminPage } from "./pages/AdminPage";
 import { HowToPlayPage } from "./pages/HowToPlayPage";
+import { ProfilePage } from "./pages/ProfilePage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { RequireAuth } from "./components/RequireAuth";
 import { RequireAdmin } from "./components/RequireAdmin";
@@ -32,6 +33,14 @@ export default function App() {
         element={
           <RequireAuth>
             <HowToPlayPage />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <RequireAuth>
+            <ProfilePage />
           </RequireAuth>
         }
       />
