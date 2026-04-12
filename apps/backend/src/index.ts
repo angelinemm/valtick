@@ -13,6 +13,7 @@ const PgStore = connectPgSimple(session);
 const isProd = process.env.NODE_ENV === "production";
 
 const app = express();
+app.set("trust proxy", 1);
 
 if (!isProd) {
   app.use(
@@ -38,8 +39,8 @@ app.use(
     cookie: {
       httpOnly: true,
       secure: isProd,
+      sameSite: isProd ? "none" : "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      sameSite: "strict",
     },
   })
 );
