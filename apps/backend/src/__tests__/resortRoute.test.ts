@@ -58,12 +58,13 @@ describe.skipIf(!HAS_DB)("GET /resort", () => {
     expect(res.status).toBe(401);
   });
 
-  it("returns 404 when user has no resort", async () => {
+  it("auto-creates a resort when user has none", async () => {
     await prisma.resort.deleteMany({ where: { id: resortId } });
     resortId = "";
     const res = await agent.get("/api/resort");
-    expect(res.status).toBe(404);
-    expect(res.body).toEqual({ error: "Game not found" });
+    expect(res.status).toBe(200);
+    expect(res.body.resort.name).toBe(username);
+    resortId = res.body.resort.id;
   });
 
   it("returns 200 with the correct resort shape", async () => {
