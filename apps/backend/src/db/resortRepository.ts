@@ -60,8 +60,15 @@ export async function createResortForUser(
   });
 }
 
+export async function resetResortTickBaseline(userId: string, at: Date): Promise<void> {
+  await prisma.resort.updateMany({ where: { userId }, data: { lastTickAt: at } });
+}
+
 export async function findIdleResorts(idleThreshold: Date): Promise<Resort[]> {
   return prisma.resort.findMany({
-    where: { lastTickAt: { lt: idleThreshold } },
+    where: {
+      lastTickAt: { lt: idleThreshold },
+      user: { firstLoginAt: { not: null } },
+    },
   });
 }

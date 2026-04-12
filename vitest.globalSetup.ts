@@ -23,7 +23,7 @@ export async function setup() {
       DO $$ BEGIN
         ALTER TABLE "session" ADD CONSTRAINT "session_pkey"
           PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
-      EXCEPTION WHEN duplicate_object THEN NULL;
+      EXCEPTION WHEN duplicate_object OR invalid_table_definition THEN NULL;
       END $$
     `);
 

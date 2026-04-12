@@ -9,6 +9,7 @@ declare global {
         username: string;
         email?: string;
         role: "USER" | "ADMIN";
+        firstLoginAt: Date | null;
       };
     }
   }

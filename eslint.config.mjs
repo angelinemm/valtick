@@ -12,6 +12,7 @@ export default tseslint.config(
       "**/build/**",
       "**/.prisma/**",
       "**/prisma/migrations/**",
+      "apps/backend/static/**",
     ],
   },
 
