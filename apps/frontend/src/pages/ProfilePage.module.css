@@ -1,0 +1,96 @@
+.page {
+  min-height: 100vh;
+  position: relative;
+  background-color: var(--bg-base);
+}
+
+.mountains {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40vh;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.panel {
+  position: relative;
+  z-index: 1;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.toolbar {
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 2rem;
+}
+
+.section {
+  margin-bottom: 2.5rem;
+}
+
+.sectionHeading {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin: 0 0 1.25rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.4rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 1rem;
+}
+
+.field label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.field input {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 0.5rem 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  border-radius: 3px;
+}
+
+.field input:focus {
+  outline: none;
+  border-color: #4a9eda;
+}
+
+.fieldError {
+  font-size: 0.78rem;
+  color: #e07070;
+}
+
+.actions {
+  margin-top: 1.5rem;
+}
+
+.success {
+  font-size: 0.9rem;
+  color: #7ec8e3;
+  margin-top: 1rem;
+}
+
+.error {
+  font-size: 0.9rem;
+  color: #e07070;
+  margin-top: 1rem;
+}
