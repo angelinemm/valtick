@@ -31,11 +31,13 @@ describe.skipIf(!HAS_DB)("Admin routes", () => {
 
     adminAgent = request.agent(app);
     await adminAgent
-      .post("/auth/login")
+      .post("/api/auth/login")
       .send({ username: adminUsername, password: "test-password" });
 
     userAgent = request.agent(app);
-    await userAgent.post("/auth/login").send({ username: userUsername, password: "test-password" });
+    await userAgent
+      .post("/api/auth/login")
+      .send({ username: userUsername, password: "test-password" });
   });
 
   afterEach(async () => {
@@ -49,24 +51,24 @@ describe.skipIf(!HAS_DB)("Admin routes", () => {
 
   describe("Access control", () => {
     it("returns 401 for unauthenticated request", async () => {
-      const res = await request(app).get("/admin/users");
+      const res = await request(app).get("/api/admin/users");
       expect(res.status).toBe(401);
     });
 
     it("returns 403 for non-admin user", async () => {
-      const res = await userAgent.get("/admin/users");
+      const res = await userAgent.get("/api/admin/users");
       expect(res.status).toBe(403);
     });
 
     it("returns 200 for admin user", async () => {
-      const res = await adminAgent.get("/admin/users");
+      const res = await adminAgent.get("/api/admin/users");
       expect(res.status).toBe(200);
     });
   });
 
   describe("GET /admin/users", () => {
     it("returns list of users", async () => {
-      const res = await adminAgent.get("/admin/users");
+      const res = await adminAgent.get("/api/admin/users");
       expect(res.status).toBe(200);
       expect(Array.isArray(res.body.users)).toBe(true);
       const usernames = res.body.users.map((u: { username: string }) => u.username);
@@ -75,7 +77,7 @@ describe.skipIf(!HAS_DB)("Admin routes", () => {
     });
 
     it("includes resort info (null when no resort)", async () => {
-      const res = await adminAgent.get("/admin/users");
+      const res = await adminAgent.get("/api/admin/users");
       const found = res.body.users.find((u: { username: string }) => u.username === userUsername);
       expect(found.resort).toBeNull();
     });
@@ -97,7 +99,7 @@ describe.skipIf(!HAS_DB)("Admin routes", () => {
           },
         },
       });
-      const res = await adminAgent.get("/admin/users");
+      const res = await adminAgent.get("/api/admin/users");
       const found = res.body.users.find((u: { username: string }) => u.username === userUsername);
       expect(found.resort.name).toBe("Test Resort");
       expect(found.resort.moneyCents).toBe(1000);
@@ -118,7 +120,7 @@ describe.skipIf(!HAS_DB)("Admin routes", () => {
 
     it("creates user and resort, returns generated password", async () => {
       const newUsername = `newuser_${Date.now()}`;
-      const res = await adminAgent.post("/admin/users").send({ username: newUsername });
+      const res = await adminAgent.post("/api/admin/users").send({ username: newUsername });
       expect(res.status).toBe(201);
       expect(res.body.user.username).toBe(newUsername);
       expect(typeof res.body.password).toBe("string");
@@ -128,7 +130,7 @@ describe.skipIf(!HAS_DB)("Admin routes", () => {
 
     it("creates a resort in starting state for the new user", async () => {
       const newUsername = `newuser_${Date.now()}`;
-      const res = await adminAgent.post("/admin/users").send({ username: newUsername });
+      const res = await adminAgent.post("/api/admin/users").send({ username: newUsername });
       createdUserId = res.body.user.id;
 
       expect(typeof res.body.user.resort.name).toBe("string");
@@ -139,7 +141,7 @@ describe.skipIf(!HAS_DB)("Admin routes", () => {
 
     it("generated password is correctly hashed in DB", async () => {
       const newUsername = `newuser_${Date.now()}`;
-      const res = await adminAgent.post("/admin/users").send({ username: newUsername });
+      const res = await adminAgent.post("/api/admin/users").send({ username: newUsername });
       createdUserId = res.body.user.id;
 
       const dbUser = await prisma.user.findUnique({ where: { id: createdUserId } });
@@ -148,33 +150,33 @@ describe.skipIf(!HAS_DB)("Admin routes", () => {
     });
 
     it("returns 400 if username is missing", async () => {
-      const res = await adminAgent.post("/admin/users").send({});
+      const res = await adminAgent.post("/api/admin/users").send({});
       expect(res.status).toBe(400);
     });
 
     it("returns 403 for non-admin", async () => {
-      const res = await userAgent.post("/admin/users").send({ username: "x" });
+      const res = await userAgent.post("/api/admin/users").send({ username: "x" });
       expect(res.status).toBe(403);
     });
   });
 
   describe("POST /admin/users/:id/reset-password", () => {
     it("returns a new generated password", async () => {
-      const res = await adminAgent.post(`/admin/users/${userId}/reset-password`);
+      const res = await adminAgent.post(`/api/admin/users/${userId}/reset-password`);
       expect(res.status).toBe(200);
       expect(typeof res.body.password).toBe("string");
       expect(res.body.password).toMatch(/^[a-z]+-[a-z]+$/);
     });
 
     it("new password is correctly hashed in DB", async () => {
-      const res = await adminAgent.post(`/admin/users/${userId}/reset-password`);
+      const res = await adminAgent.post(`/api/admin/users/${userId}/reset-password`);
       const dbUser = await prisma.user.findUnique({ where: { id: userId } });
       const match = await bcrypt.compare(res.body.password, dbUser!.passwordHash);
       expect(match).toBe(true);
     });
 
     it("returns 403 for non-admin", async () => {
-      const res = await userAgent.post(`/admin/users/${userId}/reset-password`);
+      const res = await userAgent.post(`/api/admin/users/${userId}/reset-password`);
       expect(res.status).toBe(403);
     });
   });
@@ -206,7 +208,7 @@ describe.skipIf(!HAS_DB)("Admin routes", () => {
         },
       });
 
-      const res = await adminAgent.post(`/admin/users/${userId}/reset-resort`);
+      const res = await adminAgent.post(`/api/admin/users/${userId}/reset-resort`);
       expect(res.status).toBe(200);
 
       const resort = await prisma.resort.findUnique({
@@ -220,7 +222,7 @@ describe.skipIf(!HAS_DB)("Admin routes", () => {
     });
 
     it("creates a resort if the user has none", async () => {
-      const res = await adminAgent.post(`/admin/users/${userId}/reset-resort`);
+      const res = await adminAgent.post(`/api/admin/users/${userId}/reset-resort`);
       expect(res.status).toBe(200);
 
       const resort = await prisma.resort.findUnique({ where: { userId } });
@@ -229,7 +231,7 @@ describe.skipIf(!HAS_DB)("Admin routes", () => {
     });
 
     it("returns 403 for non-admin", async () => {
-      const res = await userAgent.post(`/admin/users/${userId}/reset-resort`);
+      const res = await userAgent.post(`/api/admin/users/${userId}/reset-resort`);
       expect(res.status).toBe(403);
     });
   });

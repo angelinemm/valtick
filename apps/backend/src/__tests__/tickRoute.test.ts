@@ -39,7 +39,7 @@ describe.skipIf(!HAS_DB)("POST /tick", () => {
     resortId = resort.id;
 
     agent = request.agent(app);
-    await agent.post("/auth/login").send({ username, password: "test-password" });
+    await agent.post("/api/auth/login").send({ username, password: "test-password" });
   });
 
   afterEach(async () => {
@@ -53,30 +53,30 @@ describe.skipIf(!HAS_DB)("POST /tick", () => {
   });
 
   it("returns 401 when not authenticated", async () => {
-    const res = await request(app).post("/tick").send({});
+    const res = await request(app).post("/api/tick").send({});
     expect(res.status).toBe(401);
   });
 
   it("returns { ok: true } for an authenticated user", async () => {
-    const res = await agent.post("/tick").send({});
+    const res = await agent.post("/api/tick").send({});
     expect(res.status).toBe(200);
     expect(res.body).toEqual({ ok: true });
   });
 
   it("adds income to money after a tick", async () => {
     vi.spyOn(Math, "random").mockReturnValue(1); // no breaks
-    await agent.post("/tick").send({});
+    await agent.post("/api/tick").send({});
 
-    const res = await agent.get("/resort");
+    const res = await agent.get("/api/resort");
     // magic_carpet: 5 * 20 = 100 cents added to starting 1000
     expect(res.body.resort.moneyCents).toBe(1100);
   });
 
   it("updates lastTickAt after a tick", async () => {
     const before = Date.now();
-    await agent.post("/tick").send({});
+    await agent.post("/api/tick").send({});
 
-    const res = await agent.get("/resort");
+    const res = await agent.get("/api/resort");
     const lastTickAt = new Date(res.body.resort.lastTickAt).getTime();
     expect(lastTickAt).toBeGreaterThanOrEqual(before);
   });
@@ -89,9 +89,9 @@ describe.skipIf(!HAS_DB)("POST /tick", () => {
 
     vi.spyOn(Math, "random").mockReturnValue(0); // force break
 
-    await agent.post("/tick").send({});
+    await agent.post("/api/tick").send({});
 
-    const res = await agent.get("/resort");
+    const res = await agent.get("/api/resort");
     expect(res.body.lifts[0].status).toBe("junked");
   });
 });

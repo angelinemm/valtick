@@ -5,10 +5,10 @@ import type {
   ResetPasswordResponse,
 } from "@val-tick/shared";
 
-const BASE = import.meta.env.VITE_API_URL ?? "http://localhost:3001";
+const BASE = import.meta.env.VITE_API_URL ?? "";
 
 export async function fetchAdminUsers(): Promise<AdminUserDTO[]> {
-  const res = await fetch(`${BASE}/admin/users`, { credentials: "include" });
+  const res = await fetch(`${BASE}/api/admin/users`, { credentials: "include" });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data = await res.json();
   return data.users;
@@ -17,7 +17,7 @@ export async function fetchAdminUsers(): Promise<AdminUserDTO[]> {
 export async function createAdminUser(
   body: CreateAdminUserRequest
 ): Promise<CreateAdminUserResponse> {
-  const res = await fetch(`${BASE}/admin/users`, {
+  const res = await fetch(`${BASE}/api/admin/users`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
@@ -31,7 +31,7 @@ export async function createAdminUser(
 }
 
 export async function adminResetPassword(userId: string): Promise<ResetPasswordResponse> {
-  const res = await fetch(`${BASE}/admin/users/${userId}/reset-password`, {
+  const res = await fetch(`${BASE}/api/admin/users/${userId}/reset-password`, {
     method: "POST",
     credentials: "include",
   });
@@ -40,7 +40,7 @@ export async function adminResetPassword(userId: string): Promise<ResetPasswordR
 }
 
 export async function adminResetResort(userId: string): Promise<void> {
-  const res = await fetch(`${BASE}/admin/users/${userId}/reset-resort`, {
+  const res = await fetch(`${BASE}/api/admin/users/${userId}/reset-resort`, {
     method: "POST",
     credentials: "include",
   });

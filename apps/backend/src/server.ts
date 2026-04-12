@@ -1,7 +1,7 @@
 import { app } from "./index";
 import { runBackgroundSim } from "./jobs/backgroundSimJob";
 
-const PORT = 3001;
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3001;
 const BACKGROUND_JOB_INTERVAL_MS = 5 * 60 * 1000; // every 5 minutes
 
 app.listen(PORT, () => {

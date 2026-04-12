@@ -7,6 +7,8 @@
   ],
   "scripts": {
     "test": "vitest run --passWithNoTests",
+    "build": "npm run build --workspace=apps/frontend && mkdir -p apps/backend/static && cp -r apps/frontend/dist/. apps/backend/static/ && npm run build --workspace=apps/backend",
+    "start": "node apps/backend/dist/server.js",
     "dev:backend": "npm run dev --workspace=apps/backend",
     "dev:frontend": "npm run dev --workspace=apps/frontend",
     "db:generate": "prisma generate --schema=prisma/schema.prisma",

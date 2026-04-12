@@ -31,7 +31,7 @@ describe.skipIf(!HAS_DB)("POST /buy_lift", () => {
     resortId = resort.id;
 
     agent = request.agent(app);
-    await agent.post("/auth/login").send({ username, password: "test-password" });
+    await agent.post("/api/auth/login").send({ username, password: "test-password" });
   });
 
   afterEach(async () => {
@@ -44,63 +44,63 @@ describe.skipIf(!HAS_DB)("POST /buy_lift", () => {
   });
 
   it("returns 401 when not authenticated", async () => {
-    const res = await request(app).post("/buy_lift").send({ liftModelKey: "magic_carpet" });
+    const res = await request(app).post("/api/buy_lift").send({ liftModelKey: "magic_carpet" });
     expect(res.status).toBe(401);
   });
 
   it("successful buy: new lift appears in response", async () => {
-    const res = await agent.post("/buy_lift").send({ liftModelKey: "magic_carpet" });
+    const res = await agent.post("/api/buy_lift").send({ liftModelKey: "magic_carpet" });
     expect(res.status).toBe(200);
     expect(res.body.lifts).toHaveLength(1);
     expect(res.body.lifts[0].liftModelKey).toBe("magic_carpet");
   });
 
   it("successful buy: money reduced by purchase price", async () => {
-    const res = await agent.post("/buy_lift").send({ liftModelKey: "magic_carpet" });
+    const res = await agent.post("/api/buy_lift").send({ liftModelKey: "magic_carpet" });
     // magic_carpet costs 5000 cents, started with 10000
     expect(res.body.resort.moneyCents).toBe(5000);
   });
 
   it("new lift has status working", async () => {
-    const res = await agent.post("/buy_lift").send({ liftModelKey: "magic_carpet" });
+    const res = await agent.post("/api/buy_lift").send({ liftModelKey: "magic_carpet" });
     expect(res.body.lifts[0].status).toBe("working");
   });
 
   it("new lift has initial break probability 0.002", async () => {
-    const res = await agent.post("/buy_lift").send({ liftModelKey: "magic_carpet" });
+    const res = await agent.post("/api/buy_lift").send({ liftModelKey: "magic_carpet" });
     expect(res.body.lifts[0].currentBreakProbability).toBe(0.002);
   });
 
   it("new lift has a non-empty name assigned", async () => {
-    const res = await agent.post("/buy_lift").send({ liftModelKey: "magic_carpet" });
+    const res = await agent.post("/api/buy_lift").send({ liftModelKey: "magic_carpet" });
     expect(typeof res.body.lifts[0].name).toBe("string");
     expect(res.body.lifts[0].name.length).toBeGreaterThan(0);
   });
 
   it("two lifts bought in the same resort get different names", async () => {
-    await agent.post("/buy_lift").send({ liftModelKey: "magic_carpet" });
-    const res = await agent.post("/buy_lift").send({ liftModelKey: "magic_carpet" });
+    await agent.post("/api/buy_lift").send({ liftModelKey: "magic_carpet" });
+    const res = await agent.post("/api/buy_lift").send({ liftModelKey: "magic_carpet" });
     const names = res.body.lifts.map((l: { name: string }) => l.name);
     expect(new Set(names).size).toBe(names.length);
   });
 
   it("insufficient funds: resort unchanged, still returns 200", async () => {
     // gondola costs 200000, we only have 10000
-    const res = await agent.post("/buy_lift").send({ liftModelKey: "gondola" });
+    const res = await agent.post("/api/buy_lift").send({ liftModelKey: "gondola" });
     expect(res.status).toBe(200);
     expect(res.body.lifts).toHaveLength(0);
     expect(res.body.resort.moneyCents).toBe(10000);
   });
 
   it("can buy multiple lifts of the same type", async () => {
-    await agent.post("/buy_lift").send({ liftModelKey: "magic_carpet" });
-    const res = await agent.post("/buy_lift").send({ liftModelKey: "magic_carpet" });
+    await agent.post("/api/buy_lift").send({ liftModelKey: "magic_carpet" });
+    const res = await agent.post("/api/buy_lift").send({ liftModelKey: "magic_carpet" });
     expect(res.body.lifts).toHaveLength(2);
     expect(res.body.resort.moneyCents).toBe(0);
   });
 
   it("response matches full GetResortResponse shape", async () => {
-    const res = await agent.post("/buy_lift").send({ liftModelKey: "magic_carpet" });
+    const res = await agent.post("/api/buy_lift").send({ liftModelKey: "magic_carpet" });
     expect(res.body).toHaveProperty("resort");
     expect(res.body).toHaveProperty("summary");
     expect(res.body).toHaveProperty("liftModels");
@@ -120,7 +120,7 @@ describe.skipIf(!HAS_DB)("POST /buy_lift", () => {
       },
     });
     await prisma.resort.update({ where: { id: resortId }, data: { moneyCents: 99999999 } });
-    const res = await agent.post("/buy_lift").send({ liftModelKey: "cable_car" });
+    const res = await agent.post("/api/buy_lift").send({ liftModelKey: "cable_car" });
     expect(res.status).toBe(200);
     const cableCars = res.body.lifts.filter(
       (l: { liftModelKey: string }) => l.liftModelKey === "cable_car"
@@ -140,7 +140,7 @@ describe.skipIf(!HAS_DB)("POST /buy_lift", () => {
       },
     });
     await prisma.resort.update({ where: { id: resortId }, data: { moneyCents: 99999999 } });
-    const res = await agent.post("/buy_lift").send({ liftModelKey: "cable_car" });
+    const res = await agent.post("/api/buy_lift").send({ liftModelKey: "cable_car" });
     expect(res.status).toBe(200);
     const activeCableCars = res.body.lifts.filter(
       (l: { liftModelKey: string; status: string }) =>

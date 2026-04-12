@@ -47,7 +47,7 @@ describe.skipIf(!HAS_DB)("POST /reset", () => {
     resortId = resort.id;
 
     agent = request.agent(app);
-    await agent.post("/auth/login").send({ username, password: "test-password" });
+    await agent.post("/api/auth/login").send({ username, password: "test-password" });
   });
 
   afterEach(async () => {
@@ -60,36 +60,36 @@ describe.skipIf(!HAS_DB)("POST /reset", () => {
   });
 
   it("returns 401 when not authenticated", async () => {
-    const res = await request(app).post("/reset").send({});
+    const res = await request(app).post("/api/reset").send({});
     expect(res.status).toBe(401);
   });
 
   it("resets money to 500 cents", async () => {
-    const res = await agent.post("/reset").send({});
+    const res = await agent.post("/api/reset").send({});
     expect(res.status).toBe(200);
     expect(res.body.resort.moneyCents).toBe(500);
   });
 
   it("wipes existing lifts and replaces with 1 magic carpet", async () => {
-    const res = await agent.post("/reset").send({});
+    const res = await agent.post("/api/reset").send({});
     expect(res.body.lifts).toHaveLength(1);
     expect(res.body.lifts[0].liftModelKey).toBe("magic_carpet");
   });
 
   it("new magic carpet is working with 0.002 break probability", async () => {
-    const res = await agent.post("/reset").send({});
+    const res = await agent.post("/api/reset").send({});
     expect(res.body.lifts[0].status).toBe("working");
     expect(res.body.lifts[0].currentBreakProbability).toBe(0.002);
   });
 
   it("new magic carpet has a name assigned after reset", async () => {
-    const res = await agent.post("/reset").send({});
+    const res = await agent.post("/api/reset").send({});
     expect(typeof res.body.lifts[0].name).toBe("string");
     expect(res.body.lifts[0].name.length).toBeGreaterThan(0);
   });
 
   it("response matches full GetResortResponse shape", async () => {
-    const res = await agent.post("/reset").send({});
+    const res = await agent.post("/api/reset").send({});
     expect(res.body).toHaveProperty("resort");
     expect(res.body).toHaveProperty("summary");
     expect(res.body).toHaveProperty("liftModels");

@@ -1,4 +1,5 @@
 import "./types/express-augment";
+import path from "path";
 import express from "express";
 import cors from "cors";
 import session from "express-session";
@@ -9,15 +10,19 @@ import { adminRouter } from "./routes/admin";
 import { requireAuth } from "./middleware/requireAuth";
 
 const PgStore = connectPgSimple(session);
+const isProd = process.env.NODE_ENV === "production";
 
 const app = express();
 
-app.use(
-  cors({
-    origin: process.env.CORS_ORIGIN ?? "http://localhost:5173",
-    credentials: true,
-  })
-);
+if (!isProd) {
+  app.use(
+    cors({
+      origin: process.env.CORS_ORIGIN ?? "http://localhost:5173",
+      credentials: true,
+    })
+  );
+}
+
 app.use(express.json());
 
 app.use(
@@ -32,22 +37,30 @@ app.use(
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: isProd,
       maxAge: 7 * 24 * 60 * 60 * 1000,
       sameSite: "strict",
     },
   })
 );
 
-app.get("/health", (_req, res) => {
+app.get("/api/health", (_req, res) => {
   res.json({ ok: true });
 });
 
-app.use("/auth", authRouter);
+app.use("/api/auth", authRouter);
 
 app.use(requireAuth);
 
-app.use("/admin", adminRouter);
-app.use("/", resortRouter);
+app.use("/api/admin", adminRouter);
+app.use("/api", resortRouter);
+
+if (isProd) {
+  const staticPath = path.join(__dirname, "..", "static");
+  app.use(express.static(staticPath));
+  app.get(/^(?!\/api)/, (_req, res) => {
+    res.sendFile(path.join(staticPath, "index.html"));
+  });
+}
 
 export { app };
