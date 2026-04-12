@@ -1,59 +1,11 @@
-const WORDS = [
-  "alpine",
-  "amber",
-  "azure",
-  "birch",
-  "blaze",
-  "blue",
-  "bold",
-  "bright",
-  "calm",
-  "cedar",
-  "clear",
-  "cliff",
-  "cloud",
-  "cold",
-  "crisp",
-  "dawn",
-  "dusk",
-  "eagle",
-  "ember",
-  "fast",
-  "field",
-  "fire",
-  "fjord",
-  "flint",
-  "forest",
-  "frost",
-  "glade",
-  "glacier",
-  "golden",
-  "green",
-  "grove",
-  "haze",
-  "high",
-  "hill",
-  "ice",
-  "jade",
-  "lake",
-  "leaf",
-  "lunar",
-  "maple",
-  "mist",
-  "moon",
-  "moss",
-  "mountain",
-  "peak",
-  "pine",
-  "rapid",
-  "ridge",
-  "river",
-  "rock",
-];
+import words from "../data/passwordWords.json";
 
 export function generatePassword(): string {
-  const a = WORDS[Math.floor(Math.random() * WORDS.length)];
-  let b = WORDS[Math.floor(Math.random() * WORDS.length)];
-  while (b === a) b = WORDS[Math.floor(Math.random() * WORDS.length)];
-  return `${a}-${b}`;
+  const picked: string[] = [];
+  while (picked.length < 3) {
+    const word = words[Math.floor(Math.random() * words.length)];
+    if (!picked.includes(word)) picked.push(word);
+  }
+  const digit = Math.floor(Math.random() * 10);
+  return `${picked.join("-")}-${digit}`;
 }

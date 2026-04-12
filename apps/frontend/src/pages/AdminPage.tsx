@@ -266,7 +266,8 @@ function ResetPasswordModal({
       <div className={styles.modal}>
         <div className={styles.modalTitle}>Reset password for {user.username}?</div>
         <p style={{ color: "var(--text-secondary)", fontSize: "0.85rem", margin: "0 0 1rem" }}>
-          A new random password will be generated. The old one will stop working immediately.
+          A new random password will be generated (e.g. cold-summit-ridge-7). The old one will stop
+          working immediately.
         </p>
         <div className={styles.modalActions}>
           <button onClick={onClose}>Cancel</button>
