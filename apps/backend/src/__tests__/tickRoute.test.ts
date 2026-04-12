@@ -81,6 +81,19 @@ describe.skipIf(!HAS_DB)("POST /tick", () => {
     expect(lastTickAt).toBeGreaterThanOrEqual(before);
   });
 
+  it("returns { ok: true } but does not process tick when firstLoginAt is null", async () => {
+    // Clear firstLoginAt to simulate a user who has never fully logged in
+    await prisma.user.update({ where: { id: userId }, data: { firstLoginAt: null } });
+
+    const moneyCentsBefore = 1000;
+    const res = await agent.post("/api/tick").send({});
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ ok: true });
+
+    const resort = await prisma.resort.findUnique({ where: { id: resortId } });
+    expect(resort!.moneyCents).toBe(moneyCentsBefore);
+  });
+
   it("lift with probability >= 1.0 becomes junked when break is forced", async () => {
     await prisma.lift.updateMany({
       where: { resortId },

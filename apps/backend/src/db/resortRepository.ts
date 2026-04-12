@@ -62,6 +62,9 @@ export async function createResortForUser(
 
 export async function findIdleResorts(idleThreshold: Date): Promise<Resort[]> {
   return prisma.resort.findMany({
-    where: { lastTickAt: { lt: idleThreshold } },
+    where: {
+      lastTickAt: { lt: idleThreshold },
+      user: { firstLoginAt: { not: null } },
+    },
   });
 }

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import bcrypt from "bcrypt";
-import { findUserByUsername, findUserById } from "../db/userRepository";
+import { findUserByUsername, findUserById, setFirstLoginAt } from "../db/userRepository";
 import type { UserDTO } from "@val-tick/shared";
 
 export const authRouter = Router();
@@ -37,6 +37,10 @@ authRouter.post("/login", async (req, res) => {
   if (!match) {
     res.status(401).json({ error: "Invalid username or password" });
     return;
+  }
+
+  if (!user.firstLoginAt) {
+    await setFirstLoginAt(user.id, new Date());
   }
 
   req.session.userId = user.id;

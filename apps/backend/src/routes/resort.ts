@@ -15,6 +15,11 @@ import type { LiftModelKey } from "@val-tick/shared";
 export const resortRouter = Router();
 
 resortRouter.post("/tick", async (req, res) => {
+  if (!req.user!.firstLoginAt) {
+    res.json({ ok: true });
+    return;
+  }
+
   const resort = await findResortByUserId(req.user!.id);
   if (!resort) {
     res.status(404).json({ error: "Game not found" });

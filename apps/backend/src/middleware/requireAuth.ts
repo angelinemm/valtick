@@ -18,6 +18,7 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
     username: user.username,
     ...(user.email ? { email: user.email } : {}),
     role: user.role,
+    firstLoginAt: user.firstLoginAt,
   };
   next();
 }

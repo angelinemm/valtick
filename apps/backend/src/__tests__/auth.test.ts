@@ -114,4 +114,30 @@ describe.skipIf(!HAS_DB)("Auth routes", () => {
       expect(res.body.resort.name).toBe("Auth Test Resort");
     });
   });
+
+  describe("firstLoginAt behaviour", () => {
+    it("sets firstLoginAt on the first successful login", async () => {
+      const before = await prisma.user.findUnique({ where: { id: userId } });
+      expect(before!.firstLoginAt).toBeNull();
+
+      await request(app).post("/api/auth/login").send({ username, password: "correct-password" });
+
+      const after = await prisma.user.findUnique({ where: { id: userId } });
+      expect(after!.firstLoginAt).not.toBeNull();
+    });
+
+    it("does not overwrite firstLoginAt on subsequent logins", async () => {
+      // First login sets it
+      await request(app).post("/api/auth/login").send({ username, password: "correct-password" });
+
+      const afterFirst = await prisma.user.findUnique({ where: { id: userId } });
+      const firstTimestamp = afterFirst!.firstLoginAt;
+
+      // Second login should not change it
+      await request(app).post("/api/auth/login").send({ username, password: "correct-password" });
+
+      const afterSecond = await prisma.user.findUnique({ where: { id: userId } });
+      expect(afterSecond!.firstLoginAt!.toISOString()).toBe(firstTimestamp!.toISOString());
+    });
+  });
 });
