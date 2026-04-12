@@ -6,6 +6,7 @@ import {
   createAdminUser,
   adminResetPassword,
   adminResetResort,
+  adminDeleteUser,
 } from "../api/admin";
 import type { AdminUserDTO } from "@val-tick/shared";
 import styles from "./AdminPage.module.css";
@@ -21,6 +22,7 @@ export function AdminPage() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [resetPasswordTarget, setResetPasswordTarget] = useState<AdminUserDTO | null>(null);
   const [resetResortTarget, setResetResortTarget] = useState<AdminUserDTO | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<AdminUserDTO | null>(null);
   const [revealedPassword, setRevealedPassword] = useState<{
     forUser: string;
     password: string;
@@ -116,6 +118,11 @@ export function AdminPage() {
                     <button className={styles.dangerBtn} onClick={() => setResetResortTarget(user)}>
                       Reset resort
                     </button>
+                    {user.role !== "ADMIN" && (
+                      <button className={styles.dangerBtn} onClick={() => setDeleteTarget(user)}>
+                        Delete user
+                      </button>
+                    )}
                   </div>
                 </td>
               </tr>
@@ -151,6 +158,17 @@ export function AdminPage() {
             onClose={() => setResetResortTarget(null)}
             onReset={() => {
               setResetResortTarget(null);
+              void invalidate();
+            }}
+          />
+        )}
+
+        {deleteTarget && (
+          <DeleteUserModal
+            user={deleteTarget}
+            onClose={() => setDeleteTarget(null)}
+            onDeleted={() => {
+              setDeleteTarget(null);
               void invalidate();
             }}
           />
@@ -313,6 +331,43 @@ function ResetResortModal({
             disabled={mutation.isPending}
           >
             {mutation.isPending ? "Resetting…" : "Reset resort"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DeleteUserModal({
+  user,
+  onClose,
+  onDeleted,
+}: {
+  user: AdminUserDTO;
+  onClose: () => void;
+  onDeleted: () => void;
+}) {
+  const mutation = useMutation({
+    mutationFn: () => adminDeleteUser(user.id),
+    onSuccess: onDeleted,
+  });
+
+  return (
+    <div className={styles.overlay}>
+      <div className={styles.modal}>
+        <div className={styles.modalTitle}>Delete {user.username}?</div>
+        <p style={{ color: "var(--text-secondary)", fontSize: "0.85rem", margin: "0 0 1rem" }}>
+          Are you sure you want to delete {user.username}? This will permanently delete their
+          account, resort, and all lifts. This cannot be undone.
+        </p>
+        <div className={styles.modalActions}>
+          <button onClick={onClose}>Cancel</button>
+          <button
+            className={styles.dangerBtn}
+            onClick={() => mutation.mutate()}
+            disabled={mutation.isPending}
+          >
+            {mutation.isPending ? "Deleting…" : "Delete user"}
           </button>
         </div>
       </div>

@@ -3,8 +3,10 @@ import bcrypt from "bcrypt";
 import { requireAdmin } from "../middleware/requireAdmin";
 import {
   findAllUsersWithResorts,
+  findUserById,
   createUser,
   updateUserPasswordHashById,
+  deleteUserById,
 } from "../db/userRepository";
 import { findResortByUserId, createResortForUser } from "../db/resortRepository";
 import { resetResort } from "../services/liftService";
@@ -85,6 +87,28 @@ adminRouter.post("/users/:id/reset-password", async (req, res) => {
   await updateUserPasswordHashById(id, passwordHash);
 
   res.json({ password });
+});
+
+adminRouter.delete("/users/:id", async (req, res) => {
+  const { id } = req.params;
+
+  if (id === req.user!.id) {
+    res.status(403).json({ error: "You cannot delete your own account" });
+    return;
+  }
+
+  const target = await findUserById(id);
+  if (!target) {
+    res.status(404).json({ error: "User not found" });
+    return;
+  }
+  if (target.role === "ADMIN") {
+    res.status(403).json({ error: "Admin accounts cannot be deleted through this interface" });
+    return;
+  }
+
+  await deleteUserById(id);
+  res.json({ ok: true });
 });
 
 adminRouter.post("/users/:id/reset-resort", async (req, res) => {
