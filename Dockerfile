@@ -29,10 +29,8 @@ COPY --from=build /app/apps/backend/dist ./apps/backend/dist
 COPY --from=build /app/apps/backend/static ./apps/backend/static
 COPY prisma ./prisma
 
-COPY --from=build /app/node_modules/.bin/prisma /usr/local/bin/prisma
-COPY --from=build /app/node_modules/prisma ./node_modules/prisma
-COPY --from=build /app/node_modules/@prisma ./node_modules/@prisma
-RUN prisma generate
+COPY --from=build /app/node_modules/@prisma/client ./node_modules/@prisma/client
+COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
 
 EXPOSE 3000
 
