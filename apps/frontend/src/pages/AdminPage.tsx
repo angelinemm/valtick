@@ -39,130 +39,148 @@ export function AdminPage() {
 
   return (
     <div className={styles.page}>
-      <h1 className={styles.heading}>Admin — Users &amp; Resorts</h1>
+      <svg
+        className={styles.mountains}
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 1200 80"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <path
+          d="M0,80 L0,55 L70,22 L140,48 L230,8 L320,35 L420,15 L520,40 L630,5 L720,32 L820,18 L920,44 L1020,12 L1120,38 L1200,28 L1200,80 Z"
+          fill="#16293e"
+        />
+        <path
+          d="M0,80 L0,68 L90,52 L180,64 L270,44 L370,60 L460,46 L560,62 L660,48 L760,65 L860,50 L960,66 L1060,54 L1160,67 L1200,58 L1200,80 Z"
+          fill="#0c1a25"
+        />
+      </svg>
+      <div className={styles.content}>
+        <h1 className={styles.heading}>Admin — Users &amp; Resorts</h1>
 
-      <div className={styles.toolbar}>
-        <button onClick={() => navigate("/")}>← Back to game</button>
-        <button
-          onClick={() => {
-            setRevealedPassword(null);
-            setShowCreateModal(true);
-          }}
-        >
-          Create user
-        </button>
-      </div>
+        <div className={styles.toolbar}>
+          <button onClick={() => navigate("/")}>← Back to game</button>
+          <button
+            onClick={() => {
+              setRevealedPassword(null);
+              setShowCreateModal(true);
+            }}
+          >
+            Create user
+          </button>
+        </div>
 
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Resort</th>
-            <th>Money</th>
-            <th>Lifts</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr key={user.id}>
-              <td>{user.username}</td>
-              <td>{user.email ?? <span className={styles.muted}>—</span>}</td>
-              <td>
-                <span
-                  className={`${styles.roleBadge} ${user.role === "ADMIN" ? styles.roleAdmin : styles.roleUser}`}
-                >
-                  {user.role}
-                </span>
-              </td>
-              <td>{user.resort?.name ?? <span className={styles.muted}>none</span>}</td>
-              <td>
-                {user.resort != null ? (
-                  `$${(user.resort.moneyCents / 100).toFixed(2)}`
-                ) : (
-                  <span className={styles.muted}>—</span>
-                )}
-              </td>
-              <td>{user.resort?.liftsCount ?? <span className={styles.muted}>—</span>}</td>
-              <td>
-                <div className={styles.actions}>
-                  <button
-                    onClick={() => {
-                      setRevealedPassword(null);
-                      setResetPasswordTarget(user);
-                    }}
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Resort</th>
+              <th>Money</th>
+              <th>Lifts</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user.id}>
+                <td>{user.username}</td>
+                <td>{user.email ?? <span className={styles.muted}>—</span>}</td>
+                <td>
+                  <span
+                    className={`${styles.roleBadge} ${user.role === "ADMIN" ? styles.roleAdmin : styles.roleUser}`}
                   >
-                    Reset password
-                  </button>
-                  <button className={styles.dangerBtn} onClick={() => setResetResortTarget(user)}>
-                    Reset resort
+                    {user.role}
+                  </span>
+                </td>
+                <td>{user.resort?.name ?? <span className={styles.muted}>none</span>}</td>
+                <td>
+                  {user.resort != null ? (
+                    `$${(user.resort.moneyCents / 100).toFixed(2)}`
+                  ) : (
+                    <span className={styles.muted}>—</span>
+                  )}
+                </td>
+                <td>{user.resort?.liftsCount ?? <span className={styles.muted}>—</span>}</td>
+                <td>
+                  <div className={styles.actions}>
+                    <button
+                      onClick={() => {
+                        setRevealedPassword(null);
+                        setResetPasswordTarget(user);
+                      }}
+                    >
+                      Reset password
+                    </button>
+                    <button className={styles.dangerBtn} onClick={() => setResetResortTarget(user)}>
+                      Reset resort
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {showCreateModal && (
+          <CreateUserModal
+            onClose={() => setShowCreateModal(false)}
+            onCreated={(username, password) => {
+              setRevealedPassword({ forUser: username, password });
+              setShowCreateModal(false);
+              void invalidate();
+            }}
+          />
+        )}
+
+        {resetPasswordTarget && (
+          <ResetPasswordModal
+            user={resetPasswordTarget}
+            onClose={() => setResetPasswordTarget(null)}
+            onReset={(password) => {
+              setRevealedPassword({ forUser: resetPasswordTarget.username, password });
+              setResetPasswordTarget(null);
+            }}
+          />
+        )}
+
+        {resetResortTarget && (
+          <ResetResortModal
+            user={resetResortTarget}
+            onClose={() => setResetResortTarget(null)}
+            onReset={() => {
+              setResetResortTarget(null);
+              void invalidate();
+            }}
+          />
+        )}
+
+        {revealedPassword && (
+          <div className={styles.overlay} onClick={() => setRevealedPassword(null)}>
+            <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+              <div className={styles.modalTitle}>Password for {revealedPassword.forUser}</div>
+              <div className={styles.passwordReveal}>
+                <div className={styles.passwordWarning}>
+                  Copy this password now — it won&apos;t be shown again.
+                </div>
+                <div className={styles.passwordValue}>
+                  <span className={styles.passwordText}>{revealedPassword.password}</span>
+                  <button
+                    className={styles.copyBtn}
+                    onClick={() => handleCopy(revealedPassword.password)}
+                  >
+                    {copied ? "Copied!" : "Copy"}
                   </button>
                 </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      {showCreateModal && (
-        <CreateUserModal
-          onClose={() => setShowCreateModal(false)}
-          onCreated={(username, password) => {
-            setRevealedPassword({ forUser: username, password });
-            setShowCreateModal(false);
-            void invalidate();
-          }}
-        />
-      )}
-
-      {resetPasswordTarget && (
-        <ResetPasswordModal
-          user={resetPasswordTarget}
-          onClose={() => setResetPasswordTarget(null)}
-          onReset={(password) => {
-            setRevealedPassword({ forUser: resetPasswordTarget.username, password });
-            setResetPasswordTarget(null);
-          }}
-        />
-      )}
-
-      {resetResortTarget && (
-        <ResetResortModal
-          user={resetResortTarget}
-          onClose={() => setResetResortTarget(null)}
-          onReset={() => {
-            setResetResortTarget(null);
-            void invalidate();
-          }}
-        />
-      )}
-
-      {revealedPassword && (
-        <div className={styles.overlay} onClick={() => setRevealedPassword(null)}>
-          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.modalTitle}>Password for {revealedPassword.forUser}</div>
-            <div className={styles.passwordReveal}>
-              <div className={styles.passwordWarning}>
-                Copy this password now — it won&apos;t be shown again.
               </div>
-              <div className={styles.passwordValue}>
-                <span className={styles.passwordText}>{revealedPassword.password}</span>
-                <button
-                  className={styles.copyBtn}
-                  onClick={() => handleCopy(revealedPassword.password)}
-                >
-                  {copied ? "Copied!" : "Copy"}
-                </button>
+              <div className={styles.modalActions}>
+                <button onClick={() => setRevealedPassword(null)}>Done</button>
               </div>
-            </div>
-            <div className={styles.modalActions}>
-              <button onClick={() => setRevealedPassword(null)}>Done</button>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

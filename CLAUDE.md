@@ -25,6 +25,12 @@
 - ESLint covers TypeScript rules (including `@typescript-eslint`) and React hooks rules
 - Prettier handles all formatting — do not manually adjust indentation or quotes
 
+## Page style
+
+- Every page must have the mountain SVG background fixed to the bottom of the viewport — the same two-range silhouette used across the app (far range `#16293e`, near range `#0c1a25`, `height: 40vh`, `position: fixed`)
+- Page root: `min-height: 100vh`, `position: relative`, `background-color: var(--bg-base)`
+- All page content must sit in a wrapper with `position: relative; z-index: 1` so it renders above the mountains
+
 ## How to Play page
 
 - Whenever a new game feature is added or existing game logic changes in a way that affects how the player plays, update `/how-to-play` accordingly
