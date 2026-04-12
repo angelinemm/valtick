@@ -129,27 +129,37 @@
   animation: tickPulse 0.5s ease-out;
 }
 
-.subtleButton {
-  background-color: var(--btn-bg);
-  color: var(--text-muted);
-  border: 1px solid var(--btn-border);
-  padding: 0.35rem 0.9rem;
+.navLink {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  padding: 0.35rem 0.5rem;
   cursor: pointer;
-  border-radius: 3px;
+  font-size: inherit;
+  font-family: inherit;
   align-self: center;
   white-space: nowrap;
 }
 
-.subtleButton:hover {
-  background-color: var(--btn-hover-bg);
-  color: var(--btn-text);
+.navLink:hover {
+  color: var(--text-primary);
+}
+
+.divider {
+  display: inline-block;
+  width: 1px;
+  height: 20px;
+  background-color: var(--border);
+  align-self: center;
+  flex-shrink: 0;
+  margin: 0 0.25rem;
 }
 
 .resetButton {
   background-color: #7a1515;
   color: var(--text-primary);
   border: 1px solid #a82020;
-  padding: 0.35rem 0.9rem;
+  padding: 0.35rem 0.6rem;
   font-weight: bold;
   cursor: pointer;
   border-radius: 3px;
