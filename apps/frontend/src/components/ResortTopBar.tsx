@@ -86,17 +86,18 @@ export function ResortTopBar({
             <span className={styles.brokenValue}>{summary.brokenLiftsCount}</span>
           )}
         </div>
-        <button className={styles.subtleButton} onClick={() => navigate("/how-to-play")}>
+        <button className={styles.navLink} onClick={() => navigate("/how-to-play")}>
           How to Play
         </button>
-        <button className={styles.subtleButton} onClick={() => navigate("/profile")}>
+        <button className={styles.navLink} onClick={() => navigate("/profile")}>
           Profile
         </button>
         {isAdmin && (
-          <button className={styles.adminButton} onClick={() => navigate("/admin")}>
+          <button className={styles.navLink} onClick={() => navigate("/admin")}>
             Admin
           </button>
         )}
+        <span className={styles.divider} aria-hidden="true" />
         <button className={styles.resetButton} onClick={handleReset}>
           Reset
         </button>
