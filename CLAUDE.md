@@ -41,3 +41,15 @@
 - At the end of every task, consider whether the README needs updating
 - Updates are not required every time, but check: does anything about setup, configuration, or how the game works need to change?
 - If yes, update it as part of the same PR
+
+## Internationalisation (i18n)
+
+The app is not yet internationalised but will be in the future (English and French at minimum).
+
+To make that migration easier, follow these rules on all new frontend code:
+
+- Never hardcode user-facing strings directly in JSX or component logic
+- Keep all UI strings in a constants or strings file at the component or feature level (e.g. `strings.ts` next to the component)
+- This applies to: button labels, error messages, status text, page titles, tooltips, placeholder text, confirmation messages — anything a user reads
+- Does NOT apply to: developer-facing strings (console logs, error codes), internal identifiers, or class names
+- Do not implement i18n tooling yet — just keep strings extractable and centralised
