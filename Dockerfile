@@ -29,6 +29,8 @@ COPY --from=build /app/apps/backend/dist ./apps/backend/dist
 COPY --from=build /app/apps/backend/static ./apps/backend/static
 COPY prisma ./prisma
 
+RUN npx prisma generate --schema=prisma/schema.prisma
+
 EXPOSE 3000
 
 CMD ["sh", "-c", "npx prisma migrate deploy --schema=prisma/schema.prisma && node apps/backend/dist/server.js"]
