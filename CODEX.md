@@ -109,6 +109,18 @@ Default local URLs:
 - When work is complete, push the branch and open a PR against `main`.
 - PR title and description should clearly explain what changed and why.
 
+### Commit guidelines
+
+- When creating commits, always include a co-author line for Codex.
+- Use the exact format:
+
+```text
+Co-authored-by: Codex <codex@openai.com>
+```
+
+- Ensure the co-author line is present in the final commit message.
+- Do not duplicate the line if it already exists.
+
 ### Testing expectations
 
 Before pushing, run:
