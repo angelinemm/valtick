@@ -43,7 +43,10 @@ export async function findAllUsersWithResorts() {
     include: {
       resort: {
         include: {
-          _count: { select: { lifts: true } },
+          lifts: {
+            where: { status: "working" },
+            select: { id: true },
+          },
         },
       },
     },

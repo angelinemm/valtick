@@ -80,7 +80,7 @@ export function AdminPage() {
               <th>Role</th>
               <th>Resort</th>
               <th>Money</th>
-              <th>Lifts</th>
+              <th>Working lifts</th>
               <th>Actions</th>
             </tr>
           </thead>

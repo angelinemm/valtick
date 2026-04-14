@@ -31,7 +31,7 @@ function toAdminUserDTO(
           id: user.resort.id,
           name: user.resort.name,
           moneyCents: user.resort.moneyCents,
-          liftsCount: user.resort._count.lifts,
+          liftsCount: user.resort.lifts.length,
         }
       : null,
   };

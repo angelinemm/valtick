@@ -105,6 +105,43 @@ describe.skipIf(!HAS_DB)("Admin routes", () => {
       expect(found.resort.moneyCents).toBe(1000);
       expect(found.resort.liftsCount).toBe(1);
     });
+
+    it("counts only working lifts in the resort summary", async () => {
+      await prisma.resort.create({
+        data: {
+          name: "Test Resort",
+          userId,
+          moneyCents: 1000,
+          lastTickAt: new Date(),
+          lifts: {
+            create: [
+              {
+                liftModelKey: "magic_carpet",
+                name: "Working Lift",
+                status: "working",
+                currentBreakProbability: 0.002,
+              },
+              {
+                liftModelKey: "chairlift",
+                name: "Broken Lift",
+                status: "broken",
+                currentBreakProbability: 0.1,
+              },
+              {
+                liftModelKey: "gondola",
+                name: "Junked Lift",
+                status: "junked",
+                currentBreakProbability: 1,
+              },
+            ],
+          },
+        },
+      });
+
+      const res = await adminAgent.get("/api/admin/users");
+      const found = res.body.users.find((u: { username: string }) => u.username === userUsername);
+      expect(found.resort.liftsCount).toBe(1);
+    });
   });
 
   describe("POST /admin/users", () => {
