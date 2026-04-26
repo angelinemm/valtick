@@ -33,13 +33,13 @@ describe.skipIf(!HAS_DB)("createResort", () => {
     expect(lifts).toHaveLength(1);
   });
 
-  it("the lift is a working magic_carpet with correct break probability", async () => {
+  it("the lift is a working magic_carpet with breakCount 0", async () => {
     const resort = await seed();
     const lifts = await prisma.lift.findMany({ where: { resortId: resort.id } });
     const lift = lifts[0];
     expect(lift.liftModelKey).toBe("magic_carpet");
     expect(lift.status).toBe("working");
-    expect(lift.currentBreakProbability).toBe(0.002);
+    expect(lift.breakCount).toBe(0);
   });
 
   it("the starting lift has a name assigned", async () => {

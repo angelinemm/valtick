@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { processOneTick } from "../services/tickService";
+import { calculateBreakChance, processOneTick } from "../services/tickService";
 import type { LiftTickState } from "../services/tickService";
 
 const alwaysBreaks = () => 0;
@@ -10,7 +10,7 @@ function makeLift(overrides: Partial<LiftTickState> = {}): LiftTickState {
     id: "lift-1",
     liftModelKey: "magic_carpet",
     status: "working",
-    currentBreakProbability: 0.001,
+    breakCount: 0,
     ...overrides,
   };
 }
@@ -47,60 +47,60 @@ describe("income calculation", () => {
 });
 
 describe("break behaviour", () => {
-  it("working lift with alwaysBreaks becomes broken, probability doubles", () => {
-    const lift = makeLift({ currentBreakProbability: 0.001 });
+  it("working lift with alwaysBreaks becomes broken and increments breakCount", () => {
+    const lift = makeLift({ breakCount: 0 });
     const { updatedLifts } = processOneTick(0, [lift], alwaysBreaks);
     expect(updatedLifts[0].status).toBe("broken");
-    expect(updatedLifts[0].currentBreakProbability).toBe(0.002);
+    expect(updatedLifts[0].breakCount).toBe(1);
   });
 
-  it("working lift with neverBreaks stays working, probability unchanged", () => {
-    const lift = makeLift({ currentBreakProbability: 0.001 });
+  it("working lift with neverBreaks stays working, breakCount unchanged", () => {
+    const lift = makeLift({ breakCount: 0 });
     const { updatedLifts } = processOneTick(0, [lift], neverBreaks);
     expect(updatedLifts[0].status).toBe("working");
-    expect(updatedLifts[0].currentBreakProbability).toBe(0.001);
+    expect(updatedLifts[0].breakCount).toBe(0);
   });
 
   it("broken lift is not rolled — alwaysBreaks does not affect it", () => {
-    const lift = makeLift({ status: "broken", currentBreakProbability: 0.001 });
+    const lift = makeLift({ status: "broken", breakCount: 2 });
     const { updatedLifts } = processOneTick(0, [lift], alwaysBreaks);
     expect(updatedLifts[0].status).toBe("broken");
-    expect(updatedLifts[0].currentBreakProbability).toBe(0.001);
+    expect(updatedLifts[0].breakCount).toBe(2);
   });
 
   it("junked lift is not rolled — alwaysBreaks does not affect it", () => {
-    const lift = makeLift({ status: "junked", currentBreakProbability: 0.001 });
+    const lift = makeLift({ status: "junked", breakCount: 5 });
     const { updatedLifts } = processOneTick(0, [lift], alwaysBreaks);
     expect(updatedLifts[0].status).toBe("junked");
   });
 });
 
 describe("junk boundary", () => {
-  it("breaks at probability 0.5 → broken with probability 1.0 (not junked)", () => {
-    // probability was < 1.0 before the break, so: broken + double
-    const lift = makeLift({ currentBreakProbability: 0.5 });
+  it("breaks below maxRepairableBreaks → broken and increments breakCount", () => {
+    const lift = makeLift({ breakCount: 4 });
     const { updatedLifts } = processOneTick(0, [lift], alwaysBreaks);
     expect(updatedLifts[0].status).toBe("broken");
-    expect(updatedLifts[0].currentBreakProbability).toBe(1.0);
+    expect(updatedLifts[0].breakCount).toBe(5);
   });
 
-  it("breaks at probability 1.0 → junked", () => {
-    const lift = makeLift({ currentBreakProbability: 1.0 });
+  it("breaks at maxRepairableBreaks → junked", () => {
+    const lift = makeLift({ breakCount: 5 });
     const { updatedLifts } = processOneTick(0, [lift], alwaysBreaks);
     expect(updatedLifts[0].status).toBe("junked");
+    expect(updatedLifts[0].breakCount).toBe(5);
   });
 
-  it("breaks at probability 2.0 → junked", () => {
-    const lift = makeLift({ currentBreakProbability: 2.0 });
-    const { updatedLifts } = processOneTick(0, [lift], alwaysBreaks);
-    expect(updatedLifts[0].status).toBe("junked");
+  it("uses quadratic lifecycle progress for break chance", () => {
+    expect(calculateBreakChance(makeLift({ breakCount: 0 }))).toBeCloseTo(0.002);
+    expect(calculateBreakChance(makeLift({ breakCount: 5 }))).toBeCloseTo(0.064);
+    expect(calculateBreakChance(makeLift({ breakCount: 3 }))).toBeCloseTo(0.02432);
   });
 });
 
 describe("tick ordering", () => {
   it("a lift that breaks this tick still contributed income this tick", () => {
     // magic_carpet: income = 5 * 20 = 100 — earned before break roll
-    const lift = makeLift({ currentBreakProbability: 0.001 });
+    const lift = makeLift({ breakCount: 0 });
     const { updatedMoneyCents, updatedLifts } = processOneTick(0, [lift], alwaysBreaks);
     expect(updatedLifts[0].status).toBe("broken");
     expect(updatedMoneyCents).toBe(100);
@@ -109,7 +109,7 @@ describe("tick ordering", () => {
 
 describe("immutability", () => {
   it("does not mutate the input lifts array", () => {
-    const lift = makeLift({ currentBreakProbability: 0.001 });
+    const lift = makeLift({ breakCount: 0 });
     const original = { ...lift };
     processOneTick(0, [lift], alwaysBreaks);
     expect(lift).toEqual(original);

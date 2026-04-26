@@ -31,7 +31,7 @@ describe.skipIf(!HAS_DB)("POST /tick", () => {
             liftModelKey: "magic_carpet",
             name: "Test Lift",
             status: "working",
-            currentBreakProbability: 0.001,
+            breakCount: 0,
           },
         },
       },
@@ -94,10 +94,10 @@ describe.skipIf(!HAS_DB)("POST /tick", () => {
     expect(resort!.moneyCents).toBe(moneyCentsBefore);
   });
 
-  it("lift with probability >= 1.0 becomes junked when break is forced", async () => {
+  it("lift at max repairable breaks becomes junked when break is forced", async () => {
     await prisma.lift.updateMany({
       where: { resortId },
-      data: { currentBreakProbability: 1.0 },
+      data: { breakCount: 5 },
     });
 
     vi.spyOn(Math, "random").mockReturnValue(0); // force break

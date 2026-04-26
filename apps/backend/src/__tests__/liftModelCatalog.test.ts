@@ -18,9 +18,11 @@ describe("getAllLiftModels", () => {
     expect(keys).toEqual(["magic_carpet", "drag_lift", "chairlift", "gondola", "cable_car"]);
   });
 
-  it("every model has initialBreakChance === 0.002", () => {
+  it("every model has lifecycle break settings", () => {
     getAllLiftModels().forEach((m) => {
-      expect(m.initialBreakChance).toBe(0.002);
+      expect(m.baseBreakChance).toBe(0.002);
+      expect(m.maxBreakChance).toBe(0.064);
+      expect(m.maxRepairableBreaks).toBe(5);
     });
   });
 
@@ -41,7 +43,9 @@ describe("getLiftModel", () => {
       capacity: 5,
       priceBonusCents: 10,
       repairCostCents: 500,
-      initialBreakChance: 0.002,
+      baseBreakChance: 0.002,
+      maxBreakChance: 0.064,
+      maxRepairableBreaks: 5,
       maxOwned: 10,
       iconKey: "magic-carpet",
     });
@@ -56,7 +60,9 @@ describe("getLiftModel", () => {
       capacity: 100,
       priceBonusCents: 200,
       repairCostCents: 500000,
-      initialBreakChance: 0.002,
+      baseBreakChance: 0.002,
+      maxBreakChance: 0.064,
+      maxRepairableBreaks: 5,
       maxOwned: 1,
       iconKey: "cable-car",
     });

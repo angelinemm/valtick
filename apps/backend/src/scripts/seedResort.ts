@@ -13,7 +13,7 @@ export async function createResort(name: string): Promise<Resort> {
           liftModelKey: "magic_carpet",
           name: assignLiftName([]),
           status: "working",
-          currentBreakProbability: 0.002,
+          breakCount: 0,
         },
       },
     },

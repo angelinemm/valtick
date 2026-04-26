@@ -38,7 +38,7 @@ describe.skipIf(!HAS_DB)("runBackgroundSim", () => {
                 liftModelKey: "magic_carpet",
                 name: "Test Lift",
                 status: opts.liftStatus,
-                currentBreakProbability: 0.001,
+                breakCount: 0,
               },
             }
           : undefined,
@@ -134,7 +134,7 @@ describe.skipIf(!HAS_DB)("runBackgroundSim", () => {
             liftModelKey: "not_a_real_model",
             name: "Bad Lift",
             status: "working",
-            currentBreakProbability: 0.001,
+            breakCount: 0,
           },
         },
       },
