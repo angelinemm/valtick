@@ -5,7 +5,7 @@ SET "breakCount" = LEAST(
   5,
   GREATEST(
     0,
-    ROUND(LOG(2, "currentBreakProbability" / 0.002))::INTEGER
+    ROUND(LN("currentBreakProbability" / 0.002) / LN(2.0))::INTEGER
   )
 )
 WHERE "currentBreakProbability" > 0;
