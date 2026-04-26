@@ -1,7 +1,7 @@
-import bcrypt from "bcrypt";
 import { createUser } from "../db/userRepository";
 import { prisma } from "../db/prisma";
 import type { UserRole } from "@prisma/client";
+import { hashPassword } from "../utils/passwordHash";
 
 async function main() {
   const [, , username, password, role = "USER"] = process.argv;
@@ -16,7 +16,7 @@ async function main() {
     process.exit(1);
   }
 
-  const passwordHash = await bcrypt.hash(password, 12);
+  const passwordHash = await hashPassword(password);
   const user = await createUser({ username, passwordHash, role: role as UserRole });
   console.log(`Created user: ${user.id} (${user.username}, ${user.role})`);
   await prisma.$disconnect();

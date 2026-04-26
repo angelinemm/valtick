@@ -103,3 +103,19 @@ Log in at `/login`. If the account has no resort, one is created automatically o
 Once you're logged in as an admin, go to `/admin` to create further accounts. The admin page creates the user **and** their starting resort in one step — no CLI needed.
 
 The CLI script accepts an optional role argument (`USER` or `ADMIN`, defaults to `USER`) and is still useful if you need to create accounts outside the browser.
+
+## Admin password reset
+
+Reset a user's password from the command line without using an email reset flow:
+
+```bash
+npm run admin:reset-password -- <username> <newPassword>
+```
+
+The command looks up the user by username, updates only `passwordHash`, prints a success message, and exits non-zero if the user does not exist.
+
+From a Railway console, run the same command from the repo root:
+
+```bash
+npm run admin:reset-password -- someusername NewSecurePassword123
+```
