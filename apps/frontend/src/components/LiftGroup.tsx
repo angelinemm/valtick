@@ -1,6 +1,7 @@
 import type { LiftDTO, LiftModelDTO } from "@val-tick/shared";
 import { formatMoney } from "../utils/format";
 import { LiftRow } from "./LiftRow";
+import styles from "./LiftGroup.module.css";
 
 interface Props {
   model: LiftModelDTO;
@@ -17,8 +18,10 @@ export function LiftGroup({ model, lifts, onBuy, onRepair, canAffordBuy, canAffo
 
   return (
     <details open>
-      <summary style={{ cursor: "pointer", padding: "0.5rem 0" }}>
-        <strong>{model.name}</strong>
+      <summary className={styles.summary}>
+        <strong className={brokenCount > 0 ? `${styles.alertName} ${styles.brokenPulse}` : ""}>
+          {model.name}
+        </strong>
         {" — "}
         {lifts.length}/{model.maxOwned} owned, {brokenCount} broken
         {" | "}
