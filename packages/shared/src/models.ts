@@ -7,7 +7,9 @@ export interface LiftModelDTO {
   capacity: number;
   priceBonusCents: number;
   repairCostCents: number;
-  initialBreakChance: number;
+  baseBreakChance: number;
+  maxBreakChance: number;
+  maxRepairableBreaks: number;
   maxOwned: number;
   iconKey: string;
 }
@@ -26,7 +28,7 @@ export interface LiftDTO {
   resortId: string;
   liftModelKey: LiftModelKey;
   name: string;
-  currentBreakProbability: number;
+  breakCount: number;
   status: LiftStatus;
   createdAt: string;
   updatedAt: string;

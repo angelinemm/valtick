@@ -32,13 +32,13 @@ describe.skipIf(!HAS_DB)("POST /reset", () => {
               liftModelKey: "gondola",
               name: "Test Gondola",
               status: "working",
-              currentBreakProbability: 0.5,
+              breakCount: 4,
             },
             {
               liftModelKey: "chairlift",
               name: "Test Chairlift",
               status: "broken",
-              currentBreakProbability: 1.0,
+              breakCount: 5,
             },
           ],
         },
@@ -76,10 +76,10 @@ describe.skipIf(!HAS_DB)("POST /reset", () => {
     expect(res.body.lifts[0].liftModelKey).toBe("magic_carpet");
   });
 
-  it("new magic carpet is working with 0.002 break probability", async () => {
+  it("new magic carpet is working with breakCount 0", async () => {
     const res = await agent.post("/api/reset").send({});
     expect(res.body.lifts[0].status).toBe("working");
-    expect(res.body.lifts[0].currentBreakProbability).toBe(0.002);
+    expect(res.body.lifts[0].breakCount).toBe(0);
   });
 
   it("new magic carpet has a name assigned after reset", async () => {

@@ -43,15 +43,16 @@
   text-overflow: ellipsis;
 }
 
-.modelName {
+.wearText {
   font-size: 0.7rem;
   color: var(--text-muted);
 }
 
-.status {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  font-family: var(--font-mono);
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-shrink: 0;
 }
 
 .workingLabel {
@@ -88,4 +89,15 @@
 .repairButton:disabled {
   opacity: 0.4;
   cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+  .card {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .actions {
+    padding-left: 1.75rem;
+  }
 }
