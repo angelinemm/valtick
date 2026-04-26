@@ -35,7 +35,10 @@ function toLiftDTO(lift: Lift): LiftDTO {
 
 export function formatResortResponse(resort: Resort, lifts: Lift[]): GetResortResponse {
   const liftDTOs = lifts.map(toLiftDTO);
-  const summary = calculateSummary(resort.moneyCents, liftDTOs);
+  const summary = {
+    ...calculateSummary(resort.moneyCents, liftDTOs),
+    totalSkiersEver: resort.totalSkiersEver,
+  };
 
   return {
     resort: toResortDTO(resort),

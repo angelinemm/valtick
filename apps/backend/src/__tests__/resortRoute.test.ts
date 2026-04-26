@@ -25,6 +25,7 @@ describe.skipIf(!HAS_DB)("GET /resort", () => {
         name: "Test Resort",
         userId,
         moneyCents: 1000,
+        totalSkiersEver: 12345,
         lastTickAt: new Date(),
       },
     });
@@ -90,6 +91,7 @@ describe.skipIf(!HAS_DB)("GET /resort", () => {
     expect(summary.passPriceCents).toBe(20);
     expect(summary.totalLifts).toBe(1);
     expect(summary.brokenLiftsCount).toBe(0);
+    expect(summary.totalSkiersEver).toBe(12345);
   });
 
   it("lifts array contains the created lift with correct fields", async () => {

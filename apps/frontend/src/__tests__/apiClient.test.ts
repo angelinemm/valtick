@@ -19,6 +19,7 @@ const mockResortResponse: GetResortResponse = {
     totalLifts: 1,
     brokenLiftsCount: 0,
     junkedLiftsCount: 0,
+    totalSkiersEver: 25,
   },
   liftModels: [],
   lifts: [],

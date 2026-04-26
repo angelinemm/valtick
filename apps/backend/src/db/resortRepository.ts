@@ -1,19 +1,20 @@
-import type { Resort, Lift } from "@prisma/client";
+import type { Prisma, Resort, Lift } from "@prisma/client";
 import { prisma } from "./prisma";
 import { assignLiftName } from "../utils/liftNameGenerator";
 
 export type { Resort, Lift };
+export type ResortWithLifts = Prisma.ResortGetPayload<{
+  include: { lifts: true };
+}>;
 
-export async function findResortByUserId(
-  userId: string
-): Promise<(Resort & { lifts: Lift[] }) | null> {
+export async function findResortByUserId(userId: string): Promise<ResortWithLifts | null> {
   return prisma.resort.findUnique({
     where: { userId },
     include: { lifts: { orderBy: { createdAt: "asc" } } },
   });
 }
 
-export async function findResortById(id: string): Promise<(Resort & { lifts: Lift[] }) | null> {
+export async function findResortById(id: string): Promise<ResortWithLifts | null> {
   return prisma.resort.findUnique({
     where: { id },
     include: { lifts: { orderBy: { createdAt: "asc" } } },
@@ -22,7 +23,7 @@ export async function findResortById(id: string): Promise<(Resort & { lifts: Lif
 
 export async function updateResort(
   id: string,
-  data: { moneyCents: number; lastTickAt: Date }
+  data: { moneyCents: number; totalSkiersEver?: number; lastTickAt: Date }
 ): Promise<Resort> {
   return prisma.resort.update({
     where: { id },
@@ -37,15 +38,13 @@ export async function renameResort(id: string, name: string): Promise<Resort> {
   });
 }
 
-export async function createResortForUser(
-  userId: string,
-  name: string
-): Promise<Resort & { lifts: Lift[] }> {
+export async function createResortForUser(userId: string, name: string): Promise<ResortWithLifts> {
   return prisma.resort.create({
     data: {
       name,
       userId,
       moneyCents: 500,
+      totalSkiersEver: 0,
       lastTickAt: new Date(),
       lifts: {
         create: {

@@ -3,6 +3,7 @@ import type { LiftTickState } from "./tickService";
 
 export type OfflineSimInput = {
   moneyCents: number;
+  totalSkiersEver: number;
   lifts: LiftTickState[];
   lastTickAt: Date;
   now?: Date;
@@ -11,6 +12,7 @@ export type OfflineSimInput = {
 
 export type OfflineSimResult = {
   updatedMoneyCents: number;
+  updatedTotalSkiersEver: number;
   updatedLifts: LiftTickState[];
   ticksSimulated: number;
 };
@@ -27,17 +29,24 @@ export function simulateOfflineTicks(input: OfflineSimInput): OfflineSimResult {
   const ticksToSimulate = Math.floor(elapsedMs / 1000);
 
   let moneyCents = input.moneyCents;
+  let totalSkiersEver = input.totalSkiersEver;
   let lifts = input.lifts.map((l) => ({ ...l }));
   let ticksSimulated = 0;
 
   for (let i = 0; i < ticksToSimulate; i++) {
     if (allInactive(lifts)) break;
 
-    const result = processOneTick(moneyCents, lifts, random);
+    const result = processOneTick(moneyCents, totalSkiersEver, lifts, random);
     moneyCents = result.updatedMoneyCents;
+    totalSkiersEver = result.updatedTotalSkiersEver;
     lifts = result.updatedLifts;
     ticksSimulated++;
   }
 
-  return { updatedMoneyCents: moneyCents, updatedLifts: lifts, ticksSimulated };
+  return {
+    updatedMoneyCents: moneyCents,
+    updatedTotalSkiersEver: totalSkiersEver,
+    updatedLifts: lifts,
+    ticksSimulated,
+  };
 }

@@ -42,4 +42,5 @@ export interface SummaryDTO {
   totalLifts: number;
   brokenLiftsCount: number;
   junkedLiftsCount: number;
+  totalSkiersEver: number;
 }

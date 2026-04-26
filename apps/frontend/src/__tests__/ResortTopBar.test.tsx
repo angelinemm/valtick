@@ -22,6 +22,7 @@ const summary: SummaryDTO = {
   totalLifts: 4,
   brokenLiftsCount: 1,
   junkedLiftsCount: 0,
+  totalSkiersEver: 12345,
 };
 
 function renderBar(
@@ -78,6 +79,11 @@ describe("ResortTopBar", () => {
   it("renders totalLifts as 4", () => {
     renderBar();
     expect(screen.getByText("4")).toBeInTheDocument();
+  });
+
+  it("renders total skiers as a plain formatted number", () => {
+    renderBar();
+    expect(screen.getByText("12,345")).toBeInTheDocument();
   });
 
   it("renders brokenLiftsCount as 1", () => {
