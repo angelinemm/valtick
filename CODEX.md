@@ -121,6 +121,22 @@ Co-authored-by: Codex <codex@openai.com>
 - Ensure the co-author line is present in the final commit message.
 - Do not duplicate the line if it already exists.
 
+## Pull request guidelines
+
+- Every pull request must include a "Manual testing checklist".
+- The checklist must contain concrete, user-level scenarios, not just commands.
+- Avoid vague statements like "test the feature works".
+- Prefer specific actions and expected outcomes.
+- Include Val-Tick scenarios when relevant:
+  - Buy a lift when you have enough money and confirm it appears and money decreases.
+  - Try buying a lift without enough money and confirm nothing changes.
+  - Try buying beyond limits and confirm it is blocked.
+  - Repair a broken lift and confirm it contributes again on the next tick.
+  - Confirm broken lifts do not contribute to income.
+  - Confirm junked lifts appear in the junkyard.
+  - Confirm junked lifts do not contribute to capacity or price.
+  - Confirm junked lifts do not count toward active limits.
+
 ### Testing expectations
 
 Before pushing, run:
