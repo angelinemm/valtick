@@ -12,7 +12,7 @@ function makeWorkingLift(id = "lift-1"): LiftTickState {
     id,
     liftModelKey: "magic_carpet",
     status: "working",
-    currentBreakProbability: 0.001,
+    breakCount: 0,
   };
 }
 

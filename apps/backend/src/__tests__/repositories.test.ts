@@ -47,13 +47,13 @@ describe.skipIf(!HAS_DB)("repositories", () => {
         resortId,
         liftModelKey: "chairlift",
         name: "Test Lift",
-        currentBreakProbability: 0.001,
+        breakCount: 0,
         status: "working",
       });
       expect(lift.id).toBeDefined();
       expect(lift.resortId).toBe(resortId);
       expect(lift.liftModelKey).toBe("chairlift");
-      expect(lift.currentBreakProbability).toBe(0.001);
+      expect(lift.breakCount).toBe(0);
       expect(lift.status).toBe("working");
     });
   });
@@ -65,7 +65,7 @@ describe.skipIf(!HAS_DB)("repositories", () => {
           resortId,
           liftModelKey: "magic_carpet",
           name: "Test Lift",
-          currentBreakProbability: 0.001,
+          breakCount: 0,
           status: "working",
         },
       });
@@ -82,7 +82,7 @@ describe.skipIf(!HAS_DB)("repositories", () => {
             resortId,
             liftModelKey: "magic_carpet",
             name: "Test Lift A",
-            currentBreakProbability: 0.001,
+            breakCount: 0,
             status: "working",
           },
         }),
@@ -91,15 +91,15 @@ describe.skipIf(!HAS_DB)("repositories", () => {
             resortId,
             liftModelKey: "drag_lift",
             name: "Test Lift B",
-            currentBreakProbability: 0.001,
+            breakCount: 0,
             status: "working",
           },
         }),
       ]);
 
       await bulkUpdateLifts([
-        { id: a.id, status: "broken", currentBreakProbability: 0.002 },
-        { id: b.id, status: "junked", currentBreakProbability: 1.0 },
+        { id: a.id, status: "broken", breakCount: 1 },
+        { id: b.id, status: "junked", breakCount: 5 },
       ]);
 
       const [updatedA, updatedB] = await Promise.all([
@@ -107,7 +107,7 @@ describe.skipIf(!HAS_DB)("repositories", () => {
         prisma.lift.findUnique({ where: { id: b.id } }),
       ]);
       expect(updatedA!.status).toBe("broken");
-      expect(updatedA!.currentBreakProbability).toBe(0.002);
+      expect(updatedA!.breakCount).toBe(1);
       expect(updatedB!.status).toBe("junked");
     });
 

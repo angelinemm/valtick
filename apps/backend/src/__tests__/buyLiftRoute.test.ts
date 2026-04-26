@@ -66,9 +66,9 @@ describe.skipIf(!HAS_DB)("POST /buy_lift", () => {
     expect(res.body.lifts[0].status).toBe("working");
   });
 
-  it("new lift has initial break probability 0.002", async () => {
+  it("new lift starts with breakCount 0", async () => {
     const res = await agent.post("/api/buy_lift").send({ liftModelKey: "magic_carpet" });
-    expect(res.body.lifts[0].currentBreakProbability).toBe(0.002);
+    expect(res.body.lifts[0].breakCount).toBe(0);
   });
 
   it("new lift has a non-empty name assigned", async () => {
@@ -116,7 +116,7 @@ describe.skipIf(!HAS_DB)("POST /buy_lift", () => {
         liftModelKey: "cable_car",
         name: "Test Cable Car",
         status: "working",
-        currentBreakProbability: 0.002,
+        breakCount: 0,
       },
     });
     await prisma.resort.update({ where: { id: resortId }, data: { moneyCents: 99999999 } });
@@ -136,7 +136,7 @@ describe.skipIf(!HAS_DB)("POST /buy_lift", () => {
         liftModelKey: "cable_car",
         name: "Junked Cable Car",
         status: "junked",
-        currentBreakProbability: 1,
+        breakCount: 5,
       },
     });
     await prisma.resort.update({ where: { id: resortId }, data: { moneyCents: 99999999 } });

@@ -5,7 +5,7 @@ export async function createLift(data: {
   resortId: string;
   liftModelKey: string;
   name: string;
-  currentBreakProbability: number;
+  breakCount: number;
   status: "working" | "broken" | "junked";
 }): Promise<Lift> {
   return prisma.lift.create({ data });
@@ -15,7 +15,7 @@ export async function updateLift(
   id: string,
   data: Partial<{
     status: "working" | "broken" | "junked";
-    currentBreakProbability: number;
+    breakCount: number;
   }>
 ): Promise<Lift> {
   return prisma.lift.update({ where: { id }, data });
@@ -29,16 +29,16 @@ export async function bulkUpdateLifts(
   updates: Array<{
     id: string;
     status: "working" | "broken" | "junked";
-    currentBreakProbability: number;
+    breakCount: number;
   }>
 ): Promise<void> {
   if (updates.length === 0) return;
 
   await prisma.$transaction(
-    updates.map(({ id, status, currentBreakProbability }) =>
+    updates.map(({ id, status, breakCount }) =>
       prisma.lift.update({
         where: { id },
-        data: { status, currentBreakProbability },
+        data: { status, breakCount },
       })
     )
   );

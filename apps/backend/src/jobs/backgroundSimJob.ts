@@ -21,7 +21,7 @@ export async function runBackgroundSim(): Promise<void> {
         id: l.id,
         liftModelKey: l.liftModelKey as LiftTickState["liftModelKey"],
         status: l.status as LiftTickState["status"],
-        currentBreakProbability: l.currentBreakProbability,
+        breakCount: l.breakCount,
       }));
 
       const { updatedMoneyCents, updatedLifts, ticksSimulated } = simulateOfflineTicks({

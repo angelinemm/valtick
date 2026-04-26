@@ -35,7 +35,7 @@ describe.skipIf(!HAS_DB)("GET /resort", () => {
         resortId,
         liftModelKey: "magic_carpet",
         name: "Test Lift",
-        currentBreakProbability: 0.001,
+        breakCount: 0,
         status: "working",
       },
     });
@@ -98,6 +98,6 @@ describe.skipIf(!HAS_DB)("GET /resort", () => {
     const lift = res.body.lifts[0];
     expect(lift.liftModelKey).toBe("magic_carpet");
     expect(lift.status).toBe("working");
-    expect(lift.currentBreakProbability).toBe(0.001);
+    expect(lift.breakCount).toBe(0);
   });
 });

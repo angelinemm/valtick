@@ -30,7 +30,7 @@ resortRouter.post("/tick", async (req, res) => {
     id: l.id,
     liftModelKey: l.liftModelKey as LiftTickState["liftModelKey"],
     status: l.status as LiftTickState["status"],
-    currentBreakProbability: l.currentBreakProbability,
+    breakCount: l.breakCount,
   }));
 
   const { updatedMoneyCents, updatedLifts } = processOneTick(resort.moneyCents, liftStates);

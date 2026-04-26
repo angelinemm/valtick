@@ -10,18 +10,20 @@ const model: LiftModelDTO = {
   capacity: 5,
   priceBonusCents: 10,
   repairCostCents: 100,
-  initialBreakChance: 0.001,
+  baseBreakChance: 0.001,
+  maxBreakChance: 0.064,
+  maxRepairableBreaks: 5,
   maxOwned: 10,
   iconKey: "magic-carpet",
 };
 
-function makeLift(status: "working" | "broken"): LiftDTO {
+function makeLift(status: "working" | "broken", breakCount = 0): LiftDTO {
   return {
     id: "l1",
     resortId: "r1",
     liftModelKey: "magic_carpet",
     name: "Powder Keg",
-    currentBreakProbability: 0.001,
+    breakCount,
     status,
     createdAt: "2024-01-01T00:00:00.000Z",
     updatedAt: "2024-01-01T00:00:00.000Z",
@@ -36,11 +38,24 @@ describe("LiftRow", () => {
     expect(screen.getByText("Powder Keg")).toBeInTheDocument();
   });
 
-  it("renders the model name in parentheses below the lift name", () => {
+  it("renders wear details below the lift name", () => {
+    render(
+      <LiftRow
+        lift={makeLift("working", 2)}
+        model={model}
+        onRepair={vi.fn()}
+        canAffordRepair={true}
+      />
+    );
+    expect(screen.getByText("Wear: 40% · 2/5 repairs used")).toBeInTheDocument();
+  });
+
+  it("does not render the lift model name in the row body", () => {
     render(
       <LiftRow lift={makeLift("working")} model={model} onRepair={vi.fn()} canAffordRepair={true} />
     );
-    expect(screen.getByText("(Magic Carpet)")).toBeInTheDocument();
+    expect(screen.queryByText("(Magic Carpet)")).not.toBeInTheDocument();
+    expect(screen.queryByText("5/sec")).not.toBeInTheDocument();
   });
 
   it("broken LiftRow has the broken CSS class on the label", () => {
