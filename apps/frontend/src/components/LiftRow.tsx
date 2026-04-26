@@ -26,7 +26,7 @@ export function LiftRow({ lift, model, onRepair, canAffordRepair }: Props) {
       <div className={styles.actions}>
         {isBroken ? (
           <>
-            <span className={styles.brokenLabel}>BROKEN</span>
+            <span className={`${styles.brokenLabel} ${styles.brokenPulse}`}>BROKEN</span>
             <button
               className={styles.repairButton}
               onClick={() => onRepair(lift.id)}
