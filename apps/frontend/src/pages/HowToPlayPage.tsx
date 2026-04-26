@@ -112,9 +112,9 @@ export function HowToPlayPage() {
             for high-end lifts.
           </p>
           <p>
-            Each time a lift breaks, its future break chance doubles. A lift that has broken many
-            times will break again very quickly. If the break chance reaches the maximum, the lift
-            is <strong>junked</strong> — it's gone for good and can't be repaired.
+            Each lift has a finite service life. Early breaks are rare, but the break chance climbs
+            as a lift accumulates repairs. After it survives its last repairable break, the next
+            breakdown sends it straight to the <strong>junkyard</strong> for good.
           </p>
         </section>
 

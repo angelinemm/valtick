@@ -1,17 +1,27 @@
 import type { LiftModelKey, LiftStatus } from "@val-tick/shared";
+import { getLiftModel } from "../catalog/liftModelCatalog";
 import { calculateSummary } from "./summaryService";
 
 export type LiftTickState = {
   id: string;
   liftModelKey: LiftModelKey;
   status: LiftStatus;
-  currentBreakProbability: number;
+  breakCount: number;
 };
 
 export type TickResult = {
   updatedMoneyCents: number;
   updatedLifts: LiftTickState[];
 };
+
+export function calculateBreakChance(lift: LiftTickState): number {
+  const model = getLiftModel(lift.liftModelKey);
+  const progress = lift.breakCount / model.maxRepairableBreaks;
+
+  return (
+    model.baseBreakChance + (model.maxBreakChance - model.baseBreakChance) * Math.pow(progress, 2)
+  );
+}
 
 export function processOneTick(
   moneyCents: number,
@@ -32,19 +42,18 @@ export function processOneTick(
     }
 
     const roll = random();
-    if (roll >= lift.currentBreakProbability) {
+    if (roll >= calculateBreakChance(lift)) {
       return { ...lift };
     }
 
-    // Lift breaks — check probability BEFORE doubling to decide working vs junked
-    if (lift.currentBreakProbability >= 1.0) {
+    if (lift.breakCount >= getLiftModel(lift.liftModelKey).maxRepairableBreaks) {
       return { ...lift, status: "junked" as LiftStatus };
     }
 
     return {
       ...lift,
       status: "broken" as LiftStatus,
-      currentBreakProbability: lift.currentBreakProbability * 2,
+      breakCount: lift.breakCount + 1,
     };
   });
 

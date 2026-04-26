@@ -32,7 +32,7 @@ describe.skipIf(!HAS_DB)("POST /repair_lift", () => {
             liftModelKey: "magic_carpet",
             name: "Test Lift",
             status: "broken",
-            currentBreakProbability: 0.002,
+            breakCount: 2,
           },
         },
       },
@@ -72,10 +72,10 @@ describe.skipIf(!HAS_DB)("POST /repair_lift", () => {
     expect(res.body.resort.moneyCents).toBe(4500);
   });
 
-  it("repair does not change currentBreakProbability", async () => {
+  it("repair does not change breakCount", async () => {
     const res = await agent.post("/api/repair_lift").send({ liftId: brokenLiftId });
     const lift = res.body.lifts.find((l: { id: string }) => l.id === brokenLiftId);
-    expect(lift.currentBreakProbability).toBe(0.002);
+    expect(lift.breakCount).toBe(2);
   });
 
   it("insufficient funds: resort unchanged, still 200", async () => {
@@ -108,7 +108,7 @@ describe.skipIf(!HAS_DB)("POST /repair_lift", () => {
             liftModelKey: "magic_carpet",
             name: "Other Lift",
             status: "broken",
-            currentBreakProbability: 0.001,
+            breakCount: 1,
           },
         },
       },
@@ -128,7 +128,7 @@ describe.skipIf(!HAS_DB)("POST /repair_lift", () => {
         liftModelKey: "drag_lift",
         name: "Working Lift",
         status: "working",
-        currentBreakProbability: 0.001,
+        breakCount: 0,
       },
     });
     const res = await agent.post("/api/repair_lift").send({ liftId: workingLift.id });
@@ -142,7 +142,7 @@ describe.skipIf(!HAS_DB)("POST /repair_lift", () => {
         liftModelKey: "chairlift",
         name: "Junked Lift",
         status: "junked",
-        currentBreakProbability: 1.0,
+        breakCount: 5,
       },
     });
     const res = await agent.post("/api/repair_lift").send({ liftId: junkedLift.id });
