@@ -12,29 +12,33 @@ interface Props {
 
 export function LiftRow({ lift, model, onRepair, canAffordRepair }: Props) {
   const isBroken = lift.status === "broken";
+  const wearPercent = Math.round((lift.breakCount / model.maxRepairableBreaks) * 100);
 
   return (
     <div className={`${styles.card} ${styles[lift.status]}`}>
       <img src={liftIcons[model.iconKey]} alt={model.name} width={20} height={20} />
       <div className={styles.nameBlock}>
         <span className={styles.liftName}>{lift.name}</span>
-        <span className={styles.modelName}>({model.name})</span>
+        <span className={styles.wearText}>
+          Wear: {wearPercent}% · {lift.breakCount}/{model.maxRepairableBreaks} repairs used
+        </span>
       </div>
-      <span className={styles.status}>{model.capacity}/sec</span>
-      {isBroken ? (
-        <>
-          <span className={styles.brokenLabel}>BROKEN</span>
-          <button
-            className={styles.repairButton}
-            onClick={() => onRepair(lift.id)}
-            disabled={!canAffordRepair}
-          >
-            Repair ({formatMoney(model.repairCostCents)})
-          </button>
-        </>
-      ) : (
-        <span className={styles.workingLabel}>working</span>
-      )}
+      <div className={styles.actions}>
+        {isBroken ? (
+          <>
+            <span className={styles.brokenLabel}>BROKEN</span>
+            <button
+              className={styles.repairButton}
+              onClick={() => onRepair(lift.id)}
+              disabled={!canAffordRepair}
+            >
+              Repair ({formatMoney(model.repairCostCents)})
+            </button>
+          </>
+        ) : (
+          <span className={styles.workingLabel}>working</span>
+        )}
+      </div>
     </div>
   );
 }
