@@ -69,25 +69,25 @@ export function HowToPlayPage() {
               <tr>
                 <td>Magic Carpet</td>
                 <td>$50</td>
-                <td>10</td>
+                <td>4</td>
                 <td>$5</td>
               </tr>
               <tr>
                 <td>Drag Lift</td>
                 <td>$150</td>
-                <td>8</td>
+                <td>4</td>
                 <td>$15</td>
               </tr>
               <tr>
                 <td>Chairlift</td>
                 <td>$500</td>
-                <td>6</td>
+                <td>8</td>
                 <td>$50</td>
               </tr>
               <tr>
                 <td>Gondola</td>
                 <td>$8,000</td>
-                <td>4</td>
+                <td>6</td>
                 <td>$800</td>
               </tr>
               <tr>
@@ -99,8 +99,9 @@ export function HowToPlayPage() {
             </tbody>
           </table>
           <p className={styles.note}>
-            You can't stack unlimited copies of any lift — bigger lifts have tighter caps. You can
-            only ever own one Cable Car.
+            Limits only count lifts that are still in service or repairable. Junked lifts sit in the
+            junkyard and do not use up your ownership cap. You can only ever own one non-junked
+            Cable Car at a time.
           </p>
         </section>
 

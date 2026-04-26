@@ -46,7 +46,7 @@ describe("getLiftModel", () => {
       baseBreakChance: 0.002,
       maxBreakChance: 0.064,
       maxRepairableBreaks: 5,
-      maxOwned: 10,
+      maxOwned: 4,
       iconKey: "magic-carpet",
     });
   });

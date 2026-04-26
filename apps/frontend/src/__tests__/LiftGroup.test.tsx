@@ -14,11 +14,11 @@ const model: LiftModelDTO = {
   baseBreakChance: 0.001,
   maxBreakChance: 0.064,
   maxRepairableBreaks: 5,
-  maxOwned: 10,
+  maxOwned: 4,
   iconKey: "magic-carpet",
 };
 
-function makeLift(id: string, status: "working" | "broken", breakCount = 0): LiftDTO {
+function makeLift(id: string, status: LiftDTO["status"], breakCount = 0): LiftDTO {
   return {
     id,
     resortId: "r1",
@@ -78,7 +78,7 @@ describe("LiftGroup", () => {
 
   it("shows correct owned count", () => {
     renderGroup([makeLift("l1", "working"), makeLift("l2", "working")]);
-    expect(screen.getByText(/2\/10 owned/)).toBeInTheDocument();
+    expect(screen.getByText(/Owned: 2 \/ 4/)).toBeInTheDocument();
   });
 
   it("shows correct broken count", () => {
@@ -94,6 +94,59 @@ describe("LiftGroup", () => {
   it("buy button is disabled when canAffordBuy=false", () => {
     renderGroup([], { canAffordBuy: false });
     expect(screen.getByRole("button", { name: /Buy/ })).toBeDisabled();
+  });
+
+  it("buy button is disabled at max owned", () => {
+    renderGroup([
+      makeLift("l1", "working"),
+      makeLift("l2", "working"),
+      makeLift("l3", "broken"),
+      makeLift("l4", "working"),
+    ]);
+    expect(screen.getByRole("button", { name: "Max reached" })).toBeDisabled();
+  });
+
+  it("junked lifts are excluded from the displayed ownership limit", () => {
+    renderGroup([makeLift("l1", "working"), makeLift("l2", "broken"), makeLift("l3", "junked")]);
+    expect(screen.getByText(/Owned: 2 \/ 4/)).toBeInTheDocument();
+  });
+
+  it("buy button re-enables when a lift becomes junked", () => {
+    const { rerender } = render(
+      <LiftGroup
+        model={model}
+        lifts={[
+          makeLift("l1", "working"),
+          makeLift("l2", "working"),
+          makeLift("l3", "broken"),
+          makeLift("l4", "working"),
+        ]}
+        onBuy={vi.fn()}
+        onRepair={vi.fn()}
+        canAffordBuy={true}
+        canAffordRepair={() => true}
+      />
+    );
+
+    expect(screen.getByRole("button", { name: "Max reached" })).toBeDisabled();
+
+    rerender(
+      <LiftGroup
+        model={model}
+        lifts={[
+          makeLift("l1", "working"),
+          makeLift("l2", "working"),
+          makeLift("l3", "broken"),
+          makeLift("l4", "junked"),
+        ]}
+        onBuy={vi.fn()}
+        onRepair={vi.fn()}
+        canAffordBuy={true}
+        canAffordRepair={() => true}
+      />
+    );
+
+    expect(screen.getByRole("button", { name: /Buy/ })).toBeEnabled();
   });
 
   it("buy button click calls onBuy", async () => {
