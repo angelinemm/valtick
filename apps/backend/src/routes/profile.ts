@@ -1,6 +1,7 @@
 import { Router } from "express";
 import bcrypt from "bcrypt";
 import { findUserById, updateUserPasswordHashById } from "../db/userRepository";
+import { hashPassword } from "../utils/passwordHash";
 
 export const profileRouter = Router();
 
@@ -42,7 +43,7 @@ profileRouter.post("/change-password", async (req, res) => {
     return;
   }
 
-  const newHash = await bcrypt.hash(newPassword, 12);
+  const newHash = await hashPassword(newPassword);
   await updateUserPasswordHashById(user.id, newHash);
 
   res.json({ ok: true });

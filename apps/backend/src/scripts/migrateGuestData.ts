@@ -1,7 +1,7 @@
-import bcrypt from "bcrypt";
 import { prisma } from "../db/prisma";
 import { findUserByUsername, createUser } from "../db/userRepository";
 import type { UserRole } from "@prisma/client";
+import { hashPassword } from "../utils/passwordHash";
 
 async function main() {
   const [, , username, password] = process.argv;
@@ -13,7 +13,7 @@ async function main() {
 
   let user = await findUserByUsername(username);
   if (!user) {
-    const passwordHash = await bcrypt.hash(password, 12);
+    const passwordHash = await hashPassword(password);
     user = await createUser({ username, passwordHash, role: "ADMIN" as UserRole });
     console.log(`Created admin user: ${user.id} (${user.username})`);
   } else {
