@@ -24,7 +24,7 @@ export function LiftGroup({ model, lifts, onBuy, onRepair, canAffordBuy, canAffo
           {model.name}
         </strong>
         {" — "}
-        Owned: {ownedCount} / {model.maxOwned}, {brokenCount} broken
+        {ownedCount}/{model.maxOwned} owned, {brokenCount} broken
         {" | "}
         {formatMoney(model.purchasePriceCents)} to buy
         {" | "}
