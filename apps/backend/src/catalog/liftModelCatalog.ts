@@ -11,7 +11,7 @@ const LIFT_MODELS: LiftModelDTO[] = [
     baseBreakChance: 0.002,
     maxBreakChance: 0.064,
     maxRepairableBreaks: 5,
-    maxOwned: 10,
+    maxOwned: 4,
     iconKey: "magic-carpet",
   },
   {
@@ -24,7 +24,7 @@ const LIFT_MODELS: LiftModelDTO[] = [
     baseBreakChance: 0.002,
     maxBreakChance: 0.064,
     maxRepairableBreaks: 5,
-    maxOwned: 8,
+    maxOwned: 4,
     iconKey: "drag-lift",
   },
   {
@@ -37,7 +37,7 @@ const LIFT_MODELS: LiftModelDTO[] = [
     baseBreakChance: 0.002,
     maxBreakChance: 0.064,
     maxRepairableBreaks: 5,
-    maxOwned: 6,
+    maxOwned: 8,
     iconKey: "chairlift",
   },
   {
@@ -50,7 +50,7 @@ const LIFT_MODELS: LiftModelDTO[] = [
     baseBreakChance: 0.002,
     maxBreakChance: 0.064,
     maxRepairableBreaks: 5,
-    maxOwned: 4,
+    maxOwned: 6,
     iconKey: "gondola",
   },
   {

@@ -122,10 +122,96 @@ describe.skipIf(!HAS_DB)("POST /buy_lift", () => {
     await prisma.resort.update({ where: { id: resortId }, data: { moneyCents: 99999999 } });
     const res = await agent.post("/api/buy_lift").send({ liftModelKey: "cable_car" });
     expect(res.status).toBe(200);
+    expect(res.body.resort.moneyCents).toBe(99999999);
     const cableCars = res.body.lifts.filter(
       (l: { liftModelKey: string }) => l.liftModelKey === "cable_car"
     );
     expect(cableCars).toHaveLength(1);
+  });
+
+  it("buying below limit succeeds", async () => {
+    await prisma.resort.update({ where: { id: resortId }, data: { moneyCents: 99999999 } });
+    await prisma.lift.createMany({
+      data: [
+        {
+          resortId,
+          liftModelKey: "magic_carpet",
+          name: "Magic One",
+          status: "working",
+          breakCount: 0,
+        },
+        {
+          resortId,
+          liftModelKey: "magic_carpet",
+          name: "Magic Two",
+          status: "broken",
+          breakCount: 1,
+        },
+        {
+          resortId,
+          liftModelKey: "magic_carpet",
+          name: "Magic Three",
+          status: "working",
+          breakCount: 0,
+        },
+      ],
+    });
+
+    const res = await agent.post("/api/buy_lift").send({ liftModelKey: "magic_carpet" });
+    expect(res.status).toBe(200);
+
+    const ownedMagicCarpets = res.body.lifts.filter(
+      (l: { liftModelKey: string; status: string }) =>
+        l.liftModelKey === "magic_carpet" && (l.status === "working" || l.status === "broken")
+    );
+    expect(ownedMagicCarpets).toHaveLength(4);
+    expect(res.body.resort.moneyCents).toBe(99994999);
+  });
+
+  it("limit includes broken lifts", async () => {
+    await prisma.resort.update({ where: { id: resortId }, data: { moneyCents: 99999999 } });
+    await prisma.lift.createMany({
+      data: [
+        {
+          resortId,
+          liftModelKey: "magic_carpet",
+          name: "Magic One",
+          status: "working",
+          breakCount: 0,
+        },
+        {
+          resortId,
+          liftModelKey: "magic_carpet",
+          name: "Magic Two",
+          status: "working",
+          breakCount: 0,
+        },
+        {
+          resortId,
+          liftModelKey: "magic_carpet",
+          name: "Magic Three",
+          status: "working",
+          breakCount: 0,
+        },
+        {
+          resortId,
+          liftModelKey: "magic_carpet",
+          name: "Magic Four",
+          status: "broken",
+          breakCount: 1,
+        },
+      ],
+    });
+
+    const res = await agent.post("/api/buy_lift").send({ liftModelKey: "magic_carpet" });
+    expect(res.status).toBe(200);
+
+    const ownedMagicCarpets = res.body.lifts.filter(
+      (l: { liftModelKey: string; status: string }) =>
+        l.liftModelKey === "magic_carpet" && (l.status === "working" || l.status === "broken")
+    );
+    expect(ownedMagicCarpets).toHaveLength(4);
+    expect(res.body.resort.moneyCents).toBe(99999999);
   });
 
   it("junked lifts do not count toward the cap", async () => {
@@ -147,5 +233,28 @@ describe.skipIf(!HAS_DB)("POST /buy_lift", () => {
         l.liftModelKey === "cable_car" && l.status !== "junked"
     );
     expect(activeCableCars).toHaveLength(1);
+  });
+
+  it("if a lift becomes junked, a new one can be purchased", async () => {
+    await prisma.lift.create({
+      data: {
+        resortId,
+        liftModelKey: "cable_car",
+        name: "Retired Cable Car",
+        status: "junked",
+        breakCount: 5,
+      },
+    });
+    await prisma.resort.update({ where: { id: resortId }, data: { moneyCents: 99999999 } });
+
+    const res = await agent.post("/api/buy_lift").send({ liftModelKey: "cable_car" });
+    expect(res.status).toBe(200);
+
+    const nonJunkedCableCars = res.body.lifts.filter(
+      (l: { liftModelKey: string; status: string }) =>
+        l.liftModelKey === "cable_car" && (l.status === "working" || l.status === "broken")
+    );
+    expect(nonJunkedCableCars).toHaveLength(1);
+    expect(res.body.resort.moneyCents).toBe(94999999);
   });
 });

@@ -15,10 +15,10 @@ export async function buyLift(
     return resort;
   }
 
-  const activeCount = resort.lifts.filter(
-    (l) => l.liftModelKey === liftModelKey && l.status !== "junked"
+  const ownedCount = resort.lifts.filter(
+    (l) => l.liftModelKey === liftModelKey && (l.status === "working" || l.status === "broken")
   ).length;
-  if (activeCount >= model.maxOwned) {
+  if (ownedCount >= model.maxOwned) {
     return resort;
   }
 

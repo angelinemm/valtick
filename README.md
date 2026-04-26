@@ -82,6 +82,7 @@ val-tick/
 - **Lifts** — 5 models (Magic Carpet → Drag Lift → Chairlift → Gondola → Cable Car), each with increasing cost, capacity, and break chance
 - **Breakdowns** — lifts break over time; repair costs money; probability doubles on each break; lifts that break at max probability are junked
 - **Junkyard** — junked lifts shown in a separate section, non-interactive
+- **Ownership limits** — each lift model has a cap that counts only non-junked lifts (`working` + `broken`); junked lifts never consume the cap
 - **Reset** — big red button in the top bar wipes the resort back to starting state ($10, 1 magic carpet) after confirmation
 
 ## Creating users
