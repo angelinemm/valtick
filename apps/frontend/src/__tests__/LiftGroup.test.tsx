@@ -63,6 +63,19 @@ describe("LiftGroup", () => {
     expect(screen.getByText(/Magic Carpet/)).toBeInTheDocument();
   });
 
+  it("pulses the category name when any lift in the group is broken", () => {
+    renderGroup([makeLift("l1", "broken")]);
+    const heading = screen.getByText("Magic Carpet");
+    expect(heading.className).toContain("alertName");
+    expect(heading.className).toContain("brokenPulse");
+  });
+
+  it("does not pulse the category name when no lifts are broken", () => {
+    renderGroup([makeLift("l1", "working")]);
+    const heading = screen.getByText("Magic Carpet");
+    expect(heading.className).toBe("");
+  });
+
   it("shows correct owned count", () => {
     renderGroup([makeLift("l1", "working"), makeLift("l2", "working")]);
     expect(screen.getByText(/2\/10 owned/)).toBeInTheDocument();

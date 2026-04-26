@@ -1,0 +1,27 @@
+.summary {
+  cursor: pointer;
+  padding: 0.5rem 0;
+}
+
+.alertName {
+  color: #e07070;
+}
+
+@keyframes brokenPulse {
+  0% {
+    text-shadow: 0 0 0 #e07070;
+    color: #e07070;
+  }
+  40% {
+    text-shadow: 0 0 8px #e07070;
+    color: #f5a0a0;
+  }
+  100% {
+    text-shadow: 0 0 0 #e07070;
+    color: #e07070;
+  }
+}
+
+.brokenPulse {
+  animation: brokenPulse 0.9s ease-in-out infinite;
+}
