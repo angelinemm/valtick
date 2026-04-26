@@ -1,5 +1,4 @@
 import { Router } from "express";
-import bcrypt from "bcrypt";
 import { requireAdmin } from "../middleware/requireAdmin";
 import {
   findAllUsersWithResorts,
@@ -12,6 +11,7 @@ import { findResortByUserId, createResortForUser } from "../db/resortRepository"
 import { resetResort } from "../services/liftService";
 import { generatePassword } from "../utils/passwordGenerator";
 import { generateResortName } from "../utils/resortNameGenerator";
+import { hashPassword } from "../utils/passwordHash";
 import type { AdminUserDTO, CreateAdminUserRequest } from "@val-tick/shared";
 
 export const adminRouter = Router();
@@ -51,7 +51,7 @@ adminRouter.post("/users", async (req, res) => {
   }
 
   const password = generatePassword();
-  const passwordHash = await bcrypt.hash(password, 12);
+  const passwordHash = await hashPassword(password);
 
   const user = await createUser({
     username,
@@ -82,7 +82,7 @@ adminRouter.post("/users/:id/reset-password", async (req, res) => {
   const { id } = req.params;
 
   const password = generatePassword();
-  const passwordHash = await bcrypt.hash(password, 12);
+  const passwordHash = await hashPassword(password);
 
   await updateUserPasswordHashById(id, passwordHash);
 
