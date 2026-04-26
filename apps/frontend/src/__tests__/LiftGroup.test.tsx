@@ -78,7 +78,7 @@ describe("LiftGroup", () => {
 
   it("shows correct owned count", () => {
     renderGroup([makeLift("l1", "working"), makeLift("l2", "working")]);
-    expect(screen.getByText(/Owned: 2 \/ 4/)).toBeInTheDocument();
+    expect(screen.getByText(/2\/4 owned/)).toBeInTheDocument();
   });
 
   it("shows correct broken count", () => {
@@ -108,7 +108,7 @@ describe("LiftGroup", () => {
 
   it("junked lifts are excluded from the displayed ownership limit", () => {
     renderGroup([makeLift("l1", "working"), makeLift("l2", "broken"), makeLift("l3", "junked")]);
-    expect(screen.getByText(/Owned: 2 \/ 4/)).toBeInTheDocument();
+    expect(screen.getByText(/2\/4 owned/)).toBeInTheDocument();
   });
 
   it("buy button re-enables when a lift becomes junked", () => {
