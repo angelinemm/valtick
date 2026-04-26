@@ -18,13 +18,13 @@ const model: LiftModelDTO = {
   iconKey: "magic-carpet",
 };
 
-function makeLift(id: string, status: "working" | "broken"): LiftDTO {
+function makeLift(id: string, status: "working" | "broken", breakCount = 0): LiftDTO {
   return {
     id,
     resortId: "r1",
     liftModelKey: "magic_carpet",
     name: `Lift ${id}`,
-    breakCount: 0,
+    breakCount,
     status,
     createdAt: "2024-01-01T00:00:00.000Z",
     updatedAt: "2024-01-01T00:00:00.000Z",
@@ -93,6 +93,11 @@ describe("LiftGroup", () => {
   it("broken lift row shows BROKEN text", () => {
     renderGroup([makeLift("l1", "broken")]);
     expect(screen.getByText("BROKEN")).toBeInTheDocument();
+  });
+
+  it("lift rows show wear percentage and repairs used", () => {
+    renderGroup([makeLift("l1", "working", 2)]);
+    expect(screen.getByText("Wear: 40% · 2/5 repairs used")).toBeInTheDocument();
   });
 
   it("repair button click calls onRepair with correct liftId", async () => {
