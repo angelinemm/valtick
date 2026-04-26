@@ -66,6 +66,25 @@
   color: var(--danger);
 }
 
+@keyframes brokenPulse {
+  0% {
+    text-shadow: 0 0 0 #e07070;
+    color: #e07070;
+  }
+  40% {
+    text-shadow: 0 0 8px #e07070;
+    color: #f5a0a0;
+  }
+  100% {
+    text-shadow: 0 0 0 #e07070;
+    color: #e07070;
+  }
+}
+
+.brokenPulse {
+  animation: brokenPulse 0.9s ease-in-out infinite;
+}
+
 .junkedLabel {
   font-size: 0.75rem;
   font-weight: bold;

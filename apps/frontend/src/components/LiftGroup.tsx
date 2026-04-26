@@ -14,11 +14,6 @@ interface Props {
 export function LiftGroup({ model, lifts, onBuy, onRepair, canAffordBuy, canAffordRepair }: Props) {
   const brokenCount = lifts.filter((l) => l.status === "broken").length;
   const atCap = lifts.length >= model.maxOwned;
-  const sortedLifts = [...lifts].sort((a, b) => {
-    if (a.status === "broken" && b.status !== "broken") return -1;
-    if (a.status !== "broken" && b.status === "broken") return 1;
-    return 0;
-  });
 
   return (
     <details open>
@@ -48,7 +43,7 @@ export function LiftGroup({ model, lifts, onBuy, onRepair, canAffordBuy, canAffo
         )}
       </summary>
       <div style={{ paddingLeft: "0.5rem" }}>
-        {sortedLifts.map((lift) => (
+        {lifts.map((lift) => (
           <LiftRow
             key={lift.id}
             lift={lift}

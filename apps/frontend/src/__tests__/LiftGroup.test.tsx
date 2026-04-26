@@ -117,17 +117,10 @@ describe("LiftGroup", () => {
     expect(screen.queryByText("BROKEN")).not.toBeInTheDocument();
   });
 
-  it("broken lifts appear before working lifts", () => {
+  it("lifts stay in creation order even when some are broken", () => {
     renderGroup([makeLift("l1", "working"), makeLift("l2", "broken")]);
-    const rows = screen.getAllByText(/Magic Carpet/);
-    // header + 2 rows; the broken row has a BROKEN sibling so check ordering via DOM
-    const brokenLabel = screen.getByText("BROKEN");
-    // verify BROKEN appears in the DOM before any row without it
     const cardDivs = Array.from(document.querySelectorAll("details > div > div"));
-    const brokenIndex = cardDivs.findIndex((r) => r.textContent?.includes("BROKEN"));
-    const workingIndex = cardDivs.findIndex((r) => !r.textContent?.includes("BROKEN"));
-    expect(brokenIndex).toBeLessThan(workingIndex);
-    expect(rows.length).toBeGreaterThan(0);
-    expect(brokenLabel).toBeInTheDocument();
+    expect(cardDivs[0]?.textContent).toContain("Lift l1");
+    expect(cardDivs[1]?.textContent).toContain("Lift l2");
   });
 });
