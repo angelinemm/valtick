@@ -24,15 +24,18 @@ export async function runBackgroundSim(): Promise<void> {
         breakCount: l.breakCount,
       }));
 
-      const { updatedMoneyCents, updatedLifts, ticksSimulated } = simulateOfflineTicks({
-        moneyCents: resort.moneyCents,
-        lifts: liftStates,
-        lastTickAt: resort.lastTickAt,
-        now,
-      });
+      const { updatedMoneyCents, updatedTotalSkiersEver, updatedLifts, ticksSimulated } =
+        simulateOfflineTicks({
+          moneyCents: resort.moneyCents,
+          totalSkiersEver: resort.totalSkiersEver,
+          lifts: liftStates,
+          lastTickAt: resort.lastTickAt,
+          now,
+        });
 
       await updateResort(resort.id, {
         moneyCents: updatedMoneyCents,
+        totalSkiersEver: updatedTotalSkiersEver,
         lastTickAt: now,
       });
       await bulkUpdateLifts(updatedLifts);

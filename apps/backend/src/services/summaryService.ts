@@ -31,5 +31,6 @@ export function calculateSummary(moneyCents: number, lifts: LiftSummaryInput[]):
     totalLifts: lifts.length,
     brokenLiftsCount: lifts.filter((l) => l.status === "broken").length,
     junkedLiftsCount: lifts.filter((l) => l.status === "junked").length,
+    totalSkiersEver: 0,
   };
 }

@@ -24,6 +24,7 @@ describe("simulateOfflineTicks", () => {
   it("zero elapsed time: ticksSimulated=0, money unchanged", () => {
     const result = simulateOfflineTicks({
       moneyCents: 1000,
+      totalSkiersEver: 50,
       lifts: [makeWorkingLift()],
       lastTickAt: BASE_TIME,
       now: BASE_TIME,
@@ -37,6 +38,7 @@ describe("simulateOfflineTicks", () => {
     // magic_carpet: 100 cents per tick (5 capacity * 20 pass price)
     const result = simulateOfflineTicks({
       moneyCents: 0,
+      totalSkiersEver: 0,
       lifts: [makeWorkingLift()],
       lastTickAt: BASE_TIME,
       now: secondsLater(3),
@@ -44,11 +46,13 @@ describe("simulateOfflineTicks", () => {
     });
     expect(result.ticksSimulated).toBe(3);
     expect(result.updatedMoneyCents).toBe(300); // 3 * 100
+    expect(result.updatedTotalSkiersEver).toBe(15); // 3 * 5
   });
 
   it("partial second is floored: 3.9 seconds → 3 ticks", () => {
     const result = simulateOfflineTicks({
       moneyCents: 0,
+      totalSkiersEver: 0,
       lifts: [makeWorkingLift()],
       lastTickAt: BASE_TIME,
       now: new Date(BASE_TIME.getTime() + 3900),
@@ -60,6 +64,7 @@ describe("simulateOfflineTicks", () => {
   it("early stop: lift breaks on tick 1 with alwaysBreaks, ticks 2-5 skipped", () => {
     const result = simulateOfflineTicks({
       moneyCents: 0,
+      totalSkiersEver: 0,
       lifts: [makeWorkingLift()],
       lastTickAt: BASE_TIME,
       now: secondsLater(5),
@@ -72,6 +77,7 @@ describe("simulateOfflineTicks", () => {
   it("all lifts already broken at start: ticksSimulated=0, money unchanged", () => {
     const result = simulateOfflineTicks({
       moneyCents: 500,
+      totalSkiersEver: 40,
       lifts: [{ ...makeWorkingLift(), status: "broken" }],
       lastTickAt: BASE_TIME,
       now: secondsLater(10),
@@ -79,11 +85,13 @@ describe("simulateOfflineTicks", () => {
     });
     expect(result.ticksSimulated).toBe(0);
     expect(result.updatedMoneyCents).toBe(500);
+    expect(result.updatedTotalSkiersEver).toBe(40);
   });
 
   it("all lifts already junked at start: ticksSimulated=0, money unchanged", () => {
     const result = simulateOfflineTicks({
       moneyCents: 500,
+      totalSkiersEver: 60,
       lifts: [{ ...makeWorkingLift(), status: "junked" }],
       lastTickAt: BASE_TIME,
       now: secondsLater(10),
@@ -91,11 +99,13 @@ describe("simulateOfflineTicks", () => {
     });
     expect(result.ticksSimulated).toBe(0);
     expect(result.updatedMoneyCents).toBe(500);
+    expect(result.updatedTotalSkiersEver).toBe(60);
   });
 
   it("1 working + 1 broken, alwaysBreaks: working breaks tick 1, stops", () => {
     const result = simulateOfflineTicks({
       moneyCents: 0,
+      totalSkiersEver: 10,
       lifts: [
         makeWorkingLift("working-lift"),
         { ...makeWorkingLift("broken-lift"), status: "broken" },
@@ -106,12 +116,14 @@ describe("simulateOfflineTicks", () => {
     });
     expect(result.ticksSimulated).toBe(1);
     expect(result.updatedLifts.every((l) => l.status !== "working")).toBe(true);
+    expect(result.updatedTotalSkiersEver).toBe(15);
   });
 
   it("empty lifts array: ticksSimulated equals elapsed seconds (no early stop)", () => {
     // allInactive requires lifts.length > 0, so empty array never triggers early stop
     const result = simulateOfflineTicks({
       moneyCents: 100,
+      totalSkiersEver: 20,
       lifts: [],
       lastTickAt: BASE_TIME,
       now: secondsLater(3),
@@ -119,5 +131,6 @@ describe("simulateOfflineTicks", () => {
     });
     expect(result.ticksSimulated).toBe(3);
     expect(result.updatedMoneyCents).toBe(100); // no lifts = no income
+    expect(result.updatedTotalSkiersEver).toBe(20);
   });
 });

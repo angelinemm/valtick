@@ -36,6 +36,7 @@ model Resort {
   name       String
   userId     String?   @unique
   moneyCents Int
+  totalSkiersEver Int   @default(0)
   lastTickAt DateTime
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt

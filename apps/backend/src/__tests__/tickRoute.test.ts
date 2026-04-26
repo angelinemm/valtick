@@ -25,6 +25,7 @@ describe.skipIf(!HAS_DB)("POST /tick", () => {
         name: "Tick Test Resort",
         userId,
         moneyCents: 1000,
+        totalSkiersEver: 0,
         lastTickAt: new Date(),
         lifts: {
           create: {
@@ -70,6 +71,14 @@ describe.skipIf(!HAS_DB)("POST /tick", () => {
     const res = await agent.get("/api/resort");
     // magic_carpet: 5 * 20 = 100 cents added to starting 1000
     expect(res.body.resort.moneyCents).toBe(1100);
+  });
+
+  it("adds working capacity to totalSkiersEver after a tick", async () => {
+    vi.spyOn(Math, "random").mockReturnValue(1); // no breaks
+    await agent.post("/api/tick").send({});
+
+    const res = await agent.get("/api/resort");
+    expect(res.body.summary.totalSkiersEver).toBe(5);
   });
 
   it("updates lastTickAt after a tick", async () => {

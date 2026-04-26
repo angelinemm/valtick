@@ -63,6 +63,8 @@ export function ResortTopBar({
     }
   }
 
+  const totalSkiersDisplay = summary.totalSkiersEver.toLocaleString("en-US");
+
   return (
     <header className={styles.header}>
       <svg
@@ -122,6 +124,10 @@ export function ResortTopBar({
         <div className={styles.statBlock}>
           <span className={styles.statLabel}>Lifts</span>
           <span className={styles.statValue}>{summary.totalLifts}</span>
+        </div>
+        <div className={styles.statBlock}>
+          <span className={styles.statLabel}>Total skiers</span>
+          <span className={styles.statValue}>{totalSkiersDisplay}</span>
         </div>
         <div className={styles.statBlock}>
           <span className={styles.statLabel}>Broken</span>

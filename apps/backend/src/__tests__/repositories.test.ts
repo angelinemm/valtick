@@ -30,13 +30,15 @@ describe.skipIf(!HAS_DB)("repositories", () => {
   });
 
   describe("updateResort", () => {
-    it("updates moneyCents and lastTickAt", async () => {
+    it("updates moneyCents, totalSkiersEver, and lastTickAt", async () => {
       const newTime = new Date("2026-06-01T00:00:00.000Z");
       const updated = await updateResort(resortId, {
         moneyCents: 9999,
+        totalSkiersEver: 321,
         lastTickAt: newTime,
       });
       expect(updated.moneyCents).toBe(9999);
+      expect(updated.totalSkiersEver).toBe(321);
       expect(updated.lastTickAt.toISOString()).toBe(newTime.toISOString());
     });
   });

@@ -11,6 +11,7 @@ export type LiftTickState = {
 
 export type TickResult = {
   updatedMoneyCents: number;
+  updatedTotalSkiersEver: number;
   updatedLifts: LiftTickState[];
 };
 
@@ -25,15 +26,17 @@ export function calculateBreakChance(lift: LiftTickState): number {
 
 export function processOneTick(
   moneyCents: number,
+  totalSkiersEver: number,
   lifts: LiftTickState[],
   random: () => number = Math.random
 ): TickResult {
   // Step 1 & 2: calculate income from working lifts BEFORE any breaks
-  const { incomePerSecCents } = calculateSummary(moneyCents, lifts);
+  const { incomePerSecCents, capacityPerSec } = calculateSummary(moneyCents, lifts);
 
   // Step 3: add income, capped at Postgres INT max (2^31 - 1)
   const MONEY_CAP = 2_147_483_647;
   const updatedMoneyCents = Math.min(moneyCents + incomePerSecCents, MONEY_CAP);
+  const updatedTotalSkiersEver = Math.min(totalSkiersEver + capacityPerSec, MONEY_CAP);
 
   // Step 4: roll for breaks on working lifts only
   const updatedLifts = lifts.map((lift) => {
@@ -57,5 +60,5 @@ export function processOneTick(
     };
   });
 
-  return { updatedMoneyCents, updatedLifts };
+  return { updatedMoneyCents, updatedTotalSkiersEver, updatedLifts };
 }

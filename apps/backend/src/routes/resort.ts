@@ -33,10 +33,15 @@ resortRouter.post("/tick", async (req, res) => {
     breakCount: l.breakCount,
   }));
 
-  const { updatedMoneyCents, updatedLifts } = processOneTick(resort.moneyCents, liftStates);
+  const { updatedMoneyCents, updatedTotalSkiersEver, updatedLifts } = processOneTick(
+    resort.moneyCents,
+    resort.totalSkiersEver,
+    liftStates
+  );
 
   await updateResort(resort.id, {
     moneyCents: updatedMoneyCents,
+    totalSkiersEver: updatedTotalSkiersEver,
     lastTickAt: new Date(),
   });
   await bulkUpdateLifts(updatedLifts);

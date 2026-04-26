@@ -1,14 +1,14 @@
-import type { Resort, Lift } from "@prisma/client";
 import type { LiftModelKey } from "@val-tick/shared";
 import { getLiftModel } from "../catalog/liftModelCatalog";
 import { updateResort, findResortById } from "../db/resortRepository";
+import type { ResortWithLifts } from "../db/resortRepository";
 import { createLift, updateLift, deleteAllLiftsForResort } from "../db/liftRepository";
 import { assignLiftName } from "../utils/liftNameGenerator";
 
 export async function buyLift(
-  resort: Resort & { lifts: Lift[] },
+  resort: ResortWithLifts,
   liftModelKey: LiftModelKey
-): Promise<Resort & { lifts: Lift[] }> {
+): Promise<ResortWithLifts> {
   const model = getLiftModel(liftModelKey);
 
   if (resort.moneyCents < model.purchasePriceCents) {
@@ -38,11 +38,13 @@ export async function buyLift(
   return (await findResortById(resort.id))!;
 }
 
-export async function resetResort(
-  resort: Resort & { lifts: Lift[] }
-): Promise<Resort & { lifts: Lift[] }> {
+export async function resetResort(resort: ResortWithLifts): Promise<ResortWithLifts> {
   await deleteAllLiftsForResort(resort.id);
-  await updateResort(resort.id, { moneyCents: 500, lastTickAt: new Date() });
+  await updateResort(resort.id, {
+    moneyCents: 500,
+    totalSkiersEver: 0,
+    lastTickAt: new Date(),
+  });
   await createLift({
     resortId: resort.id,
     liftModelKey: "magic_carpet",
@@ -54,9 +56,9 @@ export async function resetResort(
 }
 
 export async function repairLift(
-  resort: Resort & { lifts: Lift[] },
+  resort: ResortWithLifts,
   liftId: string
-): Promise<Resort & { lifts: Lift[] }> {
+): Promise<ResortWithLifts> {
   const lift = resort.lifts.find((l) => l.id === liftId);
 
   if (!lift || lift.status !== "broken") {
