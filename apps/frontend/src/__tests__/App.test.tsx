@@ -7,7 +7,7 @@ import { NotFoundPage } from "../pages/NotFoundPage";
 import { GameNotFoundPage } from "../pages/GameNotFoundPage";
 import * as client from "../api/client";
 import * as authApi from "../api/auth";
-import type { GetResortResponse, UserDTO } from "@val-tick/shared";
+import type { GetResortResponse, GetResortRankingResponse, UserDTO } from "@val-tick/shared";
 
 const mockResortResponse: GetResortResponse = {
   resort: {
@@ -33,6 +33,25 @@ const mockResortResponse: GetResortResponse = {
 };
 
 const mockUser: UserDTO = { id: "u1", username: "testuser", role: "USER" };
+
+const mockRankingResponse: GetResortRankingResponse = {
+  rankings: [
+    {
+      resortId: "r2",
+      rank: 1,
+      name: "Summit Bowl",
+      totalSkiersEver: 100,
+      isCurrentUser: false,
+    },
+    {
+      resortId: "r1",
+      rank: 2,
+      name: "Snowpeak",
+      totalSkiersEver: 25,
+      isCurrentUser: true,
+    },
+  ],
+};
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -70,6 +89,15 @@ describe("App routing", () => {
   it("renders NotFoundPage for an unknown route", () => {
     renderWithRouter("/unknown-route");
     expect(screen.getByText("Game not found.")).toBeInTheDocument();
+  });
+
+  it("renders ranking at /ranking when authenticated", async () => {
+    vi.spyOn(authApi, "fetchMe").mockResolvedValue(mockUser);
+    vi.spyOn(client, "fetchResortRanking").mockResolvedValue(mockRankingResponse);
+    renderWithRouter("/ranking");
+    await waitFor(() => expect(screen.getByText("Summit Bowl")).toBeInTheDocument());
+    expect(screen.getByText("Resort Ranking")).toBeInTheDocument();
+    expect(screen.getByText("You")).toBeInTheDocument();
   });
 });
 

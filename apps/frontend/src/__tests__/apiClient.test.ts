@@ -1,6 +1,12 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { fetchResort, postTick, postBuyLift, postRepairLift } from "../api/client";
-import type { GetResortResponse } from "@val-tick/shared";
+import {
+  fetchResort,
+  fetchResortRanking,
+  postTick,
+  postBuyLift,
+  postRepairLift,
+} from "../api/client";
+import type { GetResortResponse, GetResortRankingResponse } from "@val-tick/shared";
 
 const mockResortResponse: GetResortResponse = {
   resort: {
@@ -23,6 +29,25 @@ const mockResortResponse: GetResortResponse = {
   },
   liftModels: [],
   lifts: [],
+};
+
+const mockRankingResponse: GetResortRankingResponse = {
+  rankings: [
+    {
+      resortId: "r2",
+      rank: 1,
+      name: "Summit",
+      totalSkiersEver: 500,
+      isCurrentUser: false,
+    },
+    {
+      resortId: "r1",
+      rank: 2,
+      name: "Val Thorens",
+      totalSkiersEver: 25,
+      isCurrentUser: true,
+    },
+  ],
 };
 
 afterEach(() => {
@@ -105,5 +130,38 @@ describe("postRepairLift", () => {
     const [, options] = mockFetch.mock.calls[0] as [string, RequestInit];
     expect(JSON.parse(options.body as string)).toEqual({ liftId: "lift-1" });
     expect(options.credentials).toBe("include");
+  });
+});
+
+describe("fetchResortRanking", () => {
+  it("parses and returns resort ranking on 200", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve(mockRankingResponse),
+      })
+    );
+
+    const result = await fetchResortRanking();
+
+    expect(result).toEqual(mockRankingResponse);
+    const [url, options] = vi.mocked(fetch).mock.calls[0] as [string, RequestInit | undefined];
+    expect(url).toContain("/ranking");
+    expect((options as RequestInit).credentials).toBe("include");
+  });
+
+  it("includes response body when ranking request fails", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: false,
+        status: 404,
+        text: () => Promise.resolve("Cannot GET /api/ranking"),
+      })
+    );
+
+    await expect(fetchResortRanking()).rejects.toThrow("HTTP 404: Cannot GET /api/ranking");
   });
 });

@@ -1,0 +1,163 @@
+.page {
+  min-height: 100vh;
+  position: relative;
+  background-color: var(--bg-base);
+}
+
+.mountains {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 38vh;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.panel {
+  position: relative;
+  z-index: 1;
+  width: min(860px, 100%);
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem;
+}
+
+.toolbar {
+  margin-bottom: 1.5rem;
+}
+
+.header {
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0 0 0.35rem;
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.state {
+  color: var(--text-secondary);
+  padding: 1rem 0;
+}
+
+.rankingList {
+  border: 1px solid var(--border);
+  background-color: rgba(18, 32, 48, 0.9);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 5rem minmax(0, 1fr) minmax(8rem, max-content);
+  align-items: center;
+  gap: 1rem;
+  min-height: 3.2rem;
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.headingRow {
+  min-height: 2.3rem;
+  color: var(--text-muted);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.currentUserRow {
+  border-left: 4px solid var(--danger);
+  background-color: rgba(224, 82, 82, 0.13);
+  box-shadow: inset 0 0 0 1px rgba(224, 82, 82, 0.35);
+  padding-left: calc(1rem - 4px);
+}
+
+.rank,
+.skiers {
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+.skiers {
+  text-align: right;
+}
+
+.nameCell {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 0.5rem;
+}
+
+.resortName {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-weight: 650;
+}
+
+.medal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.4rem;
+  height: 1.4rem;
+  flex: 0 0 1.4rem;
+  border-radius: 50%;
+  color: #101820;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.goldMedal {
+  background-color: #f5c542;
+}
+
+.silverMedal {
+  background-color: #c7d0d9;
+}
+
+.bronzeMedal {
+  background-color: #c18453;
+}
+
+.youBadge {
+  flex: 0 0 auto;
+  border: 1px solid rgba(224, 82, 82, 0.75);
+  color: #ffc5c5;
+  border-radius: 999px;
+  padding: 0.1rem 0.45rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+@media (max-width: 560px) {
+  .panel {
+    padding-inline: 0.75rem;
+  }
+
+  .row {
+    grid-template-columns: 3.4rem minmax(0, 1fr);
+    gap: 0.55rem;
+  }
+
+  .headingRow span:last-child {
+    display: none;
+  }
+
+  .skiers {
+    grid-column: 2;
+    text-align: left;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+  }
+}

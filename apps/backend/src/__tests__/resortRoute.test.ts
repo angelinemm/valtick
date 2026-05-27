@@ -11,8 +11,12 @@ describe.skipIf(!HAS_DB)("GET /resort", () => {
   let userId: string;
   let resortId: string;
   let username: string;
+  let extraUserIds: string[];
+  let extraResortIds: string[];
 
   beforeEach(async () => {
+    extraUserIds = [];
+    extraResortIds = [];
     username = `resorttest_${Date.now()}_${String(Math.random()).slice(2)}`;
     const passwordHash = await bcrypt.hash("test-password", 1);
     const user = await prisma.user.create({
@@ -46,7 +50,10 @@ describe.skipIf(!HAS_DB)("GET /resort", () => {
   });
 
   afterEach(async () => {
+    if (extraResortIds.length)
+      await prisma.resort.deleteMany({ where: { id: { in: extraResortIds } } });
     if (resortId) await prisma.resort.deleteMany({ where: { id: resortId } });
+    if (extraUserIds.length) await prisma.user.deleteMany({ where: { id: { in: extraUserIds } } });
     await prisma.user.deleteMany({ where: { id: userId } });
   });
 
@@ -101,5 +108,60 @@ describe.skipIf(!HAS_DB)("GET /resort", () => {
     expect(lift.liftModelKey).toBe("magic_carpet");
     expect(lift.status).toBe("working");
     expect(lift.breakCount).toBe(0);
+  });
+
+  it("returns resort ranking ordered by total skiers and highlights the current user's resort", async () => {
+    const passwordHash = await bcrypt.hash("test-password", 1);
+    const highUser = await prisma.user.create({
+      data: {
+        username: `ranking_high_${Date.now()}_${String(Math.random()).slice(2)}`,
+        passwordHash,
+        role: "USER",
+      },
+    });
+    const lowUser = await prisma.user.create({
+      data: {
+        username: `ranking_low_${Date.now()}_${String(Math.random()).slice(2)}`,
+        passwordHash,
+        role: "USER",
+      },
+    });
+    extraUserIds.push(highUser.id, lowUser.id);
+
+    const highResort = await prisma.resort.create({
+      data: {
+        name: "High Resort",
+        userId: highUser.id,
+        moneyCents: 1000,
+        totalSkiersEver: 99999,
+        lastTickAt: new Date(),
+      },
+    });
+    const lowResort = await prisma.resort.create({
+      data: {
+        name: "Low Resort",
+        userId: lowUser.id,
+        moneyCents: 1000,
+        totalSkiersEver: 10,
+        lastTickAt: new Date(),
+      },
+    });
+    extraResortIds.push(highResort.id, lowResort.id);
+
+    const res = await agent.get("/api/ranking");
+
+    expect(res.status).toBe(200);
+    const names = res.body.rankings.map((entry: { name: string }) => entry.name);
+    expect(names.indexOf("High Resort")).toBeLessThan(names.indexOf("Test Resort"));
+    expect(names.indexOf("Test Resort")).toBeLessThan(names.indexOf("Low Resort"));
+
+    const currentUserEntry = res.body.rankings.find(
+      (entry: { resortId: string }) => entry.resortId === resortId
+    );
+    expect(currentUserEntry).toMatchObject({
+      name: "Test Resort",
+      totalSkiersEver: 12345,
+      isCurrentUser: true,
+    });
   });
 });

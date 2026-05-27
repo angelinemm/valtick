@@ -145,6 +145,9 @@ export function ResortTopBar({
         <button className={styles.navLink} onClick={() => navigate("/how-to-play")}>
           How to Play
         </button>
+        <button className={styles.navLink} onClick={() => navigate("/ranking")}>
+          Ranking
+        </button>
         <button className={styles.navLink} onClick={() => navigate("/profile")}>
           Profile
         </button>
