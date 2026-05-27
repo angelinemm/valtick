@@ -4,6 +4,7 @@ import type {
   TickResponse,
   BuyLiftRequest,
   RepairLiftRequest,
+  GetResortRankingResponse,
 } from "@val-tick/shared";
 
 const BASE = import.meta.env.VITE_API_URL ?? "";
@@ -67,5 +68,14 @@ export async function patchRenameResort(name: string): Promise<{ name: string }>
     body: JSON.stringify({ name }),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}
+
+export async function fetchResortRanking(): Promise<GetResortRankingResponse> {
+  const res = await fetch(`${BASE}/api/ranking`, { credentials: "include" });
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(`HTTP ${res.status}${body ? `: ${body}` : ""}`);
+  }
   return res.json();
 }

@@ -71,3 +71,9 @@ export async function findIdleResorts(idleThreshold: Date): Promise<Resort[]> {
     },
   });
 }
+
+export async function findResortsForRanking(): Promise<Resort[]> {
+  return prisma.resort.findMany({
+    orderBy: [{ totalSkiersEver: "desc" }, { name: "asc" }, { createdAt: "asc" }],
+  });
+}

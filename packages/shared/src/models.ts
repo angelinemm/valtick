@@ -44,3 +44,11 @@ export interface SummaryDTO {
   junkedLiftsCount: number;
   totalSkiersEver: number;
 }
+
+export interface ResortRankingEntryDTO {
+  resortId: string;
+  rank: number;
+  name: string;
+  totalSkiersEver: number;
+  isCurrentUser: boolean;
+}

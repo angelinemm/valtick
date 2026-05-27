@@ -4,6 +4,7 @@ import {
   updateResort,
   renameResort,
   createResortForUser,
+  findResortsForRanking,
 } from "../db/resortRepository";
 import { bulkUpdateLifts } from "../db/liftRepository";
 import { formatResortResponse } from "../services/resortService";
@@ -114,4 +115,21 @@ resortRouter.get("/resort", async (req, res) => {
     (await findResortByUserId(user.id)) ?? (await createResortForUser(user.id, user.username));
 
   res.json(formatResortResponse(resort, resort.lifts));
+});
+
+resortRouter.get("/ranking", async (req, res) => {
+  const user = req.user!;
+  const currentUserResort =
+    (await findResortByUserId(user.id)) ?? (await createResortForUser(user.id, user.username));
+  const resorts = await findResortsForRanking();
+
+  res.json({
+    rankings: resorts.map((resort, index) => ({
+      resortId: resort.id,
+      rank: index + 1,
+      name: resort.name,
+      totalSkiersEver: resort.totalSkiersEver,
+      isCurrentUser: resort.id === currentUserResort?.id,
+    })),
+  });
 });

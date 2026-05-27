@@ -1,4 +1,4 @@
-import type { LiftModelDTO, LiftDTO, ResortDTO, SummaryDTO } from "./models";
+import type { LiftModelDTO, LiftDTO, ResortDTO, ResortRankingEntryDTO, SummaryDTO } from "./models";
 import type { LiftModelKey } from "./enums";
 
 export interface GetResortResponse {
@@ -23,3 +23,7 @@ export interface RepairLiftRequest {
 }
 
 export type ResetResortResponse = GetResortResponse;
+
+export interface GetResortRankingResponse {
+  rankings: ResortRankingEntryDTO[];
+}

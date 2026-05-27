@@ -4,6 +4,7 @@ import { LoginPage } from "./pages/LoginPage";
 import { AdminPage } from "./pages/AdminPage";
 import { HowToPlayPage } from "./pages/HowToPlayPage";
 import { ProfilePage } from "./pages/ProfilePage";
+import { RankingPage } from "./pages/RankingPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { RequireAuth } from "./components/RequireAuth";
 import { RequireAdmin } from "./components/RequireAdmin";
@@ -33,6 +34,14 @@ export default function App() {
         element={
           <RequireAuth>
             <HowToPlayPage />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/ranking"
+        element={
+          <RequireAuth>
+            <RankingPage />
           </RequireAuth>
         }
       />
