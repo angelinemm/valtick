@@ -44,6 +44,8 @@ npm run dev:backend   # http://localhost:3001
 npm run dev:frontend  # http://localhost:5173
 ```
 
+Start both dev servers, then open the frontend URL in your browser.
+
 ### Test
 
 ```bash
