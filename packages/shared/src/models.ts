@@ -49,6 +49,7 @@ export interface ResortRankingEntryDTO {
   resortId: string;
   rank: number;
   name: string;
+  username: string;
   totalSkiersEver: number;
   isCurrentUser: boolean;
 }

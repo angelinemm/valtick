@@ -104,6 +104,13 @@
   font-weight: 650;
 }
 
+.username {
+  min-width: 0;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  overflow-wrap: anywhere;
+}
+
 .medal {
   display: inline-flex;
   align-items: center;
