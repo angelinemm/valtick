@@ -160,8 +160,18 @@ describe.skipIf(!HAS_DB)("GET /resort", () => {
     );
     expect(currentUserEntry).toMatchObject({
       name: "Test Resort",
+      username,
       totalSkiersEver: 12345,
       isCurrentUser: true,
+    });
+
+    const highUserEntry = res.body.rankings.find(
+      (entry: { resortId: string }) => entry.resortId === highResort.id
+    );
+    expect(highUserEntry).toMatchObject({
+      name: "High Resort",
+      username: highUser.username,
+      isCurrentUser: false,
     });
   });
 });

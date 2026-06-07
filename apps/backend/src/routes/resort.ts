@@ -128,6 +128,7 @@ resortRouter.get("/ranking", async (req, res) => {
       resortId: resort.id,
       rank: index + 1,
       name: resort.name,
+      username: resort.user?.username ?? "unknown",
       totalSkiersEver: resort.totalSkiersEver,
       isCurrentUser: resort.id === currentUserResort?.id,
     })),

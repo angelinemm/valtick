@@ -6,6 +6,9 @@ export type { Resort, Lift };
 export type ResortWithLifts = Prisma.ResortGetPayload<{
   include: { lifts: true };
 }>;
+export type ResortForRanking = Prisma.ResortGetPayload<{
+  include: { user: { select: { username: true } } };
+}>;
 
 export async function findResortByUserId(userId: string): Promise<ResortWithLifts | null> {
   return prisma.resort.findUnique({
@@ -72,8 +75,9 @@ export async function findIdleResorts(idleThreshold: Date): Promise<Resort[]> {
   });
 }
 
-export async function findResortsForRanking(): Promise<Resort[]> {
+export async function findResortsForRanking(): Promise<ResortForRanking[]> {
   return prisma.resort.findMany({
+    include: { user: { select: { username: true } } },
     orderBy: [{ totalSkiersEver: "desc" }, { name: "asc" }, { createdAt: "asc" }],
   });
 }

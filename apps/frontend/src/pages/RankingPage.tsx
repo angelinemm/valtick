@@ -80,6 +80,9 @@ export function RankingPage() {
                       </span>
                     )}
                     <span className={styles.resortName}>{entry.name}</span>
+                    {!entry.isCurrentUser && (
+                      <span className={styles.username}>({entry.username})</span>
+                    )}
                     {entry.isCurrentUser && <span className={styles.youBadge}>You</span>}
                   </span>
                   <span className={styles.skiers}>

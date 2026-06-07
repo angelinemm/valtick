@@ -40,6 +40,7 @@ const mockRankingResponse: GetResortRankingResponse = {
       resortId: "r2",
       rank: 1,
       name: "Summit Bowl",
+      username: "rival",
       totalSkiersEver: 100,
       isCurrentUser: false,
     },
@@ -47,6 +48,7 @@ const mockRankingResponse: GetResortRankingResponse = {
       resortId: "r1",
       rank: 2,
       name: "Snowpeak",
+      username: "testuser",
       totalSkiersEver: 25,
       isCurrentUser: true,
     },
@@ -96,6 +98,8 @@ describe("App routing", () => {
     vi.spyOn(client, "fetchResortRanking").mockResolvedValue(mockRankingResponse);
     renderWithRouter("/ranking");
     await waitFor(() => expect(screen.getByText("Summit Bowl")).toBeInTheDocument());
+    expect(screen.getByText("(rival)")).toBeInTheDocument();
+    expect(screen.queryByText("(testuser)")).not.toBeInTheDocument();
     expect(screen.getByText("Resort Ranking")).toBeInTheDocument();
     expect(screen.getByText("You")).toBeInTheDocument();
   });
