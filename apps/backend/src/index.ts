@@ -64,7 +64,7 @@ app.use("/api", requireAuth, resortRouter);
 
 if (isProd) {
   const staticPath = path.join(__dirname, "..", "static");
-  app.get("*", (_req, res) => {
+  app.get("/{*splat}", (_req, res) => {
     res.sendFile(path.join(staticPath, "index.html"));
   });
 }
