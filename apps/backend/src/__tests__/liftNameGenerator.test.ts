@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import type { Lift } from "@prisma/client";
+import type { Lift } from "../generated/prisma/client";
 import liftNames from "../data/liftNames.json";
 import { assignLiftName } from "../utils/liftNameGenerator";
 

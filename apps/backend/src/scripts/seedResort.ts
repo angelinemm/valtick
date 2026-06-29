@@ -1,6 +1,6 @@
 import { prisma } from "../db/prisma";
 import { assignLiftName } from "../utils/liftNameGenerator";
-import type { Resort } from "@prisma/client";
+import type { Resort } from "../generated/prisma/client";
 
 export async function createResort(name: string): Promise<Resort> {
   const resort = await prisma.resort.create({

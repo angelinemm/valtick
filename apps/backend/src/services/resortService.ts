@@ -1,4 +1,4 @@
-import type { Resort, Lift } from "@prisma/client";
+import type { Resort, Lift } from "../generated/prisma/client";
 import type {
   GetResortResponse,
   ResortDTO,

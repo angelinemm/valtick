@@ -1,6 +1,7 @@
 node_modules/
 dist/
 apps/backend/static/
+apps/backend/src/generated/prisma/
 .env
 *.tsbuildinfo
 .claude/

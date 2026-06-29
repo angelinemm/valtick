@@ -1,4 +1,4 @@
-import type { UserRole } from "@prisma/client";
+import type { UserRole } from "../generated/prisma/client";
 import { prisma } from "./prisma";
 
 export async function findUserByUsername(username: string) {
