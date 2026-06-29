@@ -1,10 +1,11 @@
 generator client {
-  provider = "prisma-client-js"
+  provider     = "prisma-client"
+  output       = "../apps/backend/src/generated/prisma"
+  moduleFormat = "cjs"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 enum UserRole {
@@ -32,28 +33,28 @@ model User {
 }
 
 model Resort {
-  id         String    @id @default(uuid())
-  name       String
-  userId     String?   @unique
-  moneyCents Int
-  totalSkiersEver Int   @default(0)
-  lastTickAt DateTime
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  id              String   @id @default(uuid())
+  name            String
+  userId          String?  @unique
+  moneyCents      Int
+  totalSkiersEver Int      @default(0)
+  lastTickAt      DateTime
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   user  User?  @relation(fields: [userId], references: [id], onDelete: Cascade)
   lifts Lift[]
 }
 
 model Lift {
-  id                      String     @id @default(uuid())
-  resortId                String
-  liftModelKey            String
-  name                    String
-  breakCount              Int
-  status                  LiftStatus
-  createdAt               DateTime   @default(now())
-  updatedAt               DateTime   @updatedAt
+  id           String     @id @default(uuid())
+  resortId     String
+  liftModelKey String
+  name         String
+  breakCount   Int
+  status       LiftStatus
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
 
   resort Resort @relation(fields: [resortId], references: [id], onDelete: Cascade)
 

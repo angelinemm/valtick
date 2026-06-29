@@ -28,9 +28,7 @@ RUN npm ci --legacy-peer-deps --omit=dev
 COPY --from=build /app/apps/backend/dist ./apps/backend/dist
 COPY --from=build /app/apps/backend/static ./apps/backend/static
 COPY prisma ./prisma
-
-COPY --from=build /app/node_modules/@prisma/client ./node_modules/@prisma/client
-COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
+COPY prisma.config.ts ./
 
 EXPOSE 3000
 

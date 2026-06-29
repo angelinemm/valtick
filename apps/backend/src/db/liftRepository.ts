@@ -1,4 +1,4 @@
-import type { Lift } from "@prisma/client";
+import type { Lift } from "../generated/prisma/client";
 import { prisma } from "./prisma";
 
 export async function createLift(data: {
