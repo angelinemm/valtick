@@ -1,4 +1,4 @@
-FROM node:25-alpine AS build
+FROM node:26-alpine AS build
 
 WORKDIR /app
 
@@ -16,7 +16,7 @@ COPY . .
 RUN DATABASE_URL=postgresql://prisma:prisma@localhost:5432/prisma npx prisma generate
 RUN npm run build
 
-FROM node:25-alpine
+FROM node:26-alpine
 
 WORKDIR /app
 
