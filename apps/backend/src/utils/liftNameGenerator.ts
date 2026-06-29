@@ -1,4 +1,4 @@
-import type { Lift } from "@prisma/client";
+import type { Lift } from "../generated/prisma/client";
 import liftNames from "../data/liftNames.json";
 
 export function assignLiftName(existingLifts: Lift[]): string {

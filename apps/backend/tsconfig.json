@@ -8,5 +8,8 @@
     "noEmit": false,
     "resolveJsonModule": true
   },
+  "ts-node": {
+    "experimentalResolver": true
+  },
   "include": ["src"]
 }

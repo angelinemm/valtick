@@ -1,4 +1,4 @@
-import type { Prisma, Resort, Lift } from "@prisma/client";
+import type { Prisma, Resort, Lift } from "../generated/prisma/client";
 import { prisma } from "./prisma";
 import { assignLiftName } from "../utils/liftNameGenerator";
 

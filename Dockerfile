@@ -1,4 +1,4 @@
-FROM node:25-alpine AS build
+FROM node:26-alpine AS build
 
 WORKDIR /app
 
@@ -11,10 +11,12 @@ RUN npm ci --legacy-peer-deps
 
 COPY . .
 
-RUN npx prisma generate
+# Prisma Config validates that DATABASE_URL exists, but client generation does
+# not connect to the database. Railway provides the real URL only at runtime.
+RUN DATABASE_URL=postgresql://prisma:prisma@localhost:5432/prisma npx prisma generate
 RUN npm run build
 
-FROM node:25-alpine
+FROM node:26-alpine
 
 WORKDIR /app
 
@@ -28,9 +30,7 @@ RUN npm ci --legacy-peer-deps --omit=dev
 COPY --from=build /app/apps/backend/dist ./apps/backend/dist
 COPY --from=build /app/apps/backend/static ./apps/backend/static
 COPY prisma ./prisma
-
-COPY --from=build /app/node_modules/@prisma/client ./node_modules/@prisma/client
-COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
+COPY prisma.config.ts ./
 
 EXPOSE 3000
 

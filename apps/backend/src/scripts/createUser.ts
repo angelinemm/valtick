@@ -1,6 +1,6 @@
 import { createUser } from "../db/userRepository";
 import { prisma } from "../db/prisma";
-import type { UserRole } from "@prisma/client";
+import type { UserRole } from "../generated/prisma/client";
 import { hashPassword } from "../utils/passwordHash";
 
 async function main() {
