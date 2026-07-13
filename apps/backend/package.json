@@ -27,12 +27,12 @@
     "@types/connect-pg-simple": "^7.0.3",
     "@types/express": "^5.0.6",
     "@types/express-session": "^1.19.0",
-    "@types/node": "^26.0.1",
+    "@types/node": "^26.1.1",
     "@types/supertest": "^7.2.0",
     "@val-tick/shared": "*",
     "supertest": "^7.0.0",
     "ts-node": "^10.9.2",
-    "typescript": "^6.0.3",
-    "vitest": "^4.1.9"
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10"
   }
 }
