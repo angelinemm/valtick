@@ -195,6 +195,15 @@ Documentation rules:
 - Update `/how-to-play` whenever gameplay changes affect how the user plays.
 - Review `README.md` at the end of each task and update it if setup, configuration, or gameplay behavior changed.
 
+Product rules:
+
+- When implementing or changing a feature, consider whether it changes intentional product behavior.
+- Update `docs/product-rules.md` when the change affects a behavioral contract where the opposite implementation would reasonably be investigated as a bug.
+- Examples include gameplay rules or calculation order, state transitions and lifecycle rules, purchase/repair/reset/progression behavior, ownership and access boundaries, background or offline simulation behavior, important timing or activation rules, and intentional edge cases.
+- Do not update product rules for behavior-preserving refactors, code structure changes, dependency changes, test-only changes, styling or visual polish, or implementation details that are not product contracts.
+- When intentional product behavior changes, update the relevant tests and `docs/product-rules.md` as part of the same change.
+- If the implementation appears to conflict with `docs/product-rules.md` and intent is unclear, surface the ambiguity for confirmation instead of silently changing the product rules.
+
 ## 6. AI Agent Rules
 
 - Read relevant files before making changes.
