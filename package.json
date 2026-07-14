@@ -15,6 +15,7 @@
     "db:migrate": "prisma migrate dev --schema=prisma/schema.prisma",
     "db:migrate:deploy": "prisma migrate deploy --schema=prisma/schema.prisma",
     "admin:reset-password": "npm run reset-password --workspace=apps/backend --",
+    "bug-hunt:crash": "ts-node packages/shared/src/bugHunt/runCrashHunter.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
